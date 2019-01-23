@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/homescreenimg"
+    android:gravity="center"
+    app:layout_behavior="@string/appbar_scrolling_view_behavior"
+    tools:context="com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView"
+    tools:showIn="@layout/app_bar_main">
+
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/geolocate_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/add_listing_fab"
+        app:srcCompat="@drawable/geolocate_icon" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/synch_db_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/geolocate_fab"
+        app:srcCompat="@drawable/synch_db" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/add_listing_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="24dp"
+        android:clickable="true"
+        app:backgroundTint="@android:color/white"
+        app:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/search_fab"
+        app:srcCompat="@drawable/add_property" />
+
+    <android.support.design.widget.FloatingActionButton
+        android:id="@+id/search_fab"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="16dp"
+        android:layout_marginTop="50dp"
+        android:clickable="true"
+        app:elevation="15dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:srcCompat="@drawable/search_icon" />
+
+</android.support.constraint.ConstraintLayout>

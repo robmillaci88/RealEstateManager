@@ -1,0 +1,121 @@
+<?xml version="1.0" encoding="utf-8"?>
+<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+    package="com.example.robmillaci.realestatemanager">
+
+    <uses-permission android:name="android.permission.INTERNET" />
+    <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.autofocus" />
+
+    <application
+        android:allowBackup="true"
+        android:icon="@mipmap/ic_launcher"
+        android:label="@string/app_name"
+        android:roundIcon="@mipmap/ic_launcher_round"
+        android:supportsRtl="true"
+        android:theme="@style/AppTheme">
+        <meta-data
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id" />
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBKCWQJl6q4TD9FFfVACxf6fjpJPHAM4_Y" />
+
+        <activity
+            android:name="com.facebook.FacebookActivity"
+            android:configChanges="keyboard|keyboardHidden|screenLayout|screenSize|orientation"
+            android:label="@string/app_name" />
+        <activity
+            android:name="com.facebook.CustomTabActivity"
+            android:exported="true">
+            <intent-filter>
+                <action android:name="android.intent.action.VIEW" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+                <category android:name="android.intent.category.BROWSABLE" />
+
+                <data android:scheme="@string/fb_login_protocol_scheme" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".activities.sign_in_activities.StartActivity"
+            android:label="@string/app_name"
+            android:theme="@style/AppTheme_no_action_bar_no_status_bar">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".activities.BaseActivity" />
+        <activity
+            android:name=".activities.main_activity.MainActivityView"
+            android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
+        <activity
+            android:name=".activities.add_listing_activity.AddListingView"
+            android:parentActivityName=".activities.add_listing_activity.AddListingView" />
+
+        <provider
+            android:name=".databases.local_database.AppProvider"
+            android:authorities="com.example.robmillaci.realestatemanager.provider"
+            android:exported="false" />
+
+        <activity android:name=".activities.full_screen_photo_activity.FullScreenPhotoActivity" />
+        <activity
+            android:name=".activities.splash_screen.SplashScreenActivity"
+            android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
+        <activity android:name=".activities.contact_activity.ContactActivity" />
+        <activity
+            android:name=".activities.about_activity.AboutActivity"
+            android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
+        <activity
+            android:name=".activities.valuations_activities.BookEvaluationActivity"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity
+            android:name=".activities.valuations_activities.SellLetActivity"
+            android:parentActivityName=".activities.valuations_activities.BookEvaluationActivity" />
+        <activity android:name=".activities.valuations_activities.ConfirmationActivity" />
+        <activity
+            android:name=".activities.valuations_activities.UpcomingValuations"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity android:name=".activities.viewings_activities.AwaitingAction" />
+        <activity
+            android:name=".activities.viewings_activities.BaseViewingActivity"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity android:name=".activities.viewings_activities.ConfirmedViewings" />
+        <activity android:name=".activities.viewings_activities.ViewingsHistory" />
+        <activity android:name=".activities.feedback_activities.FeedBackAwaitingAction" />
+        <activity android:name=".activities.feedback_activities.FeedbackPendingReceived" />
+        <activity android:name=".activities.offers_activities.OffersAwaitingAction" />
+        <activity android:name=".activities.offers_activities.AcceptedOffers" />
+        <activity
+            android:name=".activities.customer_account.AccountActivity"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity
+            android:name=".activities.customer_account.ProfileActivity"
+            android:parentActivityName=".activities.customer_account.AccountActivity" />
+        <activity
+            android:name=".activities.customer_account.PrivacySettingsActivity"
+            android:parentActivityName=".activities.customer_account.AccountActivity" />
+
+        <service
+            android:name=".activities.add_listing_activity.AddListingService"
+            android:enabled="true"
+            android:exported="false" />
+
+        <activity
+            android:name=".activities.search_activity.SearchActivityView"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity
+            android:name=".activities.search_activity.SearchResultsView"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
+        <activity android:name=".activities.search_activity.StreetViewActivity" />
+        <activity android:name=".activities.book_viewing_activity.BookViewingActivity" />
+        <activity android:name=".activities.listing_map_activity.ListingsMapView"></activity>
+    </application>
+
+</manifest>

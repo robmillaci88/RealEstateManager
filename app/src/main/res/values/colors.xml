@@ -1,0 +1,31 @@
+<!--?xml version="1.0" encoding="UTF-8"?-->
+
+<resources>
+
+    <color name="pastel_green">#77dd91</color>
+
+    <color name="colorPrimary">#77dd91</color>
+
+    <color name="colorPrimaryDark">#009688</color>
+
+    <color name="primary_light">#C5CAE9</color>
+
+    <color name="colorAccent">#009688</color>
+
+    <color name="primaryTextColor">#212121</color>
+
+    <color name="secondaryTextColor">#757575</color>
+
+    <color name="icons">#FFFFFF</color>
+
+    <color name="divider">#BDBDBD</color>
+
+    <color name="transparent_primary_light">#00000000</color>
+
+    <color name="transparentWhite">#D9FFFFFF</color>
+
+    <color name="lightGrey">#D3D3D3</color>
+
+    <color name="transparent_black">#B3000000</color>
+
+</resources>

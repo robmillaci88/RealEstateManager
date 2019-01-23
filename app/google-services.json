@@ -1,0 +1,42 @@
+{
+  "project_info": {
+    "project_number": "23584158539",
+    "firebase_url": "https://realestate-13c41.firebaseio.com",
+    "project_id": "realestate-13c41",
+    "storage_bucket": "realestate-13c41.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:23584158539:android:139c05c1ac40ef9c",
+        "android_client_info": {
+          "package_name": "com.example.robmillaci.realestatemanager"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "23584158539-oljjebrgtrl42h6kdq5iej8t9d00je7f.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyD19Kr5dE71hLq5X-zIyiXj99-E1JC1WDQ"
+        }
+      ],
+      "services": {
+        "analytics_service": {
+          "status": 1
+        },
+        "appinvite_service": {
+          "status": 1,
+          "other_platform_oauth_client": []
+        },
+        "ads_service": {
+          "status": 2
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
