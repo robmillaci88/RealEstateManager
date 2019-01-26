@@ -46,7 +46,9 @@ public class SellLetActivity extends AppCompatActivity {
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        startActivity(new Intent(getApplicationContext(), ConfirmationActivity.class));
+                        Intent sellLetConfirmation = new Intent(getApplicationContext(),ConfirmationActivity.class);
+                        sellLetConfirmation.putExtra(ConfirmationActivity.BUNDLE_KEY,ConfirmationActivity.CALLED_FROM_VALUATION);
+                        startActivity(sellLetConfirmation);
                         overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                     }
                 });

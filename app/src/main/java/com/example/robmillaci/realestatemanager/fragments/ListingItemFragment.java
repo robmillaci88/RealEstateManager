@@ -17,10 +17,11 @@ import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
 
-import com.example.robmillaci.realestatemanager.Adapters.ImagesViewPagerAdapter;
+import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView;
 import com.example.robmillaci.realestatemanager.activities.book_viewing_activity.BookViewingActivity;
+import com.example.robmillaci.realestatemanager.activities.offers_activities.MakeAnOffer;
 import com.example.robmillaci.realestatemanager.activities.search_activity.StreetViewActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
@@ -53,9 +54,11 @@ public class ListingItemFragment extends BaseFragment {
     private TextView mapview_tv;
     private TextView streetView;
     private TextView posted_date_tv;
+    private TextView edit_date_tv;
     private FloatingActionButton edit_listing_fab;
     private CircleIndicator indicator;
     private Button bookViewing;
+    private Button makeAnOffer;
 
     @Override
     public void onCreate(@Nullable Bundle savedInstanceState) {
@@ -97,7 +100,9 @@ public class ListingItemFragment extends BaseFragment {
         mapview_tv = view.findViewById(R.id.mapbtn);
         streetView = view.findViewById(R.id.streetView);
         bookViewing = view.findViewById(R.id.book_a_viewing_btn);
+        makeAnOffer = view.findViewById(R.id.make_an_offer_button);
         posted_date_tv = view.findViewById(R.id.posted_date_tv);
+        edit_date_tv = view.findViewById(R.id.edit_date_tv);
         edit_listing_fab = view.findViewById(R.id.edit_listing_fab);
 
         SharedPreferences mPreferences = PreferenceManager.getDefaultSharedPreferences(getContext());
@@ -107,7 +112,7 @@ public class ListingItemFragment extends BaseFragment {
             edit_listing_fab.hide();
         }
 
-        indicator = view.findViewById(R.id.indicator);
+        indicator = view.findViewById(R.id.image_indicator);
     }
 
 
@@ -162,6 +167,16 @@ public class ListingItemFragment extends BaseFragment {
                 startActivity(editListingIntent);
             }
         });
+
+
+        RxView.clicks(makeAnOffer).subscribe(new Consumer<Unit>() {
+            @Override
+            public void accept(Unit unit){
+              Intent makeAnOfferIntent = new Intent(getContext(),MakeAnOffer.class);
+              makeAnOfferIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
+              startActivity(makeAnOfferIntent);
+            }
+        });
     }
 
     @SuppressWarnings("ConstantConditions")
@@ -196,9 +211,7 @@ public class ListingItemFragment extends BaseFragment {
         //noinspection ConstantConditions
         pager.setAdapter(new ImagesViewPagerAdapter(new WeakReference<>(getActivity().getApplicationContext()), thisListing));
 
-        price_text_view.setText(String.format(Locale.getDefault(), "£%s",
-                String.format(Locale.getDefault(), "%.0f",
-                        thisListing.getPrice())));
+        price_text_view.setText(String.format("%s %s", getString(R.string.currency_symbol), thisListing.getFormattedPrice()));
 
         type.setText(String.format(Locale.getDefault(), "%d %s %s.",
                 thisListing.getNumbOfBedRooms(),
@@ -213,6 +226,10 @@ public class ListingItemFragment extends BaseFragment {
         posted_date_tv.setText(String.format("%s %s" ,
                 getString(R.string.posted_on),
                 thisListing.getFormattedPostedDate()));
+
+        edit_date_tv.setText(String.format("%s %s",
+                getString(R.string.last_edit),
+                thisListing.getFormattedLastUpdateTime()));
 
         indicator.setViewPager(pager);
     }

@@ -37,7 +37,7 @@
             android:id="@+id/typetitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="4dp"
+            android:layout_marginStart="4dp"
             android:layout_marginTop="16dp"
             android:text="Type of property"
             android:textStyle="bold"
@@ -57,16 +57,6 @@
             app:layout_constraintEnd_toEndOf="@+id/price_edit_text"
             app:layout_constraintStart_toStartOf="@+id/price_edit_text"
             app:layout_constraintTop_toBottomOf="@+id/images_recycler_view" />
-
-        <TextView
-            android:id="@+id/textView16"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="24dp"
-            android:text="Surface area"
-            android:textStyle="bold"
-            app:layout_constraintStart_toStartOf="@+id/surface_area_text"
-            app:layout_constraintTop_toBottomOf="@+id/rooms_spinner" />
 
         <TextView
             android:id="@+id/textView17"
@@ -313,23 +303,23 @@
             android:id="@+id/surface_area_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="8dp"
+            android:layout_marginTop="16dp"
             android:background="@drawable/green_outline_button"
             android:drawablePadding="9dp"
             android:drawableStart="@drawable/surface_area"
             android:ems="2"
-            android:hint="  meters sqr"
+            android:hint="Surface area (m2)"
             android:imeOptions="actionNext"
             android:inputType="textPersonName|numberDecimal"
             android:paddingLeft="8dp"
             android:tag="Surface area"
             android:textColor="@color/colorPrimaryDark"
             android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="@+id/rooms_spinner"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView16"
-            tools:text="928" />
+            app:layout_constraintTop_toBottomOf="@+id/rooms_spinner" />
 
         <ImageView
             android:id="@+id/imageView2"

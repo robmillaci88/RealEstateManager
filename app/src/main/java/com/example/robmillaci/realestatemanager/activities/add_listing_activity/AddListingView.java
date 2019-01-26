@@ -7,11 +7,8 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
-import android.graphics.Rect;
 import android.net.Uri;
 import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
 import android.provider.MediaStore;
 import android.provider.Settings;
 import android.support.annotation.NonNull;
@@ -20,13 +17,13 @@ import android.support.design.widget.Snackbar;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
-import android.view.MotionEvent;
 import android.view.View;
+import android.view.WindowManager;
 import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
@@ -37,7 +34,7 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.robmillaci.realestatemanager.Adapters.ImagesRecyclerViewAdapter;
+import com.example.robmillaci.realestatemanager.adapters.ImagesRecyclerViewAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
@@ -74,6 +71,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     public static final String SOLD_TAG = "sold";
     public static final String FOR_SALE_TAG = "forSale";
+    private static final String BUY_STRING = "buy";
+    private static final String LET_STRING = "let";
 
     private ArrayList<Bitmap> images;
     private ArrayList<String> image_description;
@@ -108,14 +107,18 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     private SwitchCompat buy_or_let;
     private ProgressDialog pd;
 
+    private Listing listingBeingEdited;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
+        Log.d("editingListing", "onCreate: called");
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_listing);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.new_listing_activity_title));
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
 
         this.presenter = new AddListingPresenter(this);
         mCompositeDisposable = new CompositeDisposable();
@@ -130,15 +133,19 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
             Listing editingListing = (Listing) intentExtras.getSerializable(EDIT_LISTING_BUNDLE_KEY);
-            if (editingListing != null) prepareEdit(editingListing);
+            if (editingListing != null){
+                prepareEdit(editingListing);
+            }
         }
     }
 
 
     private void prepareEdit(Listing editingListing) {
+        Log.d("editingListing", "prepareEdit: called");
         int selection = 0;
         editing = true;
         editingId = editingListing.getId();
+        listingBeingEdited = editingListing;
 
         switch (editingListing.getType()) {
             case "Flat":
@@ -182,10 +189,10 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             buy_or_let.setChecked(true);
         }
 
-        if (editingListing.isAvailable()) {
-            updateListingSoldStatus(false);
-        } else {
+        if (editingListing.isForSale()) {
             updateListingSoldStatus(true);
+        } else {
+            updateListingSoldStatus(false);
         }
 
         if (editingListing.getFirebasePhotos() == null) {
@@ -393,7 +400,21 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             new Thread(new Runnable() {
                 @Override
                 public void run() {
+                    Log.d("addlisting", "run: run called");
                     String[] imageDescrps = image_description.toArray(new String[image_description.size()]);
+                    String saleDate = "";
+
+                    if (listingBeingEdited != null) {
+                        String editingListingSoldDate = listingBeingEdited.getSaleDate();
+                        if (!editingListingSoldDate.equals("")) { //it has been sold previously
+                            saleDate = determineSaveDate(true);
+                        }else { //it has not been sold
+                            saleDate = determineSaveDate(false);
+                        }
+
+                    }else {
+                        saleDate = determineSaveDate(false);
+                    }
 
                     presenter.addListing(getApplicationContext(), new Listing(
                             editingId == null ? DEFAULT_LISTING_ID : editingId,
@@ -410,19 +431,42 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             address_town_editText.getText().toString(),
                             address_county_editText.getText().toString(),
                             poi_edit_text.getText().toString(),
-                            sale_status_image.getTag().toString(),
-                            Utils.getTodayDate(),
-                            "",
+                            editing ? listingBeingEdited.getPostedDate() : Utils.getTodayDate(),
+                            saleDate,
                             FirebaseHelper.getLoggedInUser(),
                             Utils.getTodayDate(),
-                            !buy_or_let.isChecked() ? "buy" : "let"), editing
+                            !buy_or_let.isChecked() ? BUY_STRING : LET_STRING,
+                            sale_status_image.getTag().equals(FOR_SALE_TAG)), editing
                     );
                 }
             }).start();
 
-           createSaveListingProgressBar();
+            createSaveListingProgressBar();
         }
     }
+
+    private String determineSaveDate(boolean soldPreviously){
+        if (soldPreviously){
+            switch (sale_status_image.getTag().toString()) {
+                case FOR_SALE_TAG:
+                   return "";
+
+                case SOLD_TAG:
+                    return listingBeingEdited.getSaleDate();
+
+            }
+        }else {
+            switch (sale_status_image.getTag().toString()) {
+                case FOR_SALE_TAG:
+                    return "";
+
+                case SOLD_TAG:
+                    return Utils.getTodayDate();
+            }
+        }
+        return "";
+    }
+
 
 
 
@@ -528,12 +572,19 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
     @Override
-    public void addingListingCompleted() {
-        if (pd.isShowing()) {
+    public void addingListingCompleted(boolean error) {
+        if (pd!=null && pd.isShowing()) {
             pd.dismiss();
         }
-        ToastModifications.createToast(AddListingView.this, getString(R.string.listing_saved), Toast.LENGTH_LONG);
-        onBackPressed();
+
+        if (error){
+            ToastModifications.createToast(AddListingView.this, getString(R.string.error_saving), Toast.LENGTH_LONG);
+        }else {
+            ToastModifications.createToast(AddListingView.this, getString(R.string.listing_saved), Toast.LENGTH_LONG);
+            editing = false;
+            listingBeingEdited = null;
+            onBackPressed();
+        }
     }
 
     private void openSettingsforApp() {
@@ -544,12 +595,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         AddListingView.this.startActivity(intent);
     }
 
-    @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        mCompositeDisposable.clear();
-        presenter.unregisterReciever();
-    }
+
 
 
     @Override
@@ -622,6 +668,12 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         startActivity(new Intent(getApplicationContext(), MainActivityView.class));
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+        mCompositeDisposable.clear();
+        presenter.unregisterReciever();
+    }
 
 }
 

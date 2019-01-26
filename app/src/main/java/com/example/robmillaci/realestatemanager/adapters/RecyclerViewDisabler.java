@@ -1,4 +1,4 @@
-package com.example.robmillaci.realestatemanager.Adapters;
+package com.example.robmillaci.realestatemanager.adapters;
 
 import android.support.v7.widget.RecyclerView;
 import android.view.MotionEvent;

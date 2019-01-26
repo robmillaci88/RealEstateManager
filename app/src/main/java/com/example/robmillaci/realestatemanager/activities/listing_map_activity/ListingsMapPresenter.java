@@ -40,7 +40,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
         if (Utils.CheckConnectivity(c)) {
             FirebaseHelper.getInstance().setPresenter(this).getAllListings();
         } else {
-            MyDatabase.getInstance(c).setPresenter(this).getFromLocalDb(c, null, 1);
+            MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null, 1);
         }
     }
 
@@ -74,7 +74,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
     }
 
     @Override
-    public void gotData(ArrayList<Listing> listings, int requestCode, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c) {
         view.gotAllListings(listings);
     }
 

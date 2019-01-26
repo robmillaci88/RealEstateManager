@@ -1,5 +1,6 @@
 package com.example.robmillaci.realestatemanager.data_objects;
 
+import com.example.robmillaci.realestatemanager.utils.DecimalFormatter;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
@@ -27,17 +28,16 @@ public class Listing implements Serializable {
     private String address_town;
     private String address_county;
     private String poi;
-    private String available;
     private String postedDate;
     private String saleDate;
     private String agent;
     private String lastUpdateTime;
-    private boolean status;
+    private boolean forSaleStatus;
     private String buyOrLet;
 
     public Listing(String id, String type, double price, double surfaceArea, int numbOfBedRooms, String descr, List<byte[]> photo, String[] photoDescriptions,
-                   String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String available, String postedDate, String saleDate,
-                   String agent, String lastUpdateTime, String buyOrLet) {
+                   String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String postedDate, String saleDate,
+                   String agent, String lastUpdateTime, String buyOrLet,boolean forSaleStatus) {
         this.id = id.equals(DEFAULT_LISTING_ID) ? createTransactionID() : id;
         this.type = type;
         this.price = price;
@@ -52,19 +52,18 @@ public class Listing implements Serializable {
         this.address_town = address_town;
         this.address_county = address_county;
         this.poi = poi;
-        this.available = available;
         this.postedDate = postedDate;
         this.agent = agent;
         this.saleDate = saleDate;
         this.lastUpdateTime = lastUpdateTime;
-        this.status = false;
+        this.forSaleStatus = forSaleStatus;
         this.buyOrLet = buyOrLet;
 
     }
 
     public Listing(String id, String type, double price, double surfaceArea, int numbOfBedRooms, String descr, ArrayList<String> photo, String[] photoDescriptions,
-                   String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String available, String postedDate, String saleDate,
-                   String agent, String lastUpdateTime, String buyOrLet) {
+                   String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String postedDate, String saleDate,
+                   String agent, String lastUpdateTime, String buyOrLet, boolean forSaleStatus) {
         this.id = id.equals(DEFAULT_LISTING_ID) ? createTransactionID() : id;
         this.type = type;
         this.price = price;
@@ -79,12 +78,11 @@ public class Listing implements Serializable {
         this.address_town = address_town;
         this.address_county = address_county;
         this.poi = poi;
-        this.available = available;
         this.postedDate = postedDate;
         this.agent = agent;
         this.saleDate = saleDate;
         this.lastUpdateTime = lastUpdateTime;
-        this.status = false;
+        this.forSaleStatus = forSaleStatus;
         this.buyOrLet = buyOrLet;
 
     }
@@ -117,6 +115,10 @@ public class Listing implements Serializable {
 
     public double getPrice() {
         return price;
+    }
+
+    public String getFormattedPrice(){
+       return DecimalFormatter.formatNumber(((Double) this.getPrice()).intValue());
     }
 
     public void setPrice(double price) {
@@ -163,17 +165,6 @@ public class Listing implements Serializable {
         return poi;
     }
 
-    public String getAvailable() {
-        return available;
-    }
-
-    public boolean isAvailable() {
-        return available.equals("forSale");
-    }
-
-    public void setAvailable(String available) {
-        this.available = available;
-    }
 
     public String getLastUpdateTime() {
         return lastUpdateTime;
@@ -185,6 +176,10 @@ public class Listing implements Serializable {
 
     public String getFormattedPostedDate(){
         return postedDate.substring(0,10);
+    }
+
+    public String getFormattedLastUpdateTime(){
+        return lastUpdateTime.substring(0,10);
     }
 
     public String getAgent() {
@@ -207,8 +202,8 @@ public class Listing implements Serializable {
         return address_county;
     }
 
-    public boolean isSold() {
-        return status;
+    public boolean isForSale() {
+        return forSaleStatus;
     }
 
     public String getAddress_street() {

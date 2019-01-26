@@ -42,6 +42,9 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:text="Buy"
+            app:layout_constraintEnd_toStartOf="@+id/let_radio_btn"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
@@ -52,7 +55,10 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:text="Let"
-            app:layout_constraintStart_toStartOf="@+id/guideline6"
+            app:layout_constraintEnd_toStartOf="@+id/sold_radio_button"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/buy_radio_btn"
             app:layout_constraintTop_toTopOf="parent" />
 
         <android.support.constraint.Guideline
@@ -138,13 +144,6 @@
             app:layout_constraintEnd_toStartOf="@+id/max_price_spinner"
             app:layout_constraintStart_toStartOf="@+id/guideline5"
             app:layout_constraintTop_toTopOf="@+id/textView20" />
-
-        <android.support.constraint.Guideline
-            android:id="@+id/guideline6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="vertical"
-            app:layout_constraintGuide_percent="0.5" />
 
         <android.support.constraint.Guideline
             android:id="@+id/guideline7"
@@ -249,6 +248,20 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/search_btn" />
+
+        <RadioButton
+            android:id="@+id/sold_radio_button"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="16dp"
+            android:text="Sold"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.5"
+            app:layout_constraintHorizontal_chainStyle="spread_inside"
+            app:layout_constraintStart_toEndOf="@+id/let_radio_btn"
+            app:layout_constraintTop_toTopOf="parent" />
     </android.support.constraint.ConstraintLayout>
 
     <ImageView

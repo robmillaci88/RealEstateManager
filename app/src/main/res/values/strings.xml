@@ -878,7 +878,7 @@
     <string name="close_button">Close</string>
     <string name="at_least_one_photo">You need to add at least one photo</string>
     <string name="enter_value_for">You need to enter a value for</string>
-    <string name="saving_listing">Saving listing…</string>
+    <string name="saving_listing">Saving listing…please wait.</string>
     <string name="listing_saved">Listing saved!</string>
     <string name="error_saving_photo">Error saving photo</string>
     <string name="give_access">Grant access</string>
@@ -930,7 +930,7 @@
     <string name="delete_image_confirm_message">Are you sure you want to delete this image?</string>
     <string name="delete_btn">Delete</string>
     <string name="bedrooms">bedroom</string>
-    <string name="sync_timeout">Synch timeout, please check your internet</string>
+    <string name="sync_timeout">Sync error, please check your internet and try again</string>
     <string name="about">About</string>
     <string name="now_online">You are now online</string>
     <string name="now_offline">You are now offline</string>
@@ -954,4 +954,21 @@
     <string name="description">+ description</string>
     <string name="listing_image">listing image</string>
     <string name="remove_image_btn">remove image</string>
+    <string name="last_edit">Last edit</string>
+    <string name="asking_price">Asking Price</string>
+    <string name="currency_symbol">£</string>
+    <string name="asking_price_tv_value">Asking price :</string>
+    <string name="offer">Offer :</string>
+    <string name="submit_offer">Submit Offer</string>
+    <string name="comments">Comments</string>
+    <string name="sdsd">£</string>
+    <string name="enter_offer_value">You need to enter an offer value</string>
+    <string name="make_an_offer_response">Your offer has been sent to an agent and the seller. You will be contacted soon.</string>
+    <string name="error_saving">Error saving listing. Try again</string>
+    <string name="sync_errors">Sync completed with errors - check network speed</string>
+    <string name="sync_completed">Sync completed</string>
+    <string name="local_db_sync_message">Synching with local database…</string>
+    <string name="synching_with_firebase">Synching Firebase</string>
+    <string name="listings_remaining">listings remaining</string>
+
 </resources>

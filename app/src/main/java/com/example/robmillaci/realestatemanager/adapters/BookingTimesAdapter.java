@@ -1,4 +1,4 @@
-package com.example.robmillaci.realestatemanager.Adapters;
+package com.example.robmillaci.realestatemanager.adapters;
 
 import android.annotation.SuppressLint;
 import android.content.Context;

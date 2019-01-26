@@ -1,4 +1,4 @@
-package com.example.robmillaci.realestatemanager.Adapters;
+package com.example.robmillaci.realestatemanager.adapters;
 
 
 import android.annotation.SuppressLint;
@@ -72,7 +72,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             holder.mainImage.setImageResource(R.drawable.placeholder_image);
         }
 
-        holder.price.setText("£" + String.format("%.0f", thisListing.getPrice()));
+        holder.price.setText(String.format("%s %s", mContext.get().getString(R.string.currency_symbol), thisListing.getFormattedPrice()));
 
         holder.address.setText(String.format("%s,%s, %s.", thisListing.getAddress_street(), thisListing.getAddress_town(),
                 thisListing.getAddress_postcode().toUpperCase()));

@@ -22,19 +22,19 @@
             android:id="@+id/images_viewpager_holder"
             android:layout_width="0dp"
             android:layout_height="0dp"
-            app:layout_constraintBottom_toTopOf="@+id/indicator"
+            app:layout_constraintBottom_toTopOf="@+id/image_indicator"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
 
         <me.relex.circleindicator.CircleIndicator
-            android:id="@+id/indicator"
+            android:id="@+id/image_indicator"
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:layout_alignParentBottom="true"
             android:layout_centerHorizontal="true"
-            android:background="@color/colorAccent"
+            android:background="@color/pastel_green"
             android:gravity="bottom"
             android:padding="10dip"
             app:layout_constraintBottom_toBottomOf="@+id/guideline10"
@@ -92,7 +92,7 @@
             android:background="@color/com_facebook_button_background_color_focused_disabled"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address" />
+            app:layout_constraintTop_toBottomOf="@+id/edit_listing_fab" />
 
         <TextView
             android:id="@+id/description_tv"
@@ -164,6 +164,17 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider9" />
 
+        <TextView
+            android:id="@+id/edit_date_tv"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginEnd="8dp"
+            android:layout_marginTop="8dp"
+            android:text="TextView"
+            android:textStyle="italic"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/posted_date_tv" />
+
         <ImageView
             android:id="@+id/imageView13"
             android:layout_width="20dp"
@@ -205,14 +216,13 @@
             android:id="@+id/edit_listing_fab"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
             android:clickable="true"
             app:backgroundTint="@android:color/background_light"
-            app:layout_constraintBottom_toTopOf="@+id/divider10"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/posted_date_tv"
+            app:fabSize="mini"
+            app:layout_constraintEnd_toEndOf="@+id/edit_date_tv"
+            app:layout_constraintTop_toBottomOf="@+id/edit_date_tv"
             app:srcCompat="@drawable/edit_listing" />
 
         <View
@@ -250,7 +260,7 @@
             app:layout_constraintTop_toBottomOf="@+id/divider12" />
 
         <Button
-            android:id="@+id/button4"
+            android:id="@+id/make_an_offer_button"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="16dp"

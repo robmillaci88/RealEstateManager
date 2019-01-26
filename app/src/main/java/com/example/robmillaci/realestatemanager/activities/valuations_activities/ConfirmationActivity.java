@@ -15,10 +15,25 @@ import kotlin.Unit;
 
 public class ConfirmationActivity extends AppCompatActivity {
 private Button return_btn;
+public static final int CALLED_FROM_OFFER = 1;
+public static final int CALLED_FROM_VALUATION = 2;
+public static String BUNDLE_KEY = "confirmationActivity";
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_confirmation);
+
+        int callingFrom = getIntent().getExtras().getInt(BUNDLE_KEY);
+
+        switch (callingFrom) {
+            case CALLED_FROM_OFFER:
+                setContentView(R.layout.activity_confirmation_make_an_offer);
+                break;
+
+            case CALLED_FROM_VALUATION:
+                setContentView(R.layout.activity_confirmation);
+                break;
+        }
 
         initializeViews();
         setOnClicks();

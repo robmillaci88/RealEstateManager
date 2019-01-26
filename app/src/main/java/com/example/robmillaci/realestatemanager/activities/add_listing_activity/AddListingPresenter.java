@@ -9,11 +9,24 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.v4.app.ActivityCompat;
+import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
+import android.view.View;
+import android.widget.Button;
+import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.Spinner;
 
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
+import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
+import com.example.robmillaci.realestatemanager.utils.ArrayListTools;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 
 import java.util.ArrayList;
+
+import static com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingService.RESULTS;
+import static com.example.robmillaci.realestatemanager.data_objects.Listing.DEFAULT_LISTING_ID;
 
 
 public class AddListingPresenter extends BroadcastReceiver {
@@ -32,6 +45,8 @@ public class AddListingPresenter extends BroadcastReceiver {
 
 
     public void addListing(Context context, Listing listing, boolean editing) {
+        Log.d("addlisting", "addListing called");
+
         registerMyReceiver();
 
         Intent addListingServiceIntent = new Intent(context, AddListingService.class);
@@ -84,6 +99,7 @@ public class AddListingPresenter extends BroadcastReceiver {
         }
 
         view.imageDescriptionsChanged(image_description);
+
     }
 
     public void deleteImage(ArrayList<Bitmap> images, ArrayList<String> image_description, int position) {
@@ -100,8 +116,9 @@ public class AddListingPresenter extends BroadcastReceiver {
     @Override
     public void onReceive(Context context, Intent intent) {
         //notify the view that the listing has been added
+        boolean error = intent.getBooleanExtra(RESULTS,false);
         unregisterReciever();
-        view.addingListingCompleted();
+        view.addingListingCompleted(error);
     }
 
      void unregisterReciever() {
@@ -127,6 +144,6 @@ public class AddListingPresenter extends BroadcastReceiver {
 
         Activity getViewActivity();
 
-        void addingListingCompleted();
+        void addingListingCompleted(boolean error);
     }
 }

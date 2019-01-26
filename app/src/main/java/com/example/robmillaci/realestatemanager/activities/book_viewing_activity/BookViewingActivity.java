@@ -2,20 +2,18 @@ package com.example.robmillaci.realestatemanager.activities.book_viewing_activit
 
 import android.annotation.SuppressLint;
 import android.content.Context;
-import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.view.MenuItem;
 import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.robmillaci.realestatemanager.Adapters.BookingTimesAdapter;
+import com.example.robmillaci.realestatemanager.adapters.BookingTimesAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;

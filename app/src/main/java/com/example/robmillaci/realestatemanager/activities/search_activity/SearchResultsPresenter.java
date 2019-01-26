@@ -33,15 +33,15 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
 
     public void searchDatabase(Bundle extras) {
         if (Utils.CheckConnectivity(cReference.get())) {
-            FirebaseHelper.getInstance().setPresenter(this).getSearchListings(extras);
+            FirebaseHelper.getInstance().setPresenter(this).searchForSaleListings(extras);
         } else {
-            MyDatabase.getInstance(cReference.get()).setPresenter(this).getFromLocalDb(cReference.get(), extras, 1);
+            MyDatabase.getInstance(cReference.get()).setPresenter(this).searchLocalDB(cReference.get(), extras, 1);
         }
     }
 
 
     @Override
-    public void gotData(ArrayList<Listing> listings, int requestCode, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c) {
         view.gotAllListing(listings);
     }
 
@@ -97,7 +97,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                         Date firstDate = Utils.stringToDate(o1.getPostedDate());
                         Date secondDate = Utils.stringToDate(o2.getPostedDate());
 
-                        return (firstDate != null && secondDate != null) ? firstDate.compareTo(secondDate) : 0;
+                        return (firstDate != null && secondDate != null) ? secondDate.compareTo(firstDate) : 0;
                     }
                 });
 
@@ -112,7 +112,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                         Date firstDate = Utils.stringToDate(o1.getPostedDate());
                         Date secondDate = Utils.stringToDate(o2.getPostedDate());
 
-                        return (firstDate != null && secondDate != null) ? secondDate.compareTo(firstDate) : 0;
+                        return (firstDate != null && secondDate != null) ? firstDate.compareTo(secondDate) : 0;
                     }
                 });
 

@@ -1,5 +1,7 @@
 package com.example.robmillaci.realestatemanager.activities.main_activity;
 
+import android.util.Log;
+
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
@@ -10,7 +12,7 @@ import java.util.ArrayList;
 
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListener {
+public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListener, FirebaseHelper.AddListingCallback {
     private View mView;
 
     MainActivityPresenter(View view) {
@@ -18,9 +20,7 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
     }
 
     public void syncData() {
-        FirebaseHelper.getInstance().synchWithLocalDb(getApplicationContext());
-        FirebaseHelper.getInstance().setPresenter(this).getAllListings();
-        new SharedPreferenceHelper(getApplicationContext()).updateLastSyncDate();
+        FirebaseHelper.getInstance().setAddListingCallback(this).synchWithLocalDb(getApplicationContext());
     }
 
     @Override
@@ -29,18 +29,33 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
     }
 
     @Override
-    public void syncComplete() {
-        mView.synchDataComplete();
+    public void syncComplete(boolean error) {
+        new SharedPreferenceHelper(getApplicationContext()).updateLastSyncDate();
+        mView.syncDataComplete(error);
     }
 
     @Override
-    public void updateProgressBarSyncProgress(int count) {
-       mView.updateManualSyncProgress(count);
+    public void updateProgressBarFirebaseSync(int count, String message) {
+       mView.updateManualSyncProgress(count, message);
     }
 
-    interface View {
-        void synchDataComplete();
+    @Override
+    public void dBListingsAddedToFirebase(boolean error) {
+       if (error){
+           syncComplete(true);
+       }else {
+           FirebaseHelper.getInstance().setPresenter(this).getAllListings();
+       }
+    }
 
-        void updateManualSyncProgress(int count);
+    @Override
+    public void updateProgressBarDbSync(int count, String message) {
+        mView.updateManualSyncProgress(count,message);
+    }
+
+
+    interface View {
+        void syncDataComplete(boolean error);
+        void updateManualSyncProgress(int count,String message);
     }
 }

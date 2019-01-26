@@ -18,7 +18,7 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.robmillaci.realestatemanager.Adapters.SearchResultsAdapter;
+import com.example.robmillaci.realestatemanager.adapters.SearchResultsAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;

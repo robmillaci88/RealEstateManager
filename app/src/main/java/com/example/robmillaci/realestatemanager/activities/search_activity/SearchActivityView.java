@@ -7,6 +7,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -34,6 +35,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
 
     private RadioButton buy_radio_btn;
     private RadioButton let_radio_btn;
+    private RadioButton sold_radio_btn;
 
     private Spinner property_type_spinner;
     private Spinner min_price_spinner;
@@ -54,6 +56,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     public static final String MAX_PRICE_VALUE_KEY = "maxPrice";
     public static final String MIN_BEDROOMS_VALUE_KEY = "minBeds";
     public static final String MAX_BEDROOMS_VALUE_KEY = "maxBeds";
+    public static final String SOLD_SEARCH = "soldSearch";
 
 
     @SuppressWarnings("ConstantConditions")
@@ -83,6 +86,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         reset_btn = findViewById(R.id.reset_btn);
         search_btn = findViewById(R.id.search_btn);
         your_location_img = findViewById(R.id.loc_icn);
+        sold_radio_btn = findViewById(R.id.sold_radio_button);
 
         search_btn.setClickable(false);
         buy_radio_btn.setChecked(true);
@@ -115,8 +119,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     let_radio_btn.setChecked(false);
-                } else {
-                    let_radio_btn.setChecked(true);
+                    sold_radio_btn.setChecked(false);
                 }
             }
         });
@@ -127,8 +130,17 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
                     buy_radio_btn.setChecked(false);
-                } else {
-                    buy_radio_btn.setChecked(true);
+                    sold_radio_btn.setChecked(false);
+                }
+            }
+        });
+
+        sold_radio_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    let_radio_btn.setChecked(false);
+                    buy_radio_btn.setChecked(false);
                 }
             }
         });
@@ -163,6 +175,11 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
                 String maxPrice = max_price_spinner.getSelectedItem().toString();
                 String minBedrooms = min_bedrooms_spinner.getSelectedItem().toString();
                 String maxBedrooms = max_bedrooms_spinner.getSelectedItem().toString();
+                boolean soldSearch = sold_radio_btn.isChecked();
+
+                if (soldSearch){
+                    buy = true;
+                }
 
                 Intent searchResultsIntent = new Intent(SearchActivityView.this, SearchResultsView.class);
 
@@ -174,6 +191,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
                 searchResultsIntent.putExtra(MAX_PRICE_VALUE_KEY, maxPrice);
                 searchResultsIntent.putExtra(MIN_BEDROOMS_VALUE_KEY, minBedrooms);
                 searchResultsIntent.putExtra(MAX_BEDROOMS_VALUE_KEY, maxBedrooms);
+                searchResultsIntent.putExtra(SOLD_SEARCH,soldSearch);
 
                 startActivity(searchResultsIntent);
             }

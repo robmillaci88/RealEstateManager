@@ -16,28 +16,28 @@ import com.example.robmillaci.realestatemanager.utils.Utils;
 import java.lang.ref.WeakReference;
 import java.util.ArrayList;
 
-public class NetworkListener extends BroadcastReceiver implements FirebaseHelper.Model, DbSyncListener {
+public class NetworkListener extends BroadcastReceiver implements FirebaseHelper.Model, DbSyncListener, FirebaseHelper.AddListingCallback {
     WeakReference<Context> mContextWeakReference;
 
     private SynchListenerCallback mSynchListenerCallback;
+    @SuppressWarnings("FieldCanBeLocal")
+    private final int SYNC_FREQUENCY = 60 * 60 * 1000;
     public static final String LASTSYNCKEY = "lastSync";
 
 
     public NetworkListener(SynchListenerCallback callback) {
-       this.mSynchListenerCallback = callback;
+        this.mSynchListenerCallback = callback;
     }
 
     @Override
     public void onReceive(Context context, Intent intent) {
-       if (Utils.CheckConnectivity(context)) {
+        if (Utils.CheckConnectivity(context)) {
             if (shouldWeSynch(context)) {
                 mContextWeakReference = new WeakReference<>(context);
 
                 mSynchListenerCallback.showProgressDialog();
                 //we are online - sync local DB with fireStore and then sync firestore with localDB
-                FirebaseHelper.getInstance().synchWithLocalDb(context.getApplicationContext());
-
-                FirebaseHelper.getInstance().setPresenter(this).getAllListings();
+                FirebaseHelper.getInstance().setAddListingCallback(this).synchWithLocalDb(context.getApplicationContext());
 
                 new SharedPreferenceHelper(context).updateLastSyncDate();
 
@@ -54,7 +54,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
         long lastUpdateTime = new SharedPreferenceHelper(c).getLastSyncTime();
         long timeNow = System.currentTimeMillis();
 
-        return timeNow - lastUpdateTime >= 30 * 60 * 1000; //sync every 30 mins without having to manually trigger a sync
+        return timeNow - lastUpdateTime >= SYNC_FREQUENCY; //sync every hour without having to manually trigger a sync
     }
 
     @Override
@@ -63,14 +63,35 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
     }
 
     @Override
-    public void syncComplete() {
-        Log.d("onNext", "syncComplete: called ");
-        mSynchListenerCallback.dismissProgressDialog();
+    public void
+    syncComplete(boolean error) {
+        mSynchListenerCallback.dismissProgressDialog(error);
     }
 
     @Override
-    public void updateProgressBarSyncProgress(int count) {
-        mSynchListenerCallback.updateProgressDialog(count);
+    public void dBListingsAddedToFirebase(boolean error) {
+        if (error) {
+            mSynchListenerCallback.dismissProgressDialog(true);
+        } else {
+            FirebaseHelper.getInstance().setPresenter(this).getAllListings();
+        }
+    }
+
+
+    @Override
+    public void updateProgressBarFirebaseSync(int count, String message) {
+        Log.d("updateProgressBarSy", "updateProgressBarFirebaseSync: got here ");
+        mSynchListenerCallback.updateProgressDialog(count,message);
+        //not used in this class
+    }
+
+    @Override
+    public void updateProgressBarDbSync(int count, String message) {
+        Log.d("updateProgressBarDbSync", "updateProgressBarFirebaseSync: got here ");
+        mSynchListenerCallback.updateProgressDialog(count,message);
+
+
+        //not used in this class
     }
 
 }

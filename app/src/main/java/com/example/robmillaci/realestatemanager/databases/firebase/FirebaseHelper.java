@@ -6,6 +6,7 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
+import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.local_database.ListingsDatabaseContract;
@@ -35,6 +36,9 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import io.reactivex.Observer;
+import io.reactivex.disposables.Disposable;
+
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.IMAGE_URI_PATH;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_COUNTY;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_COLLECTION_PATH;
@@ -56,19 +60,26 @@ import static com.example.robmillaci.realestatemanager.databases.local_database.
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 public class FirebaseHelper implements MyDatabase.Model {
+    private static final String LISTINGS_COLLECTION_PATH = "listings"; //the firebase collection path for our listings
+
     private static FirebaseAuth mAuth = FirebaseAuth.getInstance(); //The entry point of the Firebase Authentication SDK
     private static String loggedInUser; //the logged in user
     private static String loggedInEmail; //the logged in users email
     private static String loggedinUserId; //the logged in users picture
+    private static int dBListingCount = 0; //the number of listings returned from local database
 
-    private static final String LISTINGS_COLLECTION_PATH = "listings";
+    private ArrayList<Listing> returnedListings; //all listings returned from Firebase
+    private ArrayList<Listing> dbListings;
 
-    private Model mPresenter;
-    private AdminCheckCallback mAdminCheckCallback;
-    private AddListingCallback addListingCallback;
+    private Model mPresenter; //the presenter
+    private AdminCheckCallback mAdminCheckCallback; //callback after checking if the user is Admin (represented by 1 = true and 0 = false in firebase
+    private AddListingCallback addListingCallback; //callback when we have added listings to firebase
 
-    private static FirebaseHelper instance;
+    private static FirebaseHelper instance; //this instance of FirebaseHelper class
 
+    private static ArrayList<String> imageUris = new ArrayList<>(); //arraylist to hold uris of images for firebase storage
+
+    private static Observer<Integer> myObserver;
 
     static {
         FirebaseFirestore.setLoggingEnabled(true);
@@ -76,10 +87,9 @@ public class FirebaseHelper implements MyDatabase.Model {
         FirebaseFirestoreSettings settings = new FirebaseFirestoreSettings.Builder()
                 .setPersistenceEnabled(true)
                 .build();
+
         FirebaseFirestore.getInstance().setFirestoreSettings(settings);
     }
-
-
 
 
     private FirebaseHelper() {
@@ -98,7 +108,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         return this;
     }
 
-    public FirebaseHelper setAddListingCallback(AddListingCallback addListingCallback){
+    public FirebaseHelper setAddListingCallback(AddListingCallback addListingCallback) {
         this.addListingCallback = addListingCallback;
         return this;
     }
@@ -118,25 +128,29 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-    private static void getListingLastUpdateTime(final Listing listing) {
+    private static void getListingLastUpdateTime(final Listing listing, final AddListingCallback callback) {
+        Log.d("getListing", "getListingLastUpdateTime: called");
         final String[] lastUpdateTime = new String[1];
         FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH).document(listing.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+            public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
+
                 DocumentSnapshot d = task.getResult();
                 if (d != null) {
                     lastUpdateTime[0] = (String) d.get(ListingsDatabaseContract.UPDATE_TIME);
                 } else {
                     lastUpdateTime[0] = "null";
                 }
-                gotListingUpdateTime(listing, lastUpdateTime[0]);
+                gotListingUpdateTime(listing, lastUpdateTime[0], callback);
+
             }
         });
     }
 
 
     public void getAllListings() {
-        final ArrayList<Listing> listings = new ArrayList<>();
+        returnedListings = new ArrayList<>();
+
         FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @SuppressWarnings("ConstantConditions")
             @Override
@@ -145,46 +159,64 @@ public class FirebaseHelper implements MyDatabase.Model {
                 if (taskResults != null) {
                     List<DocumentSnapshot> docList = taskResults.getDocuments();
                     for (DocumentSnapshot s : docList) {
-
-                        String[] photoDescArray = null;
-                        ArrayList<String> photoDescrs = (ArrayList<String>) s.get(ListingsDatabaseContract.PHOTO_DESCR);
-                        if (photoDescrs != null) {
-                            photoDescArray = photoDescrs.toArray(new String[photoDescrs.size()]);
-                        }
-
-                        Listing thisListing = new Listing(
-                                s.getId(),
-                                s.get(ListingsDatabaseContract.TYPE).toString(),
-                                s.get(ListingsDatabaseContract.PRICE) != null ? (Double) s.get(ListingsDatabaseContract.PRICE) : 0,
-                                s.get(ListingsDatabaseContract.SURFACE_AREA) != null ? (Double) s.get(ListingsDatabaseContract.SURFACE_AREA) : 0,
-                                s.get(ListingsDatabaseContract.NUM_BED_ROOMS) != null ? ((Long) s.get(ListingsDatabaseContract.NUM_BED_ROOMS)).intValue() : 0,
-                                s.get(ListingsDatabaseContract.DESCRIPTION) != null ? s.get(ListingsDatabaseContract.DESCRIPTION).toString() : "",
-                                s.get(FIREBASE_IMAGE_URLS) != null ? (ArrayList<String>) s.get(FIREBASE_IMAGE_URLS) : null, //todo sort this out!
-                                photoDescArray,
-                                s.get(ListingsDatabaseContract.ADDRESS_POSTCODE) != null ? s.get(ListingsDatabaseContract.ADDRESS_POSTCODE).toString() : "",
-                                s.get(ListingsDatabaseContract.ADDRESS_NUMBER) != null ? s.get(ListingsDatabaseContract.ADDRESS_NUMBER).toString() : "",
-                                s.get(ListingsDatabaseContract.ADDRESS_STREET) != null ? s.get(ListingsDatabaseContract.ADDRESS_STREET).toString() : "",
-                                s.get(ListingsDatabaseContract.ADDRESS_TOWN) != null ? s.get(ListingsDatabaseContract.ADDRESS_TOWN).toString() : "",
-                                s.get(ListingsDatabaseContract.ADDRESS_COUNTY) != null ? s.get(ListingsDatabaseContract.ADDRESS_COUNTY).toString() : "",
-                                s.get(ListingsDatabaseContract.POI) != null ? s.get(ListingsDatabaseContract.POI).toString() : "",
-                                s.get(ListingsDatabaseContract.STATUS) != null ? s.get(ListingsDatabaseContract.STATUS).toString() : "",
-                                s.get(ListingsDatabaseContract.POSTED_DATE) != null ? s.get(ListingsDatabaseContract.POSTED_DATE).toString() : "",
-                                s.get(ListingsDatabaseContract.SALE_DATE) != null ? s.get(ListingsDatabaseContract.SALE_DATE).toString() : "",
-                                s.get(ListingsDatabaseContract.AGENT) != null ? s.get(ListingsDatabaseContract.AGENT).toString() : "",
-                                s.get(ListingsDatabaseContract.UPDATE_TIME) != null ? s.get(ListingsDatabaseContract.UPDATE_TIME).toString() : "",
-                                s.get(ListingsDatabaseContract.BUY_LET) != null ? s.get(ListingsDatabaseContract.BUY_LET).toString() : "");
-
-                        listings.add(thisListing);
+                        foundAListing(s);
                     }
 
-                    mPresenter.gotListingsFromFirebase(listings);
+                    mPresenter.gotListingsFromFirebase(returnedListings);
                 }
             }
         });
     }
 
 
+    private void foundAListing(DocumentSnapshot s) {
+        ArrayList<String> photoDescrList;
+        String[] photoDescr;
+        if (s.get(ListingsDatabaseContract.PHOTO_DESCR) != null) {
+            photoDescrList = (ArrayList<String>) s.get(ListingsDatabaseContract.PHOTO_DESCR);
+            photoDescr = photoDescrList.toArray(new String[photoDescrList.size()]);
+        } else {
+            photoDescr = null;
+        }
+
+
+        returnedListings.add(new Listing(s.getId(),
+                s.get(ListingsDatabaseContract.TYPE).toString(),
+                s.get(ListingsDatabaseContract.PRICE) != null ? (Double) s.get(ListingsDatabaseContract.PRICE) : 0,
+                s.get(ListingsDatabaseContract.SURFACE_AREA) != null ? (Double) s.get(ListingsDatabaseContract.SURFACE_AREA) : 0,
+                s.get(ListingsDatabaseContract.NUM_BED_ROOMS) != null ? ((Long) s.get(ListingsDatabaseContract.NUM_BED_ROOMS)).intValue() : 0,
+                s.get(ListingsDatabaseContract.DESCRIPTION) != null ? s.get(ListingsDatabaseContract.DESCRIPTION).toString() : "",
+                s.get(FIREBASE_IMAGE_URLS) != null ? (ArrayList<String>) s.get(FIREBASE_IMAGE_URLS) : null, //todo sort this out!
+                photoDescr,
+                s.get(ListingsDatabaseContract.ADDRESS_POSTCODE) != null ? s.get(ListingsDatabaseContract.ADDRESS_POSTCODE).toString() : "",
+                s.get(ListingsDatabaseContract.ADDRESS_NUMBER) != null ? s.get(ListingsDatabaseContract.ADDRESS_NUMBER).toString() : "",
+                s.get(ListingsDatabaseContract.ADDRESS_STREET) != null ? s.get(ListingsDatabaseContract.ADDRESS_STREET).toString() : "",
+                s.get(ListingsDatabaseContract.ADDRESS_TOWN) != null ? s.get(ListingsDatabaseContract.ADDRESS_TOWN).toString() : "",
+                s.get(ListingsDatabaseContract.ADDRESS_COUNTY) != null ? s.get(ListingsDatabaseContract.ADDRESS_COUNTY).toString() : "",
+                s.get(ListingsDatabaseContract.POI) != null ? s.get(ListingsDatabaseContract.POI).toString() : "",
+                s.get(ListingsDatabaseContract.POSTED_DATE) != null ? s.get(ListingsDatabaseContract.POSTED_DATE).toString() : "",
+                s.get(ListingsDatabaseContract.SALE_DATE) != null ? s.get(ListingsDatabaseContract.SALE_DATE).toString() : "",
+                s.get(ListingsDatabaseContract.AGENT) != null ? s.get(ListingsDatabaseContract.AGENT).toString() : "",
+                s.get(ListingsDatabaseContract.UPDATE_TIME) != null ? s.get(ListingsDatabaseContract.UPDATE_TIME).toString() : "",
+                s.get(ListingsDatabaseContract.BUY_LET) != null ? s.get(ListingsDatabaseContract.BUY_LET).toString() : "",
+                (boolean) s.get(ListingsDatabaseContract.STATUS)));
+    }
+
+
     public void getSearchListings(Bundle searchParams) {
+        //Search parameters*************************************************
+        final boolean forSale = searchParams.getBoolean(SearchActivityView.SOLD_SEARCH);
+        //End Search parameters*************************************************
+
+        if (forSale) {
+            searchForSaleListings(searchParams);
+        } else {
+            searchSoldListings();
+        }
+    }
+
+
+    public void searchForSaleListings(Bundle searchParams) {
         //Search parameters*************************************************
         final String location = searchParams.getString(SearchActivityView.LOCATION_VALUE_KEY, "");
         final boolean buy = searchParams.getBoolean(SearchActivityView.BUY_VALUE_KEY, true);
@@ -198,15 +230,13 @@ public class FirebaseHelper implements MyDatabase.Model {
         final String maxSearchprice = maxPrice.equals(NO_MAX_VALUE) ? String.valueOf(Integer.MAX_VALUE) : maxPrice;
         final String minSearchBedrooms = minBedrooms.equals(NO_MIN_VALUE) ? "0" : minBedrooms;
         final String maxSearchBedrooms = maxBedrooms.equals(NO_MAX_VALUE) ? String.valueOf(Integer.MAX_VALUE) : maxBedrooms;
+        final boolean soldSearch = searchParams.getBoolean(SearchActivityView.SOLD_SEARCH);
         //End Search parameters*************************************************
-
 
         Query q = FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH)
                 .whereEqualTo(ListingsDatabaseContract.BUY_LET, buyOrLet)
                 .whereGreaterThanOrEqualTo(ListingsDatabaseContract.PRICE, Integer.valueOf(minSearchPrice.substring(1)))
                 .whereLessThanOrEqualTo(ListingsDatabaseContract.PRICE, Integer.valueOf(maxSearchprice.substring(1)));
-
-        final ArrayList<Listing> returnedListings = new ArrayList<>();
 
         q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @Override
@@ -215,6 +245,7 @@ public class FirebaseHelper implements MyDatabase.Model {
 
                 if (taskResults != null) {
                     List<DocumentSnapshot> docList = taskResults.getDocuments();
+                    returnedListings = new ArrayList<>();
 
                     for (DocumentSnapshot s : docList) {
                         String address_postcode = (String) s.get(ListingsDatabaseContract.ADDRESS_POSTCODE);
@@ -223,6 +254,7 @@ public class FirebaseHelper implements MyDatabase.Model {
                         String address_street = (String) s.get(ListingsDatabaseContract.ADDRESS_STREET);
                         String numberOfBedrooms = String.valueOf((long) s.get(ListingsDatabaseContract.NUM_BED_ROOMS));
                         String address_property_type = (String) s.get(ListingsDatabaseContract.TYPE);
+                        boolean forSale = (boolean) s.get(ListingsDatabaseContract.STATUS);
 
                         if (Integer.valueOf(numberOfBedrooms) >= Integer.valueOf(minSearchBedrooms)
                                 && Integer.valueOf(numberOfBedrooms) <= Integer.valueOf(maxSearchBedrooms)) {
@@ -239,42 +271,39 @@ public class FirebaseHelper implements MyDatabase.Model {
 
                                 if (propertyType.equals("Any") || address_property_type.equals(propertyType)) {
                                     //noinspection unchecked
-
-                                    ArrayList<String> photoDescrList;
-                                    String[] photoDescr;
-                                    if (s.get(ListingsDatabaseContract.PHOTO_DESCR) != null) {
-                                        photoDescrList = (ArrayList<String>) s.get(ListingsDatabaseContract.PHOTO_DESCR);
-                                        photoDescr = photoDescrList.toArray(new String[photoDescrList.size()]);
-                                    } else {
-                                        photoDescr = null;
+                                    if (soldSearch == !forSale) {
+                                        foundAListing(s);
                                     }
-
-                                    returnedListings.add(new Listing(s.getId(),
-                                            s.get(ListingsDatabaseContract.TYPE).toString(),
-                                            s.get(ListingsDatabaseContract.PRICE) != null ? (Double) s.get(ListingsDatabaseContract.PRICE) : 0,
-                                            s.get(ListingsDatabaseContract.SURFACE_AREA) != null ? (Double) s.get(ListingsDatabaseContract.SURFACE_AREA) : 0,
-                                            s.get(ListingsDatabaseContract.NUM_BED_ROOMS) != null ? ((Long) s.get(ListingsDatabaseContract.NUM_BED_ROOMS)).intValue() : 0,
-                                            s.get(ListingsDatabaseContract.DESCRIPTION) != null ? s.get(ListingsDatabaseContract.DESCRIPTION).toString() : "",
-                                            s.get(FIREBASE_IMAGE_URLS) != null ? (ArrayList<String>) s.get(FIREBASE_IMAGE_URLS) : null, //todo sort this out!
-                                            photoDescr,
-                                            s.get(ListingsDatabaseContract.ADDRESS_POSTCODE) != null ? s.get(ListingsDatabaseContract.ADDRESS_POSTCODE).toString() : "",
-                                            s.get(ListingsDatabaseContract.ADDRESS_NUMBER) != null ? s.get(ListingsDatabaseContract.ADDRESS_NUMBER).toString() : "",
-                                            s.get(ListingsDatabaseContract.ADDRESS_STREET) != null ? s.get(ListingsDatabaseContract.ADDRESS_STREET).toString() : "",
-                                            s.get(ListingsDatabaseContract.ADDRESS_TOWN) != null ? s.get(ListingsDatabaseContract.ADDRESS_TOWN).toString() : "",
-                                            s.get(ListingsDatabaseContract.ADDRESS_COUNTY) != null ? s.get(ListingsDatabaseContract.ADDRESS_COUNTY).toString() : "",
-                                            s.get(ListingsDatabaseContract.POI) != null ? s.get(ListingsDatabaseContract.POI).toString() : "",
-                                            s.get(ListingsDatabaseContract.STATUS) != null ? s.get(ListingsDatabaseContract.STATUS).toString() : "",
-                                            s.get(ListingsDatabaseContract.POSTED_DATE) != null ? s.get(ListingsDatabaseContract.POSTED_DATE).toString() : "",
-                                            s.get(ListingsDatabaseContract.SALE_DATE) != null ? s.get(ListingsDatabaseContract.SALE_DATE).toString() : "",
-                                            s.get(ListingsDatabaseContract.AGENT) != null ? s.get(ListingsDatabaseContract.AGENT).toString() : "",
-                                            s.get(ListingsDatabaseContract.UPDATE_TIME) != null ? s.get(ListingsDatabaseContract.UPDATE_TIME).toString() : "",
-                                            s.get(ListingsDatabaseContract.BUY_LET) != null ? s.get(ListingsDatabaseContract.BUY_LET).toString() : ""));
                                 }
                             }
                         }
                     }
-                    mPresenter.gotListingsFromFirebase(returnedListings);
                 }
+                mPresenter.gotListingsFromFirebase(returnedListings);
+            }
+        });
+    }
+
+
+    private void searchSoldListings() {
+        Query q = FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH)
+                .whereEqualTo(ListingsDatabaseContract.STATUS, false);
+
+        returnedListings = new ArrayList<>();
+
+        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<QuerySnapshot> task) {
+                QuerySnapshot taskResults = task.getResult();
+                if (taskResults != null) {
+                    List<DocumentSnapshot> docList = taskResults.getDocuments();
+
+                    for (DocumentSnapshot s : docList) {
+
+                        foundAListing(s);
+                    }
+                }
+                mPresenter.gotListingsFromFirebase(returnedListings);
             }
         });
 
@@ -345,7 +374,7 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-    public static void addListing(final Listing listingToAdd, final AddListingCallback addListingCallback ) {
+    public static void addListing(final Listing listingToAdd, final AddListingCallback addListingCallback) {
         if (listingToAdd != null) {
             uploadImageFiles(listingToAdd, addListingCallback);
         }
@@ -353,51 +382,41 @@ public class FirebaseHelper implements MyDatabase.Model {
 
 
     private static void uploadImageFiles(final Listing listingToAdd, final AddListingCallback addListingCallback) {
-        final boolean[] uploadInProgress = {false};
-        final List<String> imagesUris = new ArrayList<>();
-        FirebaseStorage storage = FirebaseStorage.getInstance();
-        StorageReference storageRef = storage.getReference();
+        final int[] count = {listingToAdd.getPhotos().size()};
 
-        StorageReference listingRef = storageRef.child(listingToAdd.getId());
-
-        int count = 1;
-        int photosSize = listingToAdd.getPhotos().size();
-        final int[] addCount = {photosSize};
-
-        for (int i = 0; i < photosSize; i++) {
-            uploadInProgress[0] = true;
-            if (i != 0) {
-                //noinspection StatementWithEmptyBody
-                while (uploadInProgress[0]) {
-                    //wait
-                }
-            }
-
+        for (int i = 0; i < listingToAdd.getPhotos().size(); i++) {
+            final StorageReference listingRef = FirebaseStorage.getInstance().getReference().child(listingToAdd.getId());
+            final StorageReference pictureRef = listingRef.child(String.valueOf(i));
             byte[] thisPhoto = listingToAdd.getPhotos().get(i);
-            final StorageReference pictureRef = listingRef.child(String.valueOf(count));
 
             pictureRef.putBytes(thisPhoto).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
+
                     pictureRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            addCount[0]--;
-                            imagesUris.add(uri.toString());
-                            uploadInProgress[0] = false;
-                            if (addCount[0] == 0) {
-                                saveImageDownloadBytes(listingToAdd, imagesUris, addListingCallback);
+                            imageUris.add(uri.toString());
+                            count[0]--;
+
+                            if (count[0] == 0) {
+                                saveImageDownloadBytes(listingToAdd, addListingCallback);
                             }
+                        }
+                    }).addOnFailureListener(new OnFailureListener() {
+                        @Override
+                        public void onFailure(@NonNull Exception e) {
+                            addListingCallback.dBListingsAddedToFirebase(true);
                         }
                     });
                 }
             });
-            count++;
         }
-
     }
 
-    private static void saveImageDownloadBytes(final Listing listing, List<String> imageUris, final AddListingCallback addListingCallback) {
+
+    private static void saveImageDownloadBytes(final Listing listing,
+                                               final AddListingCallback addListingCallback) {
         Map<String, Object> data = new HashMap<>();
 
         data.put(IMAGE_URI_PATH, imageUris);
@@ -406,15 +425,17 @@ public class FirebaseHelper implements MyDatabase.Model {
                 .document(listing.getId())
                 .set(data)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
-            @Override
-            public void onComplete(@NonNull Task<Void> task) {
-                finishAddingListing(listing, addListingCallback);
-
-            }
-        });
+                    @Override
+                    public void onComplete(@NonNull Task<Void> task) {
+                        imageUris = new ArrayList<>();
+                        finishAddingListing(listing, addListingCallback);
+                    }
+                });
     }
 
-    private static void finishAddingListing(Listing listingToAdd, final AddListingCallback addListingCallback) {
+
+    private static void finishAddingListing(Listing listingToAdd,
+                                            final AddListingCallback addListingCallback) {
         Map<String, Object> data = new HashMap<>();
 
         ArrayList<String> photoDescr;
@@ -436,7 +457,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         data.put(ListingsDatabaseContract.ADDRESS_COUNTY, listingToAdd.getAddress_county());
         data.put(ListingsDatabaseContract.PHOTO_DESCR, photoDescr);
         data.put(ListingsDatabaseContract.POI, listingToAdd.getPoi());
-        data.put(ListingsDatabaseContract.STATUS, listingToAdd.getAvailable());
+        data.put(ListingsDatabaseContract.STATUS, listingToAdd.isForSale());
         data.put(ListingsDatabaseContract.AGENT, listingToAdd.getAgent());
         data.put(ListingsDatabaseContract.POSTED_DATE, listingToAdd.getPostedDate());
         data.put(ListingsDatabaseContract.UPDATE_TIME, listingToAdd.getLastUpdateTime());
@@ -451,41 +472,87 @@ public class FirebaseHelper implements MyDatabase.Model {
                     @Override
                     public void onSuccess(Void aVoid) {
                     }
-                }).addOnFailureListener(new OnFailureListener() {
-            @Override
-            public void onFailure(@NonNull Exception e) {
-            }
-        }).addOnCompleteListener(new OnCompleteListener<Void>() {
+                }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                addListingCallback.listingsAdded();
+                myObserver.onNext(1);
             }
         });
     }
 
 
-
     public void synchWithLocalDb(Context c) {
-        MyDatabase.getInstance(c).setPresenter(this).getFromLocalDb(c, null, 1);
+        MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null, 1);
     }
 
 
-    public void gotData(ArrayList<Listing> listings, int requestCode, Context c) {
-        for (Listing l : listings) {
-            FirebaseHelper.getListingLastUpdateTime(l);
+    public void gotDataFromLocalDb(final ArrayList<Listing> listings, int requestCode, final Context c) {
+       // dBListingCount = listings.size();
+        final int[] iterationCount = {-1};
+
+        if (listings != null && listings.size() >= 1) {
+            final int[] progressBarCount = new int[]{listings.size()};
+            dbListings = listings;
+
+
+            myObserver = new Observer<Integer>() {
+                @Override
+                public void onSubscribe(Disposable d) {
+
+                }
+
+                @Override
+                public void onNext(Integer i) {
+                    int listingIndex = ++iterationCount[0];
+
+                    addListingCallback.updateProgressBarDbSync(progressBarCount[0], c.getString(R.string.local_db_sync_message));
+                    progressBarCount[0]--;
+
+                    if (!(listingIndex == dbListings.size())) {
+                        FirebaseHelper.getListingLastUpdateTime(dbListings.get(listingIndex), addListingCallback);
+                    }else {
+                        onComplete();
+                    }
+                }
+
+                @Override
+                public void onError(Throwable e) {
+                   addListingCallback.dBListingsAddedToFirebase(true);
+                }
+
+                @Override
+                public void onComplete() {
+                    addListingCallback.dBListingsAddedToFirebase(false);
+                }
+            };
+
+            myObserver.onNext(1);
+
+        } else {
+            addListingCallback.dBListingsAddedToFirebase(false);
+
         }
     }
 
-    private static void gotListingUpdateTime(Listing listing, String lastUpdatetime) {
+    private static void gotListingUpdateTime(Listing listing, String
+            lastUpdatetime, AddListingCallback callback) {
+
+       // dBListingCount--;
+    //    boolean callbackAllowed = dBListingCount == 0;
+
         if (lastUpdatetime == null || lastUpdatetime.equals("null")) {
-            FirebaseHelper.addListing(listing,null);
+            FirebaseHelper.addListing(listing, callback);
         } else {
             Date lastUpdateDateFromFirebase = Utils.stringToDate(lastUpdatetime);
             Date thisListingDateFromLocal = Utils.stringToDate(listing.getLastUpdateTime());
 
             if (lastUpdateDateFromFirebase != null && lastUpdateDateFromFirebase.before(thisListingDateFromLocal)) {
-                FirebaseHelper.addListing(listing,null);
-            }
+                FirebaseHelper.addListing(listing, callback);
+            }/* else {
+                if (callbackAllowed) {
+                    callback.dBListingsAddedToFirebase(false);
+                }
+            }*/
         }
     }
 
@@ -517,7 +584,9 @@ public class FirebaseHelper implements MyDatabase.Model {
         void isAdmin(boolean result);
     }
 
-    public interface AddListingCallback{
-        void listingsAdded();
+    public interface AddListingCallback {
+        void dBListingsAddedToFirebase(boolean error);
+
+        void updateProgressBarDbSync(int count, String message);
     }
 }

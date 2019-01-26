@@ -12,6 +12,7 @@ import java.text.DateFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
+import java.util.Locale;
 
 public class Utils {
 
@@ -30,7 +31,7 @@ public class Utils {
         }
 
         public static Date stringToDate(String s){
-            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/YYYY hh:mm:ssss");
+            @SuppressLint("SimpleDateFormat") SimpleDateFormat sdf = new SimpleDateFormat("dd/MM/yyyy hh:mm:ssss",Locale.getDefault());
             try {
                 return sdf.parse(s);
             } catch (ParseException ex) {

@@ -467,12 +467,12 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
     @Override
-    public void updateProgressDialog(final int count) {
+    public void updateProgressDialog(final int count, final String message) {
         runOnUiThread(new Runnable() {
             @Override
             public void run() {
                 if (pd != null && pd.isShowing()) {
-                    pd.setMessage(getString(R.string.database_sync_message) + " " + String.valueOf(count) + " " + "listings remaining");
+                    pd.setMessage(message + " " + String.valueOf(count) + " " + getString(R.string.listings_remaining));
                 }
             }
         });
@@ -480,12 +480,24 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
     @Override
-    public void dismissProgressDialog() {
+    public void dismissProgressDialog(final boolean error) {
         keepScreenOn(false);
         if (pd != null && pd.isShowing()){
             pd.dismiss();
+
+            runOnUiThread(new Runnable() {
+                @Override
+                public void run() {
+                    if (error){
+                        ToastModifications.createToast(MainActivityView.this,getString(R.string.sync_timeout),Toast.LENGTH_LONG);
+                    }else {
+                        ToastModifications.createToast(MainActivityView.this,getString(R.string.sync_completed),Toast.LENGTH_LONG);
+                    }
+                }
+            });
         }
     }
+
 
     private void keepScreenOn(boolean screenOn) {
         if (screenOn) {
@@ -531,13 +543,19 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
 
     @Override
-    public void synchDataComplete() {
-        dismissProgressDialog();
+    public void syncDataComplete(final boolean error) {
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                dismissProgressDialog(error);
+            }
+        });
+
     }
 
     @Override
-    public void updateManualSyncProgress(int count) {
-        this.updateProgressDialog(count);
+    public void updateManualSyncProgress(int count, String message) {
+        this.updateProgressDialog(count,message);
     }
 }
 
