@@ -324,7 +324,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         //noinspection ConstantConditions
         data.put(FirebaseContract.USER_DATABASE_PICTURE_FIELD, (fbUser.getPhotoUrl().toString()));
         data.put(FirebaseContract.USER_DATABASE_UNIQUE_ID_FIELD, fbUser.getUid());
-        data.put(USER_DATABASE_ISADMIN_FIELD, 0); //0 = not admin, 1 = admin. Default is no admin access. Change this value in firebase to allow admin access
+        data.put(USER_DATABASE_ISADMIN_FIELD, 1); //0 = not admin, 1 = admin. Default is no admin access. Change this value in firebase to allow admin access
 
 
         mFirebaseDatabase.collection(FirebaseContract.USER_DATABASE_COLLECTION_PATH).document(fbUser.getUid()).set(data);
