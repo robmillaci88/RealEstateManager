@@ -15,6 +15,22 @@
       },
       "oauth_client": [
         {
+          "client_id": "23584158539-4vutpjbj6o97kplmktdggfgn0hg40t8e.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.robmillaci.realestatemanager",
+            "certificate_hash": "137e54589df3988d1251303b59ca193f3e9c5905"
+          }
+        },
+        {
+          "client_id": "23584158539-oussf1bsel13uvp36s20v2jick393mkl.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.example.robmillaci.realestatemanager",
+            "certificate_hash": "7d12447e23ad66bbad92aac813978bc0dff253aa"
+          }
+        },
+        {
           "client_id": "23584158539-oljjebrgtrl42h6kdq5iej8t9d00je7f.apps.googleusercontent.com",
           "client_type": 3
         }
@@ -29,8 +45,13 @@
           "status": 1
         },
         "appinvite_service": {
-          "status": 1,
-          "other_platform_oauth_client": []
+          "status": 2,
+          "other_platform_oauth_client": [
+            {
+              "client_id": "23584158539-oljjebrgtrl42h6kdq5iej8t9d00je7f.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         },
         "ads_service": {
           "status": 2

@@ -16,6 +16,7 @@ import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelpe
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.facebook.AccessToken;
 
+import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
 import com.google.android.gms.auth.api.signin.GoogleSignInAccount;
@@ -27,6 +28,7 @@ import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.AuthCredential;
 import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
+import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 
@@ -36,7 +38,9 @@ import com.google.firebase.auth.FirebaseUserMetadata;
  */
 public class StartActivity extends AppCompatActivity implements FaceBookLoginManager.loginManagerCallback, FirebaseGoogleAuthManager.fireBaseGoogleAuthCallback {
     private static final String TAG = "StartActivity";
-    private static final String GOOGLE_ID_TOKEN = "476591839693-6ukp9b83561afq71vmbglq0i6f4v0ig2.apps.googleusercontent.com";
+    private static final String GOOGLE_ID_TOKEN = "23584158539-oljjebrgtrl42h6kdq5iej8t9d00je7f.apps.googleusercontent.com";
+    public static final String LOGOUT_INTENT_KEY = "logout";
+    public static final int LOGOUT_INTENT_VALUE = 1;
 
     private GoogleSignInClient mGoogleSignInClient; //the GoogleSignInClient
     private FaceBookLoginManager faceBookLoginManager;
@@ -51,6 +55,17 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
 
         initializeFacebookLogin();
         initializeGoogleSignIn();
+
+
+        Bundle intentBundle = getIntent().getExtras();
+        if (intentBundle != null){
+            if (intentBundle.getInt(LOGOUT_INTENT_KEY) == 1){
+                //sign the user out
+                FirebaseAuth.getInstance().signOut();
+                LoginManager.getInstance().logOut();
+                mGoogleSignInClient.signOut();
+            }
+        }
     }
 
 
@@ -121,6 +136,7 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             Toast.makeText(this, R.string.login_failed, Toast.LENGTH_LONG).show();
+            Log.d(TAG, "google login failed: " + e + "status code" + e.getStatusCode() + " " + e.getCause());
         }
     }
 
@@ -146,6 +162,18 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
     @Override
     protected void onStart() {
         super.onStart();
+
+        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
+
+        if(user!=null){
+
+            Log.i("Username","user logged in "  + user.getEmail());
+        }
+        else{
+            Log.i("Username", "there is no user");
+        }
+
+
         updateUI();
     }
 
@@ -201,8 +229,7 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
     public void error() {
         Toast.makeText(StartActivity.this, R.string.sign_in_error,Toast.LENGTH_LONG).show();
     }
-
-
+    
 }
 
 

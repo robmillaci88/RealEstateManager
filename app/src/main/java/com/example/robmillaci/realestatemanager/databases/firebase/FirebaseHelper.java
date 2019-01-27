@@ -1,23 +1,29 @@
 package com.example.robmillaci.realestatemanager.databases.firebase;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
+import com.example.robmillaci.realestatemanager.activities.customer_account.AccountActivity;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
+import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.local_database.ListingsDatabaseContract;
 import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
 import com.example.robmillaci.realestatemanager.utils.Utils;
+import com.facebook.login.LoginManager;
+import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
+import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -545,6 +551,7 @@ public class FirebaseHelper implements MyDatabase.Model {
             });
         }
     }
+
 
 
     public interface Model {

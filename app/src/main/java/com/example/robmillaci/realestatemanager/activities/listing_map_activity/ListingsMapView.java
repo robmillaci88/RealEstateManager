@@ -133,8 +133,8 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Called from the presenter when the users location has been established.
      * Get all listings is then called from the presenter
-     * @param latitude
-     * @param longitude
+     * @param latitude the users latitude
+     * @param longitude the users longitude
      */
     @Override
     public void gotUsersLocation(double latitude, double longitude) {
@@ -158,9 +158,9 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Call back from {@link ListingsMapPresenter#geoLocationListing(String, int)}
      * Creates a new marker with the listings lat long and adds this to the map
-     * @param latitude
-     * @param longitude
-     * @param markerIndex
+     * @param latitude the latitude of the place
+     * @param longitude the longitude of the lace
+     * @param markerIndex the index of the marker representing the place
      */
     @Override
     public void gotPlaceLatLng(double latitude, double longitude, int markerIndex) {

@@ -35,7 +35,7 @@
             android:layout_centerHorizontal="true"
             android:background="@color/pastel_green"
             android:gravity="bottom"
-            android:padding="10dip"
+            android:padding="10dp"
             app:layout_constraintBottom_toBottomOf="@+id/guideline10"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
@@ -237,7 +237,7 @@
         <FrameLayout
             android:id="@+id/map_fragment_container"
             android:layout_width="0dp"
-            android:layout_height="572dp"
+            android:layout_height="0dp"
             app:layout_constraintBottom_toBottomOf="@+id/divider11"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

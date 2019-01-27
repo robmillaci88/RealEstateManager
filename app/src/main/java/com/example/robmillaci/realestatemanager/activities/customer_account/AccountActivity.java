@@ -8,13 +8,15 @@ import android.widget.Button;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
-import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;
 import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
+
+import static com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity.LOGOUT_INTENT_KEY;
+import static com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity.LOGOUT_INTENT_VALUE;
 
 /**
  * This class is responsible for the customer account activity
@@ -74,8 +76,9 @@ public class AccountActivity extends BaseActivity {
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        FirebaseHelper.getmAuth().signOut();
-                        startActivity(new Intent(AccountActivity.this,StartActivity.class));
+                        Intent signOutIntent = new Intent(AccountActivity.this,StartActivity.class);
+                        signOutIntent.putExtra(LOGOUT_INTENT_KEY,LOGOUT_INTENT_VALUE);
+                        startActivity(signOutIntent);
                     }
                 });
         mCompositeDisposable.add(logOutBtn);

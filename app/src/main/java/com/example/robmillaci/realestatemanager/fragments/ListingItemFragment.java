@@ -120,6 +120,7 @@ public class ListingItemFragment extends BaseFragment {
     }
 
 
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
     private void setOnClicks() {
         final Context c = ListingItemFragment.this.getContext();
@@ -152,7 +153,7 @@ public class ListingItemFragment extends BaseFragment {
             @Override
             public void accept(Unit unit) {
                 if (Utils.CheckConnectivity(c)) {
-                    Intent streetViewIntent = new Intent(getContext(), StreetViewActivity.class);
+                    Intent streetViewIntent = new Intent(getActivity(), StreetViewActivity.class);
                     streetViewIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
 
                     startActivity(streetViewIntent);
@@ -166,7 +167,7 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(bookViewing).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Intent bookAViewingIntent = new Intent(c, BookViewingActivity.class);
+                Intent bookAViewingIntent = new Intent(getActivity(), BookViewingActivity.class);
                 bookAViewingIntent.putExtra(ListingItemFragment.LISTING_BUNDLE_KEY, thisListing);
                 startActivity(bookAViewingIntent);
             }
@@ -177,7 +178,7 @@ public class ListingItemFragment extends BaseFragment {
             @Override
             public void accept(Unit unit) {
                 Log.d("accept", "accept: called");
-                Intent editListingIntent = new Intent(c, AddListingView.class);
+                Intent editListingIntent = new Intent(getActivity(), AddListingView.class);
                 editListingIntent.putExtra(EDIT_LISTING_BUNDLE_KEY, thisListing);
                 startActivity(editListingIntent);
             }
@@ -187,7 +188,7 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(makeAnOffer).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit){
-              Intent makeAnOfferIntent = new Intent(getContext(),MakeAnOffer.class);
+              Intent makeAnOfferIntent = new Intent(getActivity(),MakeAnOffer.class);
               makeAnOfferIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
               startActivity(makeAnOfferIntent);
             }
