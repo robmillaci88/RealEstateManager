@@ -29,13 +29,16 @@ import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
 
+/**
+ * This class is responsible for displaying the Book a view activity
+ */
 public class BookViewingActivity extends AppCompatActivity implements BookingTimesAdapter.BookingAdapterCallback {
-    private Listing thisListing;
-    private ImageView listingImage;
-    private RecyclerView times_recycler_view;
-    private Button continue_btn;
+    private Listing thisListing; //the listing of which a viewing is being booked
+    private ImageView listingImage; //the imageview to display the listings image
+    private RecyclerView times_recycler_view; //the recyclerview to display the available booking times
+    private Button continue_btn; //the continue button
 
-    private static final int MAX_BOOKINGS_PER_DAY = 25;
+    private static final int MAX_BOOKINGS_PER_DAY = 25; //the maximum number of bookings per day
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -43,7 +46,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
         setContentView(R.layout.activity_book_viewing);
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getString(R.string.book_viewing_activity_title));
+        setTitle(getString(R.string.book_viewing_activity_title)); //the title of the activity
 
         getListing();
         initializeViews();
@@ -87,6 +90,9 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
     }
 
 
+    /**
+     * Get the listing passed into the intent when starting this activity. This is the listing that a viewing is being booked for
+     */
     private void getListing() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
@@ -109,6 +115,11 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
                 thisListing.getAddress_postcode()));
     }
 
+
+    /**
+     * Loads the photo associated with this listing into the listing image
+     * First we must determine if the photo data is being obtained from Firebase or from the local DB
+     */
     private void loadPhoto() {
         ArrayList<String> firebasePhoto = thisListing.getFirebasePhotos();
         List<byte[]> localPhoto = thisListing.getPhotos();
@@ -120,18 +131,21 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
         }
     }
 
-    private void createCalendarSelector() {
 
+    /**
+     * Create a calendar selector which will display the times available for booking
+     */
+    private void createCalendarSelector() {
         /* ends after 3 month from now */
-        Calendar endDate = Calendar.getInstance();
+        Calendar endDate = Calendar.getInstance(); //get a calendar instance and add 3 months to it, this is the maximum number of days that will be displayed
         endDate.add(Calendar.MONTH, 3);
 
-        final HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView)
-                .range(Calendar.getInstance(), endDate)
-                .datesNumberOnScreen(5)
+        final HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView) //create a Horizontal calendar
+                .range(Calendar.getInstance(), endDate) //set the range from now to 3 months in the future
+                .datesNumberOnScreen(5) //the number of dates on screen at once
                 .build();
 
-        horizontalCalendar.getSelectedItemStyle().setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent)));
+        horizontalCalendar.getSelectedItemStyle().setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent))); //set the color when a date is selected
 
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override

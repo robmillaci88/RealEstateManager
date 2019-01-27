@@ -15,7 +15,9 @@
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="@+id/guideline11"
-        app:layout_constraintTop_toTopOf="@+id/search_results_divider"></FrameLayout>
+        app:layout_constraintTop_toTopOf="@+id/search_results_divider">
+
+    </FrameLayout>
 
     <TextView
         android:id="@+id/property_type_filter_title"

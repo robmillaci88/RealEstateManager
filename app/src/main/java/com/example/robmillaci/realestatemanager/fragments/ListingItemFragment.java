@@ -2,6 +2,7 @@ package com.example.robmillaci.realestatemanager.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
+import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -10,21 +11,24 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.FloatingActionButton;
 import android.support.v4.view.ViewPager;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.TextView;
+import android.widget.Toast;
 
-import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.R;
+import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView;
 import com.example.robmillaci.realestatemanager.activities.book_viewing_activity.BookViewingActivity;
 import com.example.robmillaci.realestatemanager.activities.offers_activities.MakeAnOffer;
 import com.example.robmillaci.realestatemanager.activities.search_activity.StreetViewActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
+import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
@@ -118,10 +122,12 @@ public class ListingItemFragment extends BaseFragment {
 
     @SuppressLint("CheckResult")
     private void setOnClicks() {
+        final Context c = ListingItemFragment.this.getContext();
+
         RxView.clicks(descr).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                new AlertDialog.Builder(ListingItemFragment.this.getContext())
+                new AlertDialog.Builder(c)
                         .setTitle(String.format("%s %s %s", getString(R.string.about), thisListing.getAddress_number(), thisListing.getAddress_street()))
                         .setPositiveButton(getString(R.string.close_button), null)
                         .setMessage(thisListing.getDescr())
@@ -133,7 +139,11 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(mapview_tv).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                createMapFragment(NON_TABLET_REQUEST_CODE);
+                if (Utils.CheckConnectivity(c)) {
+                    createMapFragment(NON_TABLET_REQUEST_CODE);
+                }else {
+                    ToastModifications.createToast(getContext(),"Internet is not available", Toast.LENGTH_LONG);
+                }
             }
         });
 
@@ -141,10 +151,14 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(streetView).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Intent streetViewIntent = new Intent(getContext(), StreetViewActivity.class);
-                streetViewIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
+                if (Utils.CheckConnectivity(c)) {
+                    Intent streetViewIntent = new Intent(getContext(), StreetViewActivity.class);
+                    streetViewIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
 
-                startActivity(streetViewIntent);
+                    startActivity(streetViewIntent);
+                }else {
+                    ToastModifications.createToast(getContext(),"Internet is not available", Toast.LENGTH_LONG);
+                }
             }
         });
 
@@ -152,7 +166,7 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(bookViewing).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Intent bookAViewingIntent = new Intent(getContext(), BookViewingActivity.class);
+                Intent bookAViewingIntent = new Intent(c, BookViewingActivity.class);
                 bookAViewingIntent.putExtra(ListingItemFragment.LISTING_BUNDLE_KEY, thisListing);
                 startActivity(bookAViewingIntent);
             }
@@ -162,7 +176,8 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(edit_listing_fab).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Intent editListingIntent = new Intent(getContext(), AddListingView.class);
+                Log.d("accept", "accept: called");
+                Intent editListingIntent = new Intent(c, AddListingView.class);
                 editListingIntent.putExtra(EDIT_LISTING_BUNDLE_KEY, thisListing);
                 startActivity(editListingIntent);
             }

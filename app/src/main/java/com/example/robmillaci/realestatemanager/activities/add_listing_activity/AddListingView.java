@@ -63,73 +63,79 @@ import static com.example.robmillaci.realestatemanager.activities.add_listing_ac
 import static com.example.robmillaci.realestatemanager.data_objects.Listing.DEFAULT_LISTING_ID;
 import static com.example.robmillaci.realestatemanager.fragments.ListingItemFragment.EDIT_LISTING_BUNDLE_KEY;
 
+
+/**
+ * This class is responsible for handling the view related events of Adding listings
+ */
 public class AddListingView extends BaseActivity implements AddListingPresenter.View, ImagesRecyclerViewAdapter.IactivityCallback {
-    private static final int MAX_NUM_IMAGES = 15;
-    private static final int FIREBASE_ID = 1;
-    private static final int LOCAL_DB_ID = 0;
+    private static final int MAX_NUM_IMAGES = 15; //max number of images for a listing
+    private static final int FIREBASE_ID = 1; //Id to represent Firebase
+    private static final int LOCAL_DB_ID = 0; //Id to represent local DB
 
+    public static final String SOLD_TAG = "sold"; //the tag to assign if a listing is sold
+    public static final String FOR_SALE_TAG = "forSale"; //the tag to assign if a listing is for sale
+    private static final String BUY_STRING = "buy"; //the database value if the listing is categorized as BUY
+    private static final String LET_STRING = "let";//the database value if the listing is categorized as BUY
 
-    public static final String SOLD_TAG = "sold";
-    public static final String FOR_SALE_TAG = "forSale";
-    private static final String BUY_STRING = "buy";
-    private static final String LET_STRING = "let";
+    private ArrayList<Bitmap> images; //Arraylist of bitmap images to holder the listings images
+    private ArrayList<String> image_description; //Arraylist of Strings = to holder the listings images descriptions
+    private ArrayList<View> allEditTexts; //Arraylist to hold all edit texts in this view, in order to perform checks that required information is entered
+    private boolean editing = false; //are we editing or adding a new listing?
+    private String editingId = null; //the id of the listing that we are editing
+    private Listing mListingBeingEdited; //the listing being edited
 
-    private ArrayList<Bitmap> images;
-    private ArrayList<String> image_description;
-    private ArrayList<View> allEditTexts;
-    private boolean editing = false;
-    private AddListingPresenter presenter;
-    private String editingId = null;
+    private AddListingPresenter mPresenter; //the mPresenter of this class responsible for obtaining or sending any data to the model
 
-    private CompositeDisposable mCompositeDisposable;
+    private CompositeDisposable mCompositeDisposable; //holds all disposables
 
-    private RecyclerView imagesRecyclerView;
-    private ImagesRecyclerViewAdapter mAdapter;
+    private RecyclerView mImagesRecyclerView; //the recyclerview to display the listings images
+    private ImagesRecyclerViewAdapter mAdapter; //the adapter for the recyclerview
 
-    private Button add_picture_btn;
+    private Button mAddPictureBtn; //the add button
 
-    private ImageView saveButton;
-    private ImageView sale_status_image;
+    private ImageView mSaveButton; //the save button (as an imageview)
+    private ImageView mSaleStatusImage; //the sale status
 
-    private Spinner type_spinner;
-    private Spinner bedrooms_spinner;
+    private Spinner mTypeSpinner; //the type of listing spinner
+    private Spinner mBedroomsSpinner; //the number of bedrooms spinner
 
-    private EditText surface_area_text;
-    private EditText price_edit_text;
-    private EditText poi_edit_text;
-    private EditText address_postcode_editText;
-    private EditText address_number_editText;
-    private EditText address_street_editText;
-    private EditText address_town_editText;
-    private EditText address_county_editText;
-    private EditText description_edit_text;
+    private EditText mSurfaceAreaText; //listings surface area
+    private EditText mPriceEditText; //listings price
+    private EditText mPoiEditText; //listings P.O.I
+    private EditText mAddressPostcodeEditText; //listings post code
+    private EditText mAddressNumberEditText; //listings address number
+    private EditText mAddressStreetEditText; //listings address street
+    private EditText mAddressTownEditText;//listings address town
+    private EditText mAddressCountyEditText;//listings address county
+    private EditText mDescriptionEditText;//listings address description
 
-    private SwitchCompat buy_or_let;
-    private ProgressDialog pd;
-
-    private Listing listingBeingEdited;
+    private SwitchCompat mBuyOrLetSwitch; //the buy or let switch
+    private ProgressDialog mProgressDialog; //the progress dialog displayed when saving a listing
 
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        Log.d("editingListing", "onCreate: called");
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_listing);
+        setContentView(R.layout.activity_listing); //set the view
         //noinspection ConstantConditions
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        setTitle(getString(R.string.new_listing_activity_title));
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true); //add the home button to the action bar
+        setTitle(getString(R.string.new_listing_activity_title));//set the title of the activity
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //dont display the keyboard when activity is created
 
-        this.presenter = new AddListingPresenter(this);
-        mCompositeDisposable = new CompositeDisposable();
-        images = new ArrayList<>();
+        this.mPresenter = new AddListingPresenter(this); //create the presented
+        mCompositeDisposable = new CompositeDisposable(); //create a composite disposable to hold all disposables
 
-        image_description = new ArrayList<>();
+        images = new ArrayList<>(); //create a new arraylist to hold the listings images
+        image_description = new ArrayList<>();//create a new arraylist to hold the listings images description
 
-        initializeViews();
-        initializeClickEvents();
-        initializeRecyclerView();
+        initializeViews(); //see method comments
+        initializeClickEvents();  //see method comments
+        initializeRecyclerView();  //see method comments
 
+
+        /*
+         *check to see if we have a listing in the intent that created this activity, if we do then we are editing a pre existing listing
+         */
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
             Listing editingListing = (Listing) intentExtras.getSerializable(EDIT_LISTING_BUNDLE_KEY);
@@ -140,12 +146,15 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * populate the views in this activity with the values defined for an already existing listing
+     * @param editingListing the listing that is being edited.
+     */
     private void prepareEdit(Listing editingListing) {
-        Log.d("editingListing", "prepareEdit: called");
         int selection = 0;
         editing = true;
         editingId = editingListing.getId();
-        listingBeingEdited = editingListing;
+        mListingBeingEdited = editingListing;
 
         switch (editingListing.getType()) {
             case "Flat":
@@ -171,30 +180,31 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 break;
         }
 
-        type_spinner.setSelection(selection);
-        bedrooms_spinner.setSelection(editingListing.getNumbOfBedRooms() - 1);
-        surface_area_text.setText(String.valueOf(editingListing.getSurfaceArea()));
-        price_edit_text.setText(String.valueOf(editingListing.getPrice()).substring(0,String.valueOf(editingListing.getPrice()).indexOf(".")));
-        poi_edit_text.setText(editingListing.getPoi());
-        address_postcode_editText.setText(editingListing.getAddress_postcode());
-        address_number_editText.setText(editingListing.getAddress_number());
-        address_street_editText.setText(editingListing.getAddress_street());
-        address_town_editText.setText(editingListing.getAddress_town());
-        address_county_editText.setText(editingListing.getAddress_county());
-        description_edit_text.setText(editingListing.getDescr());
+        mTypeSpinner.setSelection(selection);
+        mBedroomsSpinner.setSelection(editingListing.getNumbOfBedRooms() - 1);
+        mSurfaceAreaText.setText(String.valueOf(editingListing.getSurfaceArea()));
+        mPriceEditText.setText(String.valueOf(editingListing.getPrice()).substring(0,String.valueOf(editingListing.getPrice()).indexOf(".")));
+        mPoiEditText.setText(editingListing.getPoi());
+        mAddressPostcodeEditText.setText(editingListing.getAddress_postcode());
+        mAddressNumberEditText.setText(editingListing.getAddress_number());
+        mAddressStreetEditText.setText(editingListing.getAddress_street());
+        mAddressTownEditText.setText(editingListing.getAddress_town());
+        mAddressCountyEditText.setText(editingListing.getAddress_county());
+        mDescriptionEditText.setText(editingListing.getDescr());
 
         if (editingListing.getBuyOrLet().toLowerCase().equals("buy")) {
-            buy_or_let.setChecked(false);
+            mBuyOrLetSwitch.setChecked(false);
         } else {
-            buy_or_let.setChecked(true);
+            mBuyOrLetSwitch.setChecked(true);
         }
 
         if (editingListing.isForSale()) {
-            updateListingSoldStatus(true);
-        } else {
             updateListingSoldStatus(false);
+        } else {
+            updateListingSoldStatus(true);
         }
 
+        //todo get an error when trying to edit offline
         if (editingListing.getFirebasePhotos() == null) {
             restoreImages(editingListing.getPhotos(), editingListing.getPhotoDescriptions(), LOCAL_DB_ID);
         } else {
@@ -203,6 +213,13 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * If we are editing a listing, this method will retrieve either a byte[] or arraylist of uris that are used to restore the images for the listing
+     * These images are then passed into the recyclerview adapter to display to the user
+     * @param photos the photos byte[]'s or the uris (as a string)
+     * @param photoDescriptions the descriptions of the photos
+     * @param id the id used in the switch to determine if we are working with the local db or with Firebase
+     */
     @SuppressWarnings("unchecked")
     private void restoreImages(Object photos, final String[] photoDescriptions, int id) {
         if (photos != null) {
@@ -237,72 +254,79 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * Initialize all views in this activity, set any relevant tags and create the spinners
+     */
     private void initializeViews() {
         allEditTexts = new ArrayList<>();
 
-        imagesRecyclerView = findViewById(R.id.images_recycler_view);
-        add_picture_btn = findViewById(R.id.add_picture_btn);
+        mImagesRecyclerView = findViewById(R.id.images_recycler_view);
+        mAddPictureBtn = findViewById(R.id.add_picture_btn);
 
-        sale_status_image = findViewById(R.id.sale_status_image);
-        sale_status_image.setTag(FOR_SALE_TAG);
+        mSaleStatusImage = findViewById(R.id.sale_status_image);
+        mSaleStatusImage.setTag(FOR_SALE_TAG);
 
-        type_spinner = findViewById(R.id.type_spinner);
-        bedrooms_spinner = findViewById(R.id.rooms_spinner);
+        mTypeSpinner = findViewById(R.id.type_spinner);
+        mBedroomsSpinner = findViewById(R.id.rooms_spinner);
 
-        type_spinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_types)));
-        bedrooms_spinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_number_of_rooms)));
+        mTypeSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_types)));
+        mBedroomsSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_number_of_rooms)));
 
-        surface_area_text = findViewById(R.id.surface_area_text);
-        price_edit_text = findViewById(R.id.price_edit_text);
-        poi_edit_text = findViewById(R.id.poi_edit_text);
-        address_postcode_editText = findViewById(R.id.address_postcode_et);
-        address_number_editText = findViewById(R.id.address_number_et);
-        address_street_editText = findViewById(R.id.address_street_et);
-        address_town_editText = findViewById(R.id.address_town_et);
-        address_county_editText = findViewById(R.id.address_county_et);
-        description_edit_text = findViewById(R.id.description_edit_text);
-        buy_or_let = findViewById(R.id.buy_or_let);
+        mSurfaceAreaText = findViewById(R.id.surface_area_text);
+        mPriceEditText = findViewById(R.id.price_edit_text);
+        mPoiEditText = findViewById(R.id.poi_edit_text);
+        mAddressPostcodeEditText = findViewById(R.id.address_postcode_et);
+        mAddressNumberEditText = findViewById(R.id.address_number_et);
+        mAddressStreetEditText = findViewById(R.id.address_street_et);
+        mAddressTownEditText = findViewById(R.id.address_town_et);
+        mAddressCountyEditText = findViewById(R.id.address_county_et);
+        mDescriptionEditText = findViewById(R.id.description_edit_text);
+        mBuyOrLetSwitch = findViewById(R.id.buy_or_let);
 
-        saveButton = findViewById(R.id.savebtn);
+        mSaveButton = findViewById(R.id.savebtn);
 
-        allEditTexts.add(surface_area_text);
-        allEditTexts.add(price_edit_text);
-        allEditTexts.add(poi_edit_text);
-        allEditTexts.add(address_postcode_editText);
-        allEditTexts.add(address_number_editText);
-        allEditTexts.add(address_street_editText);
-        allEditTexts.add(address_town_editText);
-        allEditTexts.add(address_county_editText);
-        allEditTexts.add(description_edit_text);
+        allEditTexts.add(mSurfaceAreaText);
+        allEditTexts.add(mPriceEditText);
+        allEditTexts.add(mPoiEditText);
+        allEditTexts.add(mAddressPostcodeEditText);
+        allEditTexts.add(mAddressNumberEditText);
+        allEditTexts.add(mAddressStreetEditText);
+        allEditTexts.add(mAddressTownEditText);
+        allEditTexts.add(mAddressCountyEditText);
+        allEditTexts.add(mDescriptionEditText);
 
     }
 
 
+    //Created the recycler view to display a listings images
     private void initializeRecyclerView() {
         if (images != null) {
             if (images.size() > 0) {
-                imagesRecyclerView.setBackground(null);
+                mImagesRecyclerView.setBackground(null);
             } else {
-                imagesRecyclerView.setBackgroundResource(R.drawable.placeholder_image);
+                mImagesRecyclerView.setBackgroundResource(R.drawable.placeholder_image);
             }
 
-            imagesRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
+            mImagesRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
 
             mAdapter = new ImagesRecyclerViewAdapter(this, images, image_description, this);
-            imagesRecyclerView.setAdapter(mAdapter);
+            mImagesRecyclerView.setAdapter(mAdapter);
         }
     }
 
 
+    /**
+     * initialize on click events for this activity
+     */
     @SuppressLint("CheckResult")
     private void initializeClickEvents() {
         //create the onlick event for the add picture button
-        Disposable pictureClick = RxView.clicks(add_picture_btn)
+        Disposable pictureClick = RxView.clicks(mAddPictureBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
                         if (images.size() < MAX_NUM_IMAGES) {
-                            displayDialog();
+                            displayPictureMethodDialog();
                         } else {
                             Toast.makeText(AddListingView.this, R.string.maximum_images, Toast.LENGTH_LONG).show();
                         }
@@ -312,7 +336,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
         //create the on click event for the save button
-        final Disposable save = RxView.clicks(saveButton)
+        final Disposable save = RxView.clicks(mSaveButton)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -323,11 +347,11 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
         //create onclick for the property status image
-        Disposable statusChange = RxView.clicks(sale_status_image)
+        Disposable statusChange = RxView.clicks(mSaleStatusImage)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        switch (sale_status_image.getTag().toString()) {
+                        switch (mSaleStatusImage.getTag().toString()) {
                             case FOR_SALE_TAG:
                                 updateListingSoldStatus(true);
                                 break;
@@ -340,18 +364,27 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * update the sold status of a listing, changes the sales status image and tag depending on wether the listing is sold or not
+     * @param sold true if sold, false if available
+     */
     private void updateListingSoldStatus(boolean sold) {
         if (sold) {
-            sale_status_image.setBackgroundResource(R.drawable.sold);
-            sale_status_image.setTag(SOLD_TAG);
+            mSaleStatusImage.setBackgroundResource(R.drawable.sold);
+            mSaleStatusImage.setTag(SOLD_TAG);
         } else {
-            sale_status_image.setBackgroundResource(R.drawable.for_sale);
-            sale_status_image.setTag(FOR_SALE_TAG);
+            mSaleStatusImage.setBackgroundResource(R.drawable.for_sale);
+            mSaleStatusImage.setTag(FOR_SALE_TAG);
         }
     }
 
+
+    /**
+     * Displays an Alert dialog to the user with a choice of choosing an image from the camera or from the gallery
+     * The result is passed to the presented to get the photo, the results of which are passed onto {@link AddListingView#onActivityResult}
+     */
     @SuppressLint("CheckResult")
-    private void displayDialog() {
+    private void displayPictureMethodDialog() {
         final AlertDialog.Builder chooseBuilder = new AlertDialog.Builder(this);
         @SuppressLint("InflateParams") View v = LayoutInflater.from(this).inflate(R.layout.picture_method_chooser, null);
         chooseBuilder.setView(v);
@@ -362,7 +395,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        presenter.getPhotoFromCamera();
+                        mPresenter.getPhotoFromCamera();
                         chooseDialog.dismiss();
                     }
                 });
@@ -371,13 +404,21 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        presenter.getPhotoFromDevice();
+                        mPresenter.getPhotoFromDevice();
                         chooseDialog.dismiss();
                     }
                 });
     }
 
 
+    /**
+     * Called from the save button. Checks first to see if we are ok to save based on <br/>
+     * Do we have at least one image?<br/>
+     * Do all the edit texts have a value? <br/>
+     * <br/>
+     * If ok to save, a listing object is passed to the presenter to save the data
+     *
+     */
     @SuppressLint("CheckResult")
     private void saveData() {
         boolean okToSave = true;
@@ -400,12 +441,11 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    Log.d("addlisting", "run: run called");
                     String[] imageDescrps = image_description.toArray(new String[image_description.size()]);
                     String saleDate = "";
 
-                    if (listingBeingEdited != null) {
-                        String editingListingSoldDate = listingBeingEdited.getSaleDate();
+                    if (mListingBeingEdited != null) {
+                        String editingListingSoldDate = mListingBeingEdited.getSaleDate();
                         if (!editingListingSoldDate.equals("")) { //it has been sold previously
                             saleDate = determineSaveDate(true);
                         }else { //it has not been sold
@@ -416,47 +456,53 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                         saleDate = determineSaveDate(false);
                     }
 
-                    presenter.addListing(getApplicationContext(), new Listing(
+                    mPresenter.addListing(getApplicationContext(), new Listing(
                             editingId == null ? DEFAULT_LISTING_ID : editingId,
-                            type_spinner.getSelectedItem().toString(),
-                            Double.valueOf(price_edit_text.getText().toString()),
-                            Double.valueOf(surface_area_text.getText().toString()),
-                            Integer.valueOf(bedrooms_spinner.getSelectedItem().toString()),
-                            description_edit_text.getText().toString(),
+                            mTypeSpinner.getSelectedItem().toString(),
+                            Double.valueOf(mPriceEditText.getText().toString()),
+                            Double.valueOf(mSurfaceAreaText.getText().toString()),
+                            Integer.valueOf(mBedroomsSpinner.getSelectedItem().toString()),
+                            mDescriptionEditText.getText().toString(),
                             ArrayListTools.BitmapsToByteArray(images),
                             imageDescrps,
-                            address_postcode_editText.getText().toString(),
-                            address_number_editText.getText().toString(),
-                            address_street_editText.getText().toString(),
-                            address_town_editText.getText().toString(),
-                            address_county_editText.getText().toString(),
-                            poi_edit_text.getText().toString(),
-                            editing ? listingBeingEdited.getPostedDate() : Utils.getTodayDate(),
+                            mAddressPostcodeEditText.getText().toString(),
+                            mAddressNumberEditText.getText().toString(),
+                            mAddressStreetEditText.getText().toString(),
+                            mAddressTownEditText.getText().toString(),
+                            mAddressCountyEditText.getText().toString(),
+                            mPoiEditText.getText().toString(),
+                            editing ? mListingBeingEdited.getPostedDate() : Utils.getTodayDate(),
                             saleDate,
                             FirebaseHelper.getLoggedInUser(),
                             Utils.getTodayDate(),
-                            !buy_or_let.isChecked() ? BUY_STRING : LET_STRING,
-                            sale_status_image.getTag().equals(FOR_SALE_TAG)), editing
+                            !mBuyOrLetSwitch.isChecked() ? BUY_STRING : LET_STRING,
+                             mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG)), editing
                     );
                 }
             }).start();
 
-            createSaveListingProgressBar();
+            createSaveListingProgressBar(); //create the progress bar to display to the user that saving is taking place
         }
     }
 
+
+    /**
+     * Determines the date we should show for the sale date
+     * @param soldPreviously has the property been sold previously and we are editing it to change the sale status?
+     * @return the string to be saved relating to the sold date
+     */
     private String determineSaveDate(boolean soldPreviously){
         if (soldPreviously){
-            switch (sale_status_image.getTag().toString()) {
+            switch (mSaleStatusImage.getTag().toString()) {
                 case FOR_SALE_TAG:
                    return "";
 
                 case SOLD_TAG:
-                    return listingBeingEdited.getSaleDate();
+                    return mListingBeingEdited.getSaleDate();
 
             }
         }else {
-            switch (sale_status_image.getTag().toString()) {
+            switch (mSaleStatusImage.getTag().toString()) {
                 case FOR_SALE_TAG:
                     return "";
 
@@ -469,12 +515,10 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
 
-
-
     private void createSaveListingProgressBar() {
-        pd = new ProgressDialog(this);
-        pd.setMessage(getString(R.string.saving_listing));
-        pd.show();
+        mProgressDialog = new ProgressDialog(this);
+        mProgressDialog.setMessage(getString(R.string.saving_listing));
+        mProgressDialog.show();
     }
 
 
@@ -515,11 +559,20 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * called if ther was an error getting a photo
+     */
     private void onPhotoError() {
         ToastModifications.createToast(this, getString(R.string.error_saving_photo), Toast.LENGTH_LONG);
     }
 
 
+    /**
+     * Callback for the result from requesting permissions. This method is invoked for every call on requestPermissions(String[], int).
+     * @param requestCode the request code, in this case either PICK_FROM_GALLERY_REQUEST_CODE or PICK_FROM_CAMERA_REQUEST_CODE
+     * @param permissions the permissions requested
+     * @param grantResults the results of the persmission request
+     */
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
                                            @NonNull int[] grantResults) {
@@ -527,14 +580,14 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             case PICK_FROM_GALLERY_REQUEST_CODE:
                 // If request is cancelled, the result arrays are empty.
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    presenter.getPhotoFromDevice();
+                    mPresenter.getPhotoFromDevice();
                 } else {
                     Snackbar.make(getWindow().getDecorView().getRootView(), R.string.permission_error, Snackbar.LENGTH_LONG)
                             .setAction(R.string.give_access, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (ActivityCompat.shouldShowRequestPermissionRationale(AddListingView.this, READ_EXTERNAL_STORAGE)) {
-                                        presenter.getPhotoFromDevice();
+                                        mPresenter.getPhotoFromDevice();
                                     } else {
                                         //The user has permanently denied permission - so take them to the app settings so they can manually enable the permission
                                         openSettingsforApp();
@@ -546,14 +599,14 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
             case PICK_FROM_CAMERA_REQUEST_CODE:
                 if (grantResults.length > 0 && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
-                    presenter.getPhotoFromCamera();
+                    mPresenter.getPhotoFromCamera();
                 } else {
                     Snackbar.make(getWindow().getDecorView().getRootView(), R.string.permission_error, Snackbar.LENGTH_LONG)
                             .setAction(R.string.give_access, new View.OnClickListener() {
                                 @Override
                                 public void onClick(View v) {
                                     if (ActivityCompat.shouldShowRequestPermissionRationale(AddListingView.this, READ_EXTERNAL_STORAGE)) {
-                                        presenter.getPhotoFromCamera();
+                                        mPresenter.getPhotoFromCamera();
                                     } else {
                                         //The user has permanently denied permission - so take them to the app settings so they can manually enable the permission
                                         openSettingsforApp();
@@ -566,15 +619,24 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * Called by this activites presenter when required
+     * @return this
+     */
     @Override
     public Activity getViewActivity() {
         return this;
     }
 
+
+    /**
+     * Callback from the presenter when a listing has been added in order to update the UI
+     * @param error wether an error occurred saving the listing
+     */
     @Override
     public void addingListingCompleted(boolean error) {
-        if (pd!=null && pd.isShowing()) {
-            pd.dismiss();
+        if (mProgressDialog !=null && mProgressDialog.isShowing()) {
+            mProgressDialog.dismiss();
         }
 
         if (error){
@@ -582,11 +644,15 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         }else {
             ToastModifications.createToast(AddListingView.this, getString(R.string.listing_saved), Toast.LENGTH_LONG);
             editing = false;
-            listingBeingEdited = null;
+            mListingBeingEdited = null;
             onBackPressed();
         }
     }
 
+
+    /**
+     * The user has permanently denied permission - so take them to the app settings so they can manually enable the permission if required
+     */
     private void openSettingsforApp() {
         Intent intent = new Intent();
         intent.setAction(Settings.ACTION_APPLICATION_DETAILS_SETTINGS);
@@ -596,14 +662,19 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
-
-
+    /**
+     * Called from the presented to open the camera
+     */
     @Override
     public void startCameraIntent() {
         Intent cameraIntent = new Intent(android.provider.MediaStore.ACTION_IMAGE_CAPTURE);
         startActivityForResult(cameraIntent, PICK_FROM_CAMERA_REQUEST_CODE);
     }
 
+
+    /**
+     * Called from the presented to open the gallery
+     */
     @Override
     public void startDeviceImageIntent() {
         Intent galleryIntent = new Intent(Intent.ACTION_PICK, android.provider.MediaStore.Images.Media.EXTERNAL_CONTENT_URI);
@@ -611,10 +682,17 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * Called from within the recyclerview adapter when an images description is changes, the presented will then handle updating the arrayList and callback to
+     * {@link AddListingView#imageDescriptionsChanged}
+     * @param desc the new description
+     * @param position the position in the arraylist
+     */
     @Override
     public void changedImageDescr(String desc, int position) {
-        presenter.changedImageDescr(desc, position, image_description);
+        mPresenter.changedImageDescr(desc, position, image_description);
     }
+
 
     @Override
     public void imageDescriptionsChanged(ArrayList<String> image_description) {
@@ -622,10 +700,17 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * Called when an image is removed from within the recyclerview adapter. The neccessary changes are passed onto the presented to handle
+     * which will then call back to {@link AddListingView#imageDeleted(ArrayList, ArrayList)}
+     * @param position the position of the image in the ArrayList
+     */
     @Override
     public void deletedImage(int position) {
-        presenter.deleteImage(images, image_description, position);
+        mPresenter.deleteImage(images, image_description, position);
     }
+
+
 
     @Override
     public void imageDeleted(ArrayList<Bitmap> images, ArrayList<String> image_descs) {
@@ -635,6 +720,11 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    /**
+     * Handles the events of the home button being pressed
+     * @param item the menu item selected
+     * @return
+     */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
@@ -644,7 +734,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 confirmDiagBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
                     @Override
                     public void onClick(DialogInterface dialogInterface, int i) {
-                        saveButton.callOnClick();
+                        mSaveButton.callOnClick();
                     }
                 });
 
@@ -671,8 +761,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        mCompositeDisposable.clear();
-        presenter.unregisterReciever();
+        mCompositeDisposable.clear(); //clear any disposables
+        mPresenter.unregisterReciever(); //unregister the reciever
     }
 
 }

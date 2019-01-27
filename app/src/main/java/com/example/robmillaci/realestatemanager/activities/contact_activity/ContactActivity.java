@@ -10,13 +10,16 @@ import android.widget.Button;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 
+/**
+ * This class is responsible for the contact activity
+ */
 public class ContactActivity extends BaseActivity implements View.OnClickListener {
-    private Button enquiries_call_btn;
-    private Button sold_call_button;
-    private Button lettings_call_btn;
-    private Button enquiries_email_btn;
-    private Button sold_email_btn;
-    private Button lettings_email_btn;
+    private Button enquiries_call_btn; //the button for calling the enquiries
+    private Button sold_call_button; //the button for calling sold properties
+    private Button lettings_call_btn; //the button for calling lettings
+    private Button enquiries_email_btn;//the button for emailing enquiries
+    private Button sold_email_btn;//the button for emailing sold properties
+    private Button lettings_email_btn;//the button for emailing lettings
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

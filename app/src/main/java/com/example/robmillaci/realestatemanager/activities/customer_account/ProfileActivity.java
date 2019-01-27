@@ -30,21 +30,24 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_TITLE;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_TOWN;
 
+/**
+ * This class is responsible for the users profile
+ */
 public class ProfileActivity extends BaseActivity {
-    EditText user_title;
-    EditText user_forename;
-    EditText user_surname;
-    EditText user_dob;
-    EditText user_postcode;
-    EditText user_houseNameNumb;
-    EditText user_street;
-    EditText user_town;
-    EditText user_email;
-    EditText user_county;
-    EditText user_home_numb;
-    EditText user_mobile_numb;
-    EditText user_primary_contact_numb;
-    Button saveBtn;
+    EditText user_title; //the title of the user
+    EditText user_forename; //the forename of the user
+    EditText user_surname; //the surname of the user
+    EditText user_dob; //the users DOB
+    EditText user_postcode; //the users postcode
+    EditText user_houseNameNumb; //the users house number
+    EditText user_street; //the users house address street
+    EditText user_town; //the users house address street
+    EditText user_email; //the users email
+    EditText user_county;//the users house address county
+    EditText user_home_numb; // the users home phone number
+    EditText user_mobile_numb; //the users mobile number
+    EditText user_primary_contact_numb; //the users primary contact number
+    Button saveBtn; //the save button
 
 
     @Override
@@ -111,6 +114,7 @@ public class ProfileActivity extends BaseActivity {
         spHelper.saveUserDetailsToSharedPreferences(title,forename,surname,dob,postCode,houseNameNumb,street,town,county,homeNumber,mobile,primaryContactNumb);
 
         FirebaseHelper.updateUserProfileDetails(new SharedPreferenceHelper(getApplicationContext()).getUsersDetails());
+        onBackPressed();
     }
 
     private void initializeViews() {

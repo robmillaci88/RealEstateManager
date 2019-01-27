@@ -6,6 +6,9 @@ import android.view.MenuItem;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.viewings_activities.BaseViewingActivity;
 
+/**
+ * This class is responsible for any feedback or pending feedback for the user
+ */
 public class FeedbackPendingReceived extends BaseViewingActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {

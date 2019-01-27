@@ -35,6 +35,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.TreeMap;
 
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
@@ -77,9 +78,9 @@ public class FirebaseHelper implements MyDatabase.Model {
 
     private static FirebaseHelper instance; //this instance of FirebaseHelper class
 
-    private static ArrayList<String> imageUris = new ArrayList<>(); //arraylist to hold uris of images for firebase storage
+    private static Map<Integer,String> mImagesUriTreeMap = new TreeMap<>(); //Treemap to hold uris of images for firebase storage. Treemap is used to maintain order base on key value
 
-    private static Observer<Integer> myObserver;
+    private static Observer<Integer> syncObservable;
 
     static {
         FirebaseFirestore.setLoggingEnabled(true);
@@ -131,10 +132,13 @@ public class FirebaseHelper implements MyDatabase.Model {
     private static void getListingLastUpdateTime(final Listing listing, final AddListingCallback callback) {
         Log.d("getListing", "getListingLastUpdateTime: called");
         final String[] lastUpdateTime = new String[1];
-        FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH).document(listing.getId()).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+        FirebaseFirestore.getInstance()
+                .collection(LISTINGS_COLLECTION_PATH)
+                .document(listing.getId())
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
             @Override
             public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
-
                 DocumentSnapshot d = task.getResult();
                 if (d != null) {
                     lastUpdateTime[0] = (String) d.get(ListingsDatabaseContract.UPDATE_TIME);
@@ -202,18 +206,6 @@ public class FirebaseHelper implements MyDatabase.Model {
                 (boolean) s.get(ListingsDatabaseContract.STATUS)));
     }
 
-
-    public void getSearchListings(Bundle searchParams) {
-        //Search parameters*************************************************
-        final boolean forSale = searchParams.getBoolean(SearchActivityView.SOLD_SEARCH);
-        //End Search parameters*************************************************
-
-        if (forSale) {
-            searchForSaleListings(searchParams);
-        } else {
-            searchSoldListings();
-        }
-    }
 
 
     public void searchForSaleListings(Bundle searchParams) {
@@ -285,29 +277,7 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-    private void searchSoldListings() {
-        Query q = FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH)
-                .whereEqualTo(ListingsDatabaseContract.STATUS, false);
 
-        returnedListings = new ArrayList<>();
-
-        q.get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<QuerySnapshot> task) {
-                QuerySnapshot taskResults = task.getResult();
-                if (taskResults != null) {
-                    List<DocumentSnapshot> docList = taskResults.getDocuments();
-
-                    for (DocumentSnapshot s : docList) {
-
-                        foundAListing(s);
-                    }
-                }
-                mPresenter.gotListingsFromFirebase(returnedListings);
-            }
-        });
-
-    }
 
 
     @SuppressWarnings("ConstantConditions")
@@ -392,11 +362,11 @@ public class FirebaseHelper implements MyDatabase.Model {
             pictureRef.putBytes(thisPhoto).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-
                     pictureRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
                         @Override
                         public void onSuccess(Uri uri) {
-                            imageUris.add(uri.toString());
+                            Log.d("onSuccess", "onSuccess: picture ref is " + pictureRef.getName());
+                            mImagesUriTreeMap.put(Integer.valueOf(pictureRef.getName()),uri.toString()); //use a tree map here to maintain sort order
                             count[0]--;
 
                             if (count[0] == 0) {
@@ -417,9 +387,10 @@ public class FirebaseHelper implements MyDatabase.Model {
 
     private static void saveImageDownloadBytes(final Listing listing,
                                                final AddListingCallback addListingCallback) {
-        Map<String, Object> data = new HashMap<>();
+        ArrayList<String> sortedImageUris = new ArrayList<>(mImagesUriTreeMap.values());
 
-        data.put(IMAGE_URI_PATH, imageUris);
+        Map<String, Object> data = new HashMap<>();
+        data.put(IMAGE_URI_PATH, sortedImageUris);
         FirebaseFirestore.getInstance()
                 .collection(FirebaseContract.LISTING_DATABASE_COLLECTION_PATH)
                 .document(listing.getId())
@@ -427,7 +398,7 @@ public class FirebaseHelper implements MyDatabase.Model {
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
-                        imageUris = new ArrayList<>();
+                        mImagesUriTreeMap = new TreeMap<>();
                         finishAddingListing(listing, addListingCallback);
                     }
                 });
@@ -475,7 +446,11 @@ public class FirebaseHelper implements MyDatabase.Model {
                 }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                myObserver.onNext(1);
+                if (syncObservable !=null) {
+                    syncObservable.onNext(1);
+                }else {
+                    addListingCallback.dBListingsAddedToFirebase(false);
+                }
             }
         });
     }
@@ -487,7 +462,6 @@ public class FirebaseHelper implements MyDatabase.Model {
 
 
     public void gotDataFromLocalDb(final ArrayList<Listing> listings, int requestCode, final Context c) {
-       // dBListingCount = listings.size();
         final int[] iterationCount = {-1};
 
         if (listings != null && listings.size() >= 1) {
@@ -495,7 +469,7 @@ public class FirebaseHelper implements MyDatabase.Model {
             dbListings = listings;
 
 
-            myObserver = new Observer<Integer>() {
+            syncObservable = new Observer<Integer>() {
                 @Override
                 public void onSubscribe(Disposable d) {
 
@@ -510,14 +484,14 @@ public class FirebaseHelper implements MyDatabase.Model {
 
                     if (!(listingIndex == dbListings.size())) {
                         FirebaseHelper.getListingLastUpdateTime(dbListings.get(listingIndex), addListingCallback);
-                    }else {
+                    } else {
                         onComplete();
                     }
                 }
 
                 @Override
                 public void onError(Throwable e) {
-                   addListingCallback.dBListingsAddedToFirebase(true);
+                    addListingCallback.dBListingsAddedToFirebase(true);
                 }
 
                 @Override
@@ -526,7 +500,7 @@ public class FirebaseHelper implements MyDatabase.Model {
                 }
             };
 
-            myObserver.onNext(1);
+            syncObservable.onNext(1);
 
         } else {
             addListingCallback.dBListingsAddedToFirebase(false);
@@ -534,11 +508,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         }
     }
 
-    private static void gotListingUpdateTime(Listing listing, String
-            lastUpdatetime, AddListingCallback callback) {
-
-       // dBListingCount--;
-    //    boolean callbackAllowed = dBListingCount == 0;
+    private static void gotListingUpdateTime(Listing listing, String lastUpdatetime, AddListingCallback callback) {
 
         if (lastUpdatetime == null || lastUpdatetime.equals("null")) {
             FirebaseHelper.addListing(listing, callback);
@@ -548,17 +518,18 @@ public class FirebaseHelper implements MyDatabase.Model {
 
             if (lastUpdateDateFromFirebase != null && lastUpdateDateFromFirebase.before(thisListingDateFromLocal)) {
                 FirebaseHelper.addListing(listing, callback);
-            }/* else {
-                if (callbackAllowed) {
-                    callback.dBListingsAddedToFirebase(false);
-                }
-            }*/
+            }else {
+                syncObservable.onNext(1);
+            }
         }
     }
 
     public void checkAdminAccess() {
         if (loggedInUser != null) {
-            FirebaseFirestore.getInstance().collection(USER_DATABASE_COLLECTION_PATH).document(loggedinUserId).get().addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            FirebaseFirestore.getInstance().collection(USER_DATABASE_COLLECTION_PATH)
+                    .document(loggedinUserId)
+                    .get()
+                    .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
                 @Override
                 public void onComplete(@NonNull Task<DocumentSnapshot> task) {
                     DocumentSnapshot results = task.getResult();

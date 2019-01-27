@@ -28,26 +28,33 @@ import java.util.ArrayList;
 import static com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingService.RESULTS;
 import static com.example.robmillaci.realestatemanager.data_objects.Listing.DEFAULT_LISTING_ID;
 
-
+/**
+ * This class is the presenter layer between {@link AddListingView} and {@link AddListingService}
+ *
+ */
 public class AddListingPresenter extends BroadcastReceiver {
-    static final int PICK_FROM_GALLERY_REQUEST_CODE = 0;
-    static final int PICK_FROM_CAMERA_REQUEST_CODE = 1;
-    static final String EDITING_KEY = "editing";
-    AddListingPresenter myBroadCastReceiver;
-    static final String BROADCAST_ACTION = "com.example.robmillaci.realestatemanager.AddListingPresenter";
+    static final int PICK_FROM_GALLERY_REQUEST_CODE = 0; //request code for Gallery images
+    static final int PICK_FROM_CAMERA_REQUEST_CODE = 1; //request code for camera images
+    static final String EDITING_KEY = "editing"; //bundle key for editing listing
+    AddListingPresenter myBroadCastReceiver; //Variable to hold the reference to this class acting as a broadcast reciever in order to unregister
+    static final String BROADCAST_ACTION = "com.example.robmillaci.realestatemanager.AddListingPresenter"; //the broadcast action
 
 
-    private AddListingPresenter.View view;
+    private AddListingPresenter.View view; //this presenters view in order to communicate back
 
     AddListingPresenter(AddListingPresenter.View view) {
         this.view = view;
     }
 
 
+    /**
+     * Called from {@link AddListingView} when saving a listing
+     * @param context the context of the calling activity
+     * @param listing the listing to add
+     * @param editing are we editing this listing or is it new?
+     */
     public void addListing(Context context, Listing listing, boolean editing) {
-        Log.d("addlisting", "addListing called");
-
-        registerMyReceiver();
+        registerMyReceiver(); //register this class as a broadcast receiver
 
         Intent addListingServiceIntent = new Intent(context, AddListingService.class);
         addListingServiceIntent.putExtra(EDITING_KEY, editing);
@@ -60,7 +67,7 @@ public class AddListingPresenter extends BroadcastReceiver {
             myBroadCastReceiver = this;
             IntentFilter intentFilter = new IntentFilter();
             intentFilter.addAction(BROADCAST_ACTION);
-            view.getViewActivity().registerReceiver(myBroadCastReceiver, intentFilter);
+            view.getViewActivity().registerReceiver(this, intentFilter);
         } catch (Exception ex) {
             ex.printStackTrace();
         }
@@ -68,10 +75,15 @@ public class AddListingPresenter extends BroadcastReceiver {
     }
 
 
+    /**
+     * Called from {@link AddListingView#displayPictureMethodDialog()} to perform permission checks and then inform the view of the action to take
+     */
     public void getPhotoFromDevice() {
         try {
-            if (ActivityCompat.checkSelfPermission(view.getViewActivity(), Manifest.permission.READ_EXTERNAL_STORAGE) != PackageManager.PERMISSION_GRANTED) {
-                ActivityCompat.requestPermissions((view.getViewActivity()), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE}, PICK_FROM_GALLERY_REQUEST_CODE);
+            if (ActivityCompat.checkSelfPermission(view.getViewActivity(), Manifest.permission.READ_EXTERNAL_STORAGE)
+                    != PackageManager.PERMISSION_GRANTED) {
+                ActivityCompat.requestPermissions((view.getViewActivity()), new String[]{Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE},
+                        PICK_FROM_GALLERY_REQUEST_CODE);
             } else {
                 view.startDeviceImageIntent();
             }
@@ -81,6 +93,9 @@ public class AddListingPresenter extends BroadcastReceiver {
     }
 
 
+    /**
+     * Called from {@link AddListingView#displayPictureMethodDialog()} to perform permission checks and then inform the view of the action to take
+     */
     public void getPhotoFromCamera() {
         if (ActivityCompat.checkSelfPermission(view.getViewActivity(), Manifest.permission.CAMERA)
                 != PackageManager.PERMISSION_GRANTED) {
@@ -91,6 +106,10 @@ public class AddListingPresenter extends BroadcastReceiver {
         }
     }
 
+
+    /**
+     * Called from {@link AddListingView#changedImageDescr(String, int)} to update the arraylist of image descriptions for a listing and return the new list
+     */
     public void changedImageDescr(String desc, int position, ArrayList<String> image_description) {
         try {
             image_description.set(position, desc);
@@ -102,6 +121,10 @@ public class AddListingPresenter extends BroadcastReceiver {
 
     }
 
+
+    /**
+     * Called from {@link AddListingView#deletedImage(int)} to update the arraylist of images for a listing and return the new list
+     */
     public void deleteImage(ArrayList<Bitmap> images, ArrayList<String> image_description, int position) {
         images.remove(position);
         try {
@@ -113,6 +136,12 @@ public class AddListingPresenter extends BroadcastReceiver {
     }
 
 
+    /**
+     * Called on reciept of a broadcast from {@link AddListingService} which is sent when a listing has been added to the database
+     * This method calls back to the view to update the UI when a listing is saved
+     * @param context the context of the broadcast
+     * @param intent the intent passed
+     */
     @Override
     public void onReceive(Context context, Intent intent) {
         //notify the view that the listing has been added
@@ -133,6 +162,8 @@ public class AddListingPresenter extends BroadcastReceiver {
     }
 
 
+
+    //The views interface methods
     public interface View {
         void startCameraIntent();
 

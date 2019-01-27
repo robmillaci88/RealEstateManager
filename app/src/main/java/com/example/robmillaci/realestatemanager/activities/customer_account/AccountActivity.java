@@ -7,6 +7,8 @@ import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
+import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -14,11 +16,14 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for the customer account activity
+ */
 public class AccountActivity extends BaseActivity {
-    private Button yourDetails;
-    private Button privacySettings;
-    private Button logout;
-    private CompositeDisposable mCompositeDisposable;
+    private Button yourDetails; //Your details button
+    private Button privacySettings; //Privacy settings button
+    private Button logout; //logout of the app button
+    private CompositeDisposable mCompositeDisposable; //holds any disposables
 
 
     @Override
@@ -69,7 +74,8 @@ public class AccountActivity extends BaseActivity {
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        //todo implement logout
+                        FirebaseHelper.getmAuth().signOut();
+                        startActivity(new Intent(AccountActivity.this,StartActivity.class));
                     }
                 });
         mCompositeDisposable.add(logOutBtn);

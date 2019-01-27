@@ -14,20 +14,23 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for handling the View of 'About Activity'
+ */
 public class AboutActivity extends BaseActivity {
-    private static final String ACTIVITY_TITLE = "About";
-    private Button licenseBtn;
-    private Button backbtn;
-    private CompositeDisposable mCompositeDisposable;
+    private static final String ACTIVITY_TITLE = "About"; //the title of the activity
+    private Button licenseBtn; //The license button to credit the author of the images in the app
+    private Button backbtn; //the back button for this activity
+    private CompositeDisposable mCompositeDisposable; //to hold and dispose of all disposables when the activity is destroyed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_about);
-        setTitle(ACTIVITY_TITLE);
+        setContentView(R.layout.activity_about); //set the view
+        setTitle(ACTIVITY_TITLE); //set the title
 
-        initializeViews();
-        initializeOnClicks();
+        initializeViews(); //init the views
+        initializeOnClicks(); //init the onClick methods
     }
 
 

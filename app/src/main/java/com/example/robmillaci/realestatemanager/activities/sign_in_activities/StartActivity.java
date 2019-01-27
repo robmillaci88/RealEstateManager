@@ -32,7 +32,7 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 
 /**
  * This class created the first activity presented to a new user<br>
- * It deals with authenticating the user via Facebook or Google and handles the login event
+ * It deals with authenticating the user via Facebook, Google and Twitter and handles the login event
  */
 public class StartActivity extends AppCompatActivity implements FaceBookLoginManager.loginManagerCallback, FirebaseGoogleAuthManager.fireBaseGoogleAuthCallback {
     private static final String TAG = "StartActivity";

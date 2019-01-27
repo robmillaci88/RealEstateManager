@@ -10,6 +10,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuItem;
@@ -239,7 +240,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         if (!Utils.isTablet(getApplicationContext())) {
             changeActivityViewsVisibility(false);
         }
-
+        Log.d("accept", "setFragment: called");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListingItemFragment(), FRAGMENT_TAG).addToBackStack(null).commit();
     }
 

@@ -6,6 +6,9 @@ import android.view.MenuItem;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.viewings_activities.BaseViewingActivity;
 
+/**
+ * This class is responsible for any feedback awaiting action on the user
+ */
 public class FeedBackAwaitingAction extends BaseViewingActivity {
 
     @Override

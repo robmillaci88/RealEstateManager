@@ -116,7 +116,8 @@
         <activity android:name=".activities.search_activity.StreetViewActivity" />
         <activity android:name=".activities.book_viewing_activity.BookViewingActivity" />
         <activity android:name=".activities.listing_map_activity.ListingsMapView" />
-        <activity android:name=".activities.offers_activities.MakeAnOffer"></activity>
+        <activity android:name=".activities.offers_activities.MakeAnOffer">
+        </activity>
     </application>
 
 </manifest>

@@ -30,7 +30,7 @@ import static com.example.robmillaci.realestatemanager.utils.network_utils.Netwo
 public class SharedPreferenceHelper {
     private static final String LISTING_KEY = "listing";
     private static final String SHARED_PREFERENCES_NAME = "myprefs";
-    private static final String FIRST_LOGIN = "firstLogin";
+    private static final String PROFILE_UPDATE = "profileUpdate";
 
 
     private SharedPreferences sharedPreferences;
@@ -111,12 +111,12 @@ public class SharedPreferenceHelper {
     }
 
 
-    public boolean isFirstLogin() {
-        return sharedPreferences.getBoolean(FIRST_LOGIN, true);
+    public boolean isProfileUpdated() {
+        return sharedPreferences.getBoolean(PROFILE_UPDATE, true);
     }
 
     @SuppressLint("ApplySharedPref")
-    public void setPreviousLogin() {
-        sharedPreferences.edit().putBoolean(FIRST_LOGIN, false).commit();
+    public void setProfileUpdated() {
+        sharedPreferences.edit().putBoolean(PROFILE_UPDATE, false).commit();
     }
 }

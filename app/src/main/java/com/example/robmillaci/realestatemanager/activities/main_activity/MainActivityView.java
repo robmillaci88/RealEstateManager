@@ -14,7 +14,6 @@ import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.widget.Toolbar;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.WindowManager;
@@ -58,8 +57,11 @@ import kotlin.Unit;
 import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_ISADMIN_FIELD;
 
+/**
+ * The main activity of this app
+ */
 public class MainActivityView extends BaseActivity implements SynchListenerCallback, FirebaseHelper.AdminCheckCallback, MainActivityPresenter.View {
-
+    private static long back_pressed; //the time between back button presses
 
     @SuppressWarnings("unused")
     private TextView textViewMain;
@@ -67,16 +69,16 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     private TextView textViewQuantity;
 
 
-    private ArrayList<View> adminViews;
-    private DrawerLayout mDrawerLayout;
-    private CompositeDisposable mCompositeDisposable;
+    private ArrayList<View> adminViews; //Arraylist to store all views to be show if the user is an admin, or hidden if they are a regular user
+    private DrawerLayout mDrawerLayout; //the DrawerLayout
+    private CompositeDisposable mCompositeDisposable; //holds all disposables
 
     private ProgressDialog pd;
 
-    private IntentFilter intentFilter;
-    private NetworkListener mNetworkListener;
+    private IntentFilter intentFilter; //the intent filter used for network changes
+    private NetworkListener mNetworkListener; //the network change listener
 
-    private MainActivityPresenter mMainActivityPresenter;
+    private MainActivityPresenter mMainActivityPresenter; //this views presenter
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -111,15 +113,20 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         // this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
         //this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
 
-        if (Utils.CheckConnectivity(this)) {
+
+        if (Utils.CheckConnectivity(this)) { //Check whether the user logged in has admin access or not
             FirebaseHelper.getInstance().setAdminCallback(this).checkAdminAccess();
         }
 
-        checkFirstLogin();
+        checkProfileUpdated(); //check whether this is the users first login, if so display the "update profile" snackbar
     }
 
-    private void checkFirstLogin() {
-        if (new SharedPreferenceHelper(getApplicationContext()).isFirstLogin()) {
+
+    /**
+     * Checks wether the user has updated their profile or not and displays a snackbar if not
+     */
+    private void checkProfileUpdated() {
+        if (new SharedPreferenceHelper(getApplicationContext()).isProfileUpdated()) {
             createProfileSnackbar();
         }
     }
@@ -129,7 +136,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
                 .setAction(R.string.update_action, new View.OnClickListener() {
                     @Override
                     public void onClick(View view) {
-                        new SharedPreferenceHelper(getApplicationContext()).setPreviousLogin();
+                        new SharedPreferenceHelper(getApplicationContext()).setProfileUpdated(); //the user has opened their profile, we can set the profile update to true
                         startActivity(new Intent(getApplicationContext(), ProfileActivity.class));
                     }
                 })
@@ -138,6 +145,28 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    private void initializeNavDrawer() {
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+
+        if (getSupportActionBar() != null) {
+            getSupportActionBar().setElevation(0);
+            findViewById(R.id.appbar).bringToFront();
+        }
+
+        mDrawerLayout = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
+                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        mDrawerLayout.addDrawerListener(toggle);
+
+        toggle.syncState();
+
+    }
+
+
+    /**
+     * Initialize all the nav bar on click methods
+     */
     @SuppressLint("CheckResult")
     private void initializeNavViewClicks() {
         mCompositeDisposable = new CompositeDisposable();
@@ -298,38 +327,22 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
-    private void initializeNavDrawer() {
-        Toolbar toolbar = findViewById(R.id.toolbar);
-        setSupportActionBar(toolbar);
-
-        if (getSupportActionBar() != null) {
-            getSupportActionBar().setElevation(0);
-            findViewById(R.id.appbar).bringToFront();
-        }
-
-        mDrawerLayout = findViewById(R.id.drawer_layout);
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
-                this, mDrawerLayout, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
-        mDrawerLayout.addDrawerListener(toggle);
-
-        toggle.syncState();
-
-    }
-
-
+    /**
+     * Configure the floating action buttons
+     */
     @SuppressLint("CheckResult")
     private void configureFabs() {
-        FloatingActionButton addListingsFab = findViewById(R.id.add_listing_fab);
-        FloatingActionButton search_fab = findViewById(R.id.search_fab);
-        FloatingActionButton geolocate_fab = findViewById(R.id.geolocate_fab);
-        FloatingActionButton sync_db_fab = findViewById(R.id.synch_db_fab);
+        FloatingActionButton addListingsFab = findViewById(R.id.add_listing_fab); //the add listing FAB
+        FloatingActionButton search_fab = findViewById(R.id.search_fab);//the search listing FAB
+        FloatingActionButton geolocate_fab = findViewById(R.id.geolocate_fab);//the mapview of listings FAB
+        FloatingActionButton sync_db_fab = findViewById(R.id.sync_db_fab);//the sync database FAB
 
         RxView.clicks(addListingsFab).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
                 Intent i = new Intent(getApplicationContext(), AddListingView.class);
                 startActivity(i);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out); //fade the activity out when transitioning
             }
         });
 
@@ -348,7 +361,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
         RxView.clicks(sync_db_fab).subscribe(new Consumer<Unit>() {
             @Override
-            public void accept(Unit unit){
+            public void accept(Unit unit) {
                 showProgressDialog();
                 mMainActivityPresenter.syncData();
             }
@@ -367,6 +380,12 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * If the user is an admin, this method will show all floating action buttons
+     * If the user is not an admin, only the search floating action button will be visible
+     *
+     * @param response is the user an admin or not
+     */
     private void configureAdminViews(boolean response) {
         for (View v : adminViews) {
             if (response) {
@@ -398,15 +417,17 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 //        int quantity = Utils.convertDollarToEuro(100);
 //        this.textViewQuantity.setTextSize(20);
 
-        //this.textViewQuantity.setText(quantity); this caused an error because we are trying to use the the .setText() method which takes a string parameter
-        //We are trying to assign an integer value and hence this causes a crash with "String resource not found"
-        //Modified code below
+    //this.textViewQuantity.setText(quantity); this caused an error because we are trying to use the the .setText() method which takes a string parameter
+    //We are trying to assign an integer value and hence this causes a crash with "String resource not found"
+    //Modified code below
 
 //        this.textViewQuantity.setText(String.valueOf(quantity));
-  //  }
+    //  }
 
-    private static long back_pressed;
 
+    /**
+     * Handles wether the user exits the application when the back button is pressed
+     */
     @Override
     public void onBackPressed() {
         if (back_pressed + 2000 > System.currentTimeMillis()) {
@@ -419,6 +440,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    //Set the network listener for connectivity changes
     private void setNetworkListener() {
         intentFilter = new IntentFilter();
         intentFilter.addAction(CONNECTIVITY_ACTION);
@@ -458,6 +480,9 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * Show the progress dialog when synching with the databases
+     */
     @Override
     public void showProgressDialog() {
         keepScreenOn(true);
@@ -466,6 +491,12 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         pd.show();
     }
 
+
+    /**
+     * Updates the progress dialog while the databases are synching
+     * @param count the number of listings remaining
+     * @param message the message to display
+     */
     @Override
     public void updateProgressDialog(final int count, final String message) {
         runOnUiThread(new Runnable() {
@@ -479,19 +510,24 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
     }
 
+
+    /**
+     * Once the synch is completed with an error or not, this method dismisses the progress dialog and displays a toast to the user
+     * @param error did we get an error synching or not ?
+     */
     @Override
     public void dismissProgressDialog(final boolean error) {
         keepScreenOn(false);
-        if (pd != null && pd.isShowing()){
+        if (pd != null && pd.isShowing()) {
             pd.dismiss();
 
             runOnUiThread(new Runnable() {
                 @Override
                 public void run() {
-                    if (error){
-                        ToastModifications.createToast(MainActivityView.this,getString(R.string.sync_timeout),Toast.LENGTH_LONG);
-                    }else {
-                        ToastModifications.createToast(MainActivityView.this,getString(R.string.sync_completed),Toast.LENGTH_LONG);
+                    if (error) {
+                        ToastModifications.createToast(MainActivityView.this, getString(R.string.sync_timeout), Toast.LENGTH_LONG);
+                    } else {
+                        ToastModifications.createToast(MainActivityView.this, getString(R.string.sync_completed), Toast.LENGTH_LONG);
                     }
                 }
             });
@@ -499,6 +535,10 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * This method keeps the screen on or turns it off. When synching the users mobile screen is kept on. This flag is removed when synching completes.
+     * @param screenOn screen on or off?
+     */
     private void keepScreenOn(boolean screenOn) {
         if (screenOn) {
             runOnUiThread(new Runnable() {
@@ -518,6 +558,11 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * Callback from {@link FirebaseHelper#checkAdminAccess}
+     * if the user is an admin , the admin views will be displayed, if not they will be hidden
+     * @param isAdmin is the user an admin or not?
+     */
     @SuppressLint("ApplySharedPref")
     @Override
     public void isAdmin(boolean isAdmin) {
@@ -532,6 +577,10 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         displayAdminViews();
     }
 
+
+    /**
+     * Display or hide the admin views based on wether the user is an admin in the database or not
+     */
     private void displayAdminViews() {
         SharedPreferences preferences = PreferenceManager.getDefaultSharedPreferences(this);
         if (preferences.getBoolean(USER_DATABASE_ISADMIN_FIELD, false)) {
@@ -542,6 +591,10 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * Callback from the presenter when synching is completed. Called {@link #dismissProgressDialog(boolean)}
+     * @param error if an error is returned whilst synching
+     */
     @Override
     public void syncDataComplete(final boolean error) {
         runOnUiThread(new Runnable() {
@@ -553,9 +606,15 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
     }
 
+
+    /**
+     * Updated the progress dialog when performing a manual synch
+     * @param count the number of listings remaining to be synched
+     * @param message the message to display in the progress dialog
+     */
     @Override
     public void updateManualSyncProgress(int count, String message) {
-        this.updateProgressDialog(count,message);
+        this.updateProgressDialog(count, message);
     }
 }
 

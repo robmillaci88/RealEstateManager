@@ -15,6 +15,9 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for the users privacy settings activity
+ */
 public class PrivacySettingsActivity extends BaseActivity {
     private Button contactUs;
     private CompositeDisposable mCompositeDisposable;
@@ -26,7 +29,7 @@ public class PrivacySettingsActivity extends BaseActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //remove the full screen flag set in BaseActivity
 
         initializeViews();
         setOnClicks();

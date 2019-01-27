@@ -76,7 +76,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/email_icon"
             android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
+            android:inputType="textMultiLine|textEmailAddress"
             android:paddingLeft="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -95,7 +95,6 @@
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
             android:paddingLeft="10dp"
-            app:layout_constraintEnd_toStartOf="@+id/guideline3"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title8" />
 

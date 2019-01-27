@@ -52,8 +52,8 @@ dependencies {
     implementation 'com.google.android.gms:play-services-auth:16.0.1'
     implementation 'com.shobhitpuri.custombuttons:google-signin:1.0.0'
     implementation 'com.google.firebase:firebase-core:16.0.6'
-    implementation 'com.google.firebase:firebase-database:16.0.5'
-    implementation 'com.google.firebase:firebase-firestore:17.1.5'
+    implementation 'com.google.firebase:firebase-database:16.0.6'
+    implementation 'com.google.firebase:firebase-firestore:18.0.0'
     implementation 'com.google.firebase:firebase-auth:16.1.0'
     implementation 'com.google.firebase:firebase-storage:16.0.5'
     implementation('com.google.api-client:google-api-client-android:1.20.0') {
@@ -71,3 +71,4 @@ dependencies {
 
 }
 apply plugin: 'com.google.gms.google-services'
+

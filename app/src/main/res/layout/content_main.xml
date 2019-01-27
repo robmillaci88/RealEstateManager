@@ -25,7 +25,7 @@
         app:srcCompat="@drawable/geolocate_icon" />
 
     <android.support.design.widget.FloatingActionButton
-        android:id="@+id/synch_db_fab"
+        android:id="@+id/sync_db_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginEnd="16dp"
