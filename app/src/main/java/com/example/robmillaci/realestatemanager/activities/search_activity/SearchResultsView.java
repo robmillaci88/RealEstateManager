@@ -19,8 +19,8 @@ import android.widget.AdapterView;
 import android.widget.Spinner;
 import android.widget.TextView;
 
-import com.example.robmillaci.realestatemanager.adapters.SearchResultsAdapter;
 import com.example.robmillaci.realestatemanager.R;
+import com.example.robmillaci.realestatemanager.adapters.SearchResultsAdapter;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;
 import com.example.robmillaci.realestatemanager.fragments.MapViewFragment;
@@ -33,23 +33,28 @@ import java.util.ArrayList;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * The view for the search results. Called from {@link SearchActivityView} when a user searches for listings
+ */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class SearchResultsView extends AppCompatActivity implements SearchResultsPresenter.View, SearchResultsAdapter.SearchResultsAdapterCallback {
-    public static final String FRAGMENT_TAG = "addedFragment";
+    public static final String FRAGMENT_TAG = "addedFragment"; //the tag for the the listing item fragment
 
-    public static final int SORT_CHOICE_HIGHEST_PRICE = 1;
-    public static final int SORT_CHOICE_LOWEST_PRICE = 2;
-    public static final int SORT_CHOICE_NEWEST = 3;
-    public static final int SORT_CHOICE_OLDEST = 4;
+    public static final int SORT_CHOICE_HIGHEST_PRICE = 1; //represents the user sorting by highest price
+    public static final int SORT_CHOICE_LOWEST_PRICE = 2;//represents the user sorting by lowest price
+    public static final int SORT_CHOICE_NEWEST = 3;//represents the user sorting by newest to oldest
+    public static final int SORT_CHOICE_OLDEST = 4;//represents the user sorting by oldest to newest
 
-    private SearchResultsPresenter presenter;
-    private RecyclerView search_results_recyclerview;
-    private TextView search_results_numb;
-    private Spinner filterTypeSpinner;
-    private ArrayList<View> activityViews;
-    private AlertDialog sortAlertDialog;
+    private SearchResultsPresenter presenter; //this views presenter
+
+    private RecyclerView search_results_recyclerview; //the recyclerview to display the search results
+    private TextView search_results_numb; //the text view to display the number of results found
+    private Spinner filterTypeSpinner; //the spinner to filter out types of listings
+    private ArrayList<View> activityViews; //arraylist to hold this activities views, so we can hide and unhide easily
+    private AlertDialog sortAlertDialog; //the alter dialog displaying the sorting options
 
 
-    private ArrayList<Listing> originalListings;
+    private ArrayList<Listing> originalListings; //arraylist to hold the origional returned listings, so they can be restored after filtering is completed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -59,7 +64,8 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.search_results_title));
 
-        if (!Utils.isTablet(getApplicationContext())) {
+        if (!Utils.isTablet(getApplicationContext())) { //if we are not on a tablet, remove the ability for screen rotation
+            //We have a different view for tablets
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
             setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
@@ -94,6 +100,11 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         }
     }
 
+
+    /**
+     * Display the alert dialog to display the sorting options to the user
+     * Passes the users choice to the presenter to perform the search {@link SearchResultsPresenter#sortData(ArrayList, int)}
+     */
     @SuppressLint("CheckResult")
     private void showSortDialog() {
         final AlertDialog.Builder sortByDialog = new AlertDialog.Builder(SearchResultsView.this);
@@ -168,6 +179,10 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
     }
 
 
+    /**
+     * The listing type spinner passes the chosen value to the presenter to filter the data and return it to the view to
+     * update the recyclerview {@link SearchResultsPresenter#filterData(String, ArrayList)}
+     */
     private void configureSpinnerOnSelect() {
         filterTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
@@ -188,6 +203,11 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
     }
 
 
+    /**
+     * Show or hide this activities views depending on whether {@link ListingItemFragment} is shown
+     *
+     * @param show boolean show or not
+     */
     private void changeActivityViewsVisibility(boolean show) {
         for (View v : activityViews) {
             if (show) {
@@ -199,16 +219,34 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
     }
 
 
+    /**
+     * Called in onCreate to search the database for listings passed in the intent when creating this activity
+     * The search parameters are passed to the presenter and returned to {@link SearchResultsView#gotAllListing(ArrayList)}
+     *
+     * @param extras the search parameters passed into the intent when creating this activity
+     */
     private void search(Bundle extras) {
         presenter.searchDatabase(extras);
     }
 
 
+    /**
+     * Sets the number of results returned to display to the user
+     *
+     * @param number      the number of results returned
+     * @param totalNumber the total number of available results
+     */
     private void setResultNumber(int number, int totalNumber) {
-        search_results_numb.setText(String.format("%s of %s %s", number, totalNumber,getApplicationContext().getString(R.string.results)));
+        search_results_numb.setText(String.format("%s of %s %s", number, totalNumber, getApplicationContext().getString(R.string.results)));
     }
 
 
+    /**
+     * Callback from {@link SearchResultsPresenter#searchDatabase(Bundle)}
+     * This updates the recyclerview with the returned listings
+     *
+     * @param listings the returned listings from either firebase or the local db
+     */
     @Override
     public void gotAllListing(ArrayList<Listing> listings) {
         originalListings = listings;
@@ -217,6 +255,13 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         initializeRecyclerView(listings);
     }
 
+
+    /**
+     * The callback from {@link SearchResultsPresenter#filterData(String, ArrayList)}
+     * This updates the recyclerview with the filtered listings
+     *
+     * @param returnedListings the listings returned after filtering
+     */
     @Override
     public void filteredListings(ArrayList<Listing> returnedListings) {
         if (returnedListings != null) {
@@ -225,6 +270,13 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         }
     }
 
+
+    /**
+     * Callback from {@link SearchResultsPresenter#sortData(ArrayList, int)}
+     * This updates the recycler view with the listings sorted in a specific order
+     *
+     * @param sortedListings the returned sorted Arraylist of listings
+     */
     @Override
     public void sortedListings(ArrayList<Listing> sortedListings) {
         if (sortedListings != null) {
@@ -232,6 +284,13 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         }
     }
 
+
+    /**
+     * Called from {@link SearchResultsAdapter}. The recycler views on click methods for the listing.
+     * The listing details are displayed in a fragment to the user.<br/>
+     * If we are using a tablet, this activities views are not hidden, otherwise they are hidden
+     * @param listingAddress the address of the listing
+     */
     @Override
     public void setFragment(String listingAddress) {
         findViewById(R.id.fragment_container).setBackgroundColor(Color.WHITE);
@@ -240,32 +299,36 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         if (!Utils.isTablet(getApplicationContext())) {
             changeActivityViewsVisibility(false);
         }
-        Log.d("accept", "setFragment: called");
         getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListingItemFragment(), FRAGMENT_TAG).addToBackStack(null).commit();
     }
 
+
+    /**
+     * Handles the user clicking back in the application
+     * Different behaviour depending on whether the device is a tablet or not
+     */
     @Override
     public void onBackPressed() {
-        if(Utils.isTablet(getApplicationContext())){
+        if (Utils.isTablet(getApplicationContext())) {
             finish();
-        }else{
+        } else {
             final Fragment fragment = getSupportFragmentManager().findFragmentByTag(FRAGMENT_TAG);
 
             if (fragment instanceof ListingItemFragment) {
-            if (fragment.isAdded() && fragment.isVisible()) {
-                getSupportFragmentManager().beginTransaction().remove(fragment).commit();
-                changeActivityViewsVisibility(true);
+                if (fragment.isAdded() && fragment.isVisible()) {
+                    getSupportFragmentManager().beginTransaction().remove(fragment).commit();
+                    changeActivityViewsVisibility(true);
 
-                setTitle(getString(R.string.search_results_title));
+                    setTitle(getString(R.string.search_results_title));
+                } else {
+                    finish();
+                }
+
+            } else if (fragment instanceof MapViewFragment) {
+                getSupportFragmentManager().popBackStackImmediate();
             } else {
                 finish();
             }
-
-        } else if (fragment instanceof MapViewFragment) {
-            getSupportFragmentManager().popBackStackImmediate();
-        } else {
-            finish();
-        }
 
         }
     }

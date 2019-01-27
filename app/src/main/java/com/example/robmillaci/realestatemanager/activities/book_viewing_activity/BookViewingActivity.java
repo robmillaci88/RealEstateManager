@@ -2,6 +2,7 @@ package com.example.robmillaci.realestatemanager.activities.book_viewing_activit
 
 import android.annotation.SuppressLint;
 import android.content.Context;
+import android.content.Intent;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -13,11 +14,13 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
+import com.example.robmillaci.realestatemanager.activities.valuations_activities.ConfirmationActivity;
 import com.example.robmillaci.realestatemanager.adapters.BookingTimesAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;
+import com.jakewharton.rxbinding3.view.RxView;
 
 import java.lang.ref.WeakReference;
 import java.text.SimpleDateFormat;
@@ -25,10 +28,11 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
-
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
+import io.reactivex.functions.Consumer;
+import kotlin.Unit;
 
 /**
  * This class is responsible for displaying the Book a view activity
@@ -51,6 +55,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
 
         getListing();
         initializeViews();
+        setOnClickListeners();
         loadPhoto();
 
         createCalendarSelector();
@@ -114,6 +119,20 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
                 thisListing.getAddress_street(),
                 thisListing.getAddress_county(),
                 thisListing.getAddress_postcode()));
+    }
+
+    @SuppressLint("CheckResult")
+    private void setOnClickListeners(){
+        //noinspection ResultOfMethodCallIgnored
+        RxView.clicks(continue_btn)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) {
+                        Intent bookingConfirmation = new Intent(BookViewingActivity.this, ConfirmationActivity.class);
+                        bookingConfirmation.putExtra(ConfirmationActivity.BUNDLE_KEY,ConfirmationActivity.CALLED_FROM_BOOK_VIEWING);
+                        startActivity(bookingConfirmation);
+                    }
+                });
     }
 
 

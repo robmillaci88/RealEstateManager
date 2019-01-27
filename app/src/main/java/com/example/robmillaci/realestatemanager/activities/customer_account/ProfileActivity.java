@@ -10,6 +10,7 @@ import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.util.HashMap;
@@ -33,7 +34,7 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 /**
  * This class is responsible for the users profile
  */
-public class ProfileActivity extends BaseActivity {
+public class ProfileActivity extends BaseActivity implements IUserDetailsCallback {
     EditText user_title; //the title of the user
     EditText user_forename; //the forename of the user
     EditText user_surname; //the surname of the user
@@ -77,9 +78,24 @@ public class ProfileActivity extends BaseActivity {
         });
     }
 
+    /**
+     * Restore any users values stored in Firebase (if we are online) or shared preferences if we are offline
+     */
     private void restoreValues() {
-        HashMap<String,String> userDetails =  new SharedPreferenceHelper(getApplicationContext()).getUsersDetails();
+        if (Utils.CheckConnectivity(ProfileActivity.this)){
+            FirebaseHelper.getUsersDetails(this);
+        }else {
+            HashMap<String, String> userDetails = new SharedPreferenceHelper(getApplicationContext()).getUsersDetails();
+            setUserDetails(userDetails);
+        }
+    }
 
+
+    /**
+     * Update the profile views with the users details returned from either shared preferences or {@link IUserDetailsCallback#gotUserDetails(HashMap)}
+     * @param userDetails the returned user information
+     */
+    private void setUserDetails(HashMap<String, String> userDetails) {
         user_title.setText(userDetails.get(USER_TITLE));
         user_forename.setText(userDetails.get(USER_FORENAME));
         user_surname.setText(userDetails.get(USER_SURNAME));
@@ -92,9 +108,12 @@ public class ProfileActivity extends BaseActivity {
         user_mobile_numb.setText(userDetails.get(USER_MOBILE));
         user_primary_contact_numb.setText(userDetails.get(USER_PRIMARY_CONTACT_NUMBER));
         user_county.setText(userDetails.get(USER_COUNTY));
-
     }
 
+
+    /**
+     * save the users values to shared preferences and to firebase
+     */
     private void saveValues() {
         SharedPreferenceHelper spHelper = new SharedPreferenceHelper(getApplicationContext());
 
@@ -138,4 +157,18 @@ public class ProfileActivity extends BaseActivity {
 
         saveBtn=findViewById(R.id.savebtn);
     }
+
+
+    /**
+     * Callback method from {@link FirebaseHelper#getUsersDetails(IUserDetailsCallback)}
+     * @param userDetails the returned user details. This method then passes the user details to {@link #setUserDetails(HashMap)}
+     */
+    @Override
+    public void gotUserDetails(HashMap<String,String> userDetails) {
+        setUserDetails(userDetails);
+    }
+
+
 }
+
+

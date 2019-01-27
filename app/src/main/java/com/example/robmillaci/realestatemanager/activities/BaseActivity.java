@@ -7,8 +7,26 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
+import com.example.robmillaci.realestatemanager.activities.viewings_activities.AwaitingAction;
+import com.example.robmillaci.realestatemanager.activities.viewings_activities.ConfirmedViewings;
+import com.example.robmillaci.realestatemanager.activities.viewings_activities.ViewingsHistory;
 import com.example.robmillaci.realestatemanager.utils.Utils;
-
+/**
+ * The base activity for <br/>{@link com.example.robmillaci.realestatemanager.activities.about_activity.AboutActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.customer_account.AccountActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.contact_activity.ContactActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.full_screen_photo_activity.FullScreenPhotoActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.offers_activities.MakeAnOffer}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.customer_account.PrivacySettingsActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.customer_account.ProfileActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.splash_screen.SplashScreenActivity}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.search_activity.StreetViewActivity}<br/>
+ *
+ * Sets the activities to full screen and if the users device is not a tablet, removes the screen rotation sensor
+ */
 public class BaseActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {

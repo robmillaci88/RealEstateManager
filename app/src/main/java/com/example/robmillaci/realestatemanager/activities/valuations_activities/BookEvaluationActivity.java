@@ -13,14 +13,17 @@ import io.reactivex.disposables.Disposable;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for the booking evaluation activity
+ */
 public class BookEvaluationActivity extends AppCompatActivity {
-    private Button sell_property_btn;
-    private Button let_property_btn;
-    private CompositeDisposable mCompositeDisposable;
+    private Button sell_property_btn; //the sell a property button
+    private Button let_property_btn; //the let a property button
+    private CompositeDisposable mCompositeDisposable; //hold all disposables
 
-    static final String TYPE = "type";
-    static final String SELLING_TYPE = "selling";
-    static final String LETTING_TYPE = "letting";
+    static final String TYPE_KEY = "type"; //the key for the tye of booking activity passed into the intent for SellLetActivity
+    static final String SELLING_TYPE = "selling"; //the value for selling
+    static final String LETTING_TYPE = "letting"; //the value for letting
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -47,7 +50,7 @@ public class BookEvaluationActivity extends AppCompatActivity {
                     @Override
                     public void accept(Unit unit){
                         Intent i = new Intent(BookEvaluationActivity.this,SellLetActivity.class);
-                        i.putExtra(TYPE,SELLING_TYPE);
+                        i.putExtra(TYPE_KEY,SELLING_TYPE);
                         startActivity(i);
                     }
                 });
@@ -59,7 +62,7 @@ public class BookEvaluationActivity extends AppCompatActivity {
                     @Override
                     public void accept(Unit unit){
                         Intent i = new Intent(BookEvaluationActivity.this,SellLetActivity.class);
-                        i.putExtra(TYPE,LETTING_TYPE);
+                        i.putExtra(TYPE_KEY,LETTING_TYPE);
                         startActivity(i);
                     }
                 });

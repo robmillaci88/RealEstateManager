@@ -140,11 +140,7 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(mapview_tv).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                if (Utils.CheckConnectivity(c)) {
                     createMapFragment(NON_TABLET_REQUEST_CODE);
-                }else {
-                    ToastModifications.createToast(getContext(),"Internet is not available", Toast.LENGTH_LONG);
-                }
             }
         });
 
@@ -152,14 +148,10 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(streetView).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                if (Utils.CheckConnectivity(c)) {
                     Intent streetViewIntent = new Intent(getActivity(), StreetViewActivity.class);
                     streetViewIntent.putExtra(LISTING_BUNDLE_KEY, thisListing);
 
                     startActivity(streetViewIntent);
-                }else {
-                    ToastModifications.createToast(getContext(),"Internet is not available", Toast.LENGTH_LONG);
-                }
             }
         });
 
@@ -177,7 +169,6 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(edit_listing_fab).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Log.d("accept", "accept: called");
                 Intent editListingIntent = new Intent(getActivity(), AddListingView.class);
                 editListingIntent.putExtra(EDIT_LISTING_BUNDLE_KEY, thisListing);
                 startActivity(editListingIntent);

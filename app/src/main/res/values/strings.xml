@@ -970,5 +970,10 @@
     <string name="local_db_sync_message">Synching with local database…</string>
     <string name="synching_with_firebase">Synching Firebase</string>
     <string name="listings_remaining">listings remaining</string>
+    <string name="editing_title">Editing</string>
+    <string name="no_confirmed_viewings">You do not have any confirmed viewings</string>
+    <string name="no_viewings_history">You do not have any viewings history</string>
+    <string name="unknown_agent">Unknown agent</string>
+    <string name="book_a_viewing_confirmation">Your viewing has been booked! An agent will be in contact soon</string>
 
 </resources>

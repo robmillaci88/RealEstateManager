@@ -16,21 +16,31 @@ import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.utils.network_utils.NetworkListener;
 import com.jakewharton.rxbinding3.view.RxView;
 
+import java.util.Objects;
+
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * The base activity for <br/>{@link com.example.robmillaci.realestatemanager.activities.offers_activities.AcceptedOffers}<br/>
+ * {@link AwaitingAction}<br/>
+ * {@link ConfirmedViewings}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.feedback_activities.FeedBackAwaitingAction}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.feedback_activities.FeedbackPendingReceived}<br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.offers_activities.OffersAwaitingAction}<br/>
+ * {@link ViewingsHistory}<br/>
+ * Currently in this application all the above classes are for visual representational purposes only and don't have functionality
+ */
 public class BaseViewingActivity extends AppCompatActivity {
     private Button refresh;
     protected TextView action_message;
-    IntentFilter intentFilter;
-    NetworkListener receiver;
 
     @SuppressLint("CheckResult")
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.viewings);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
         refresh = findViewById(R.id.refresh_btn);
         action_message = findViewById(R.id.message);
@@ -39,6 +49,7 @@ public class BaseViewingActivity extends AppCompatActivity {
 
         startSearch();
 
+        //noinspection ResultOfMethodCallIgnored
         RxView.clicks(refresh)
                 .subscribe(new Consumer<Unit>() {
                     @Override
@@ -83,23 +94,4 @@ public class BaseViewingActivity extends AppCompatActivity {
         return true;
     }
 
-    @Override
-    protected void onResume() {
-        super.onResume();
-        try {
-            registerReceiver(receiver, intentFilter);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        try {
-            unregisterReceiver(receiver);
-        }catch (Exception e){
-            e.printStackTrace();
-        }
-    }
 }

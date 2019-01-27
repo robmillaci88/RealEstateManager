@@ -5,7 +5,6 @@ import retrofit2.converter.gson.GsonConverterFactory;
 
 public class ServiceGenerator {
     private static Retrofit retrofit;
-    private static Retrofit retrofit4Square;
 
     private static final String BASE_URL = "https://maps.googleapis.com/";
     private static final String GOOGLE_API_KEY = "AIzaSyCTLuMXfUowBd37AbdHvM9kSQIlmmlHkR4";

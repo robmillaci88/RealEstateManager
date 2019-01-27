@@ -19,8 +19,12 @@ import com.google.android.gms.maps.model.LatLng;
 
 import java.util.List;
 
+/**
+ * This class is responsible for displaying the street view of a specific listing to the user
+ */
 public class StreetViewActivity extends BaseActivity implements OnStreetViewPanoramaReadyCallback {
-    private LatLng thisListingLoc;
+    private LatLng thisListingLoc; //the locations latLng
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -30,6 +34,8 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle(getString(R.string.street_view_activity_title));
 
+
+        //Restore the listing passed into the intent when creating this activity
         Listing thisListing;
         Bundle intentBundle = getIntent().getExtras();
         if (intentBundle != null) {
@@ -37,13 +43,13 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
 
             String addressString = "";
             if (thisListing != null) {
-                addressString = String.format("%s %s %s %s", thisListing.getAddress_number(),
+                addressString = String.format("%s %s %s %s", thisListing.getAddress_number(), //Created an address string from the listing
                         thisListing.getAddress_street(),
                         thisListing.getAddress_town(),
                         thisListing.getAddress_postcode());
 
-                getListingLatLng(addressString);
-                getStreetView(savedInstanceState, thisListingLoc);
+                getListingLatLng(addressString); //pass the address string into getListingLatLng method
+                getStreetView(savedInstanceState, thisListingLoc);  //creates the street view using the listings location
 
                 setTitle(getString(R.string.street_view_title) + addressString);
             }
@@ -51,6 +57,10 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
     }
 
 
+    /**
+     * Using the passed in address string, this method sets the listings latitude and longitude so we can create the street view
+     * @param strAddress the address of the listing to be Geo coded
+     */
     public void getListingLatLng(String strAddress) {
         Geocoder coder = new Geocoder(getApplicationContext());
         List<Address> address;
@@ -67,6 +77,10 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
     }
 
 
+    /**
+     * Creates the street view fragment asynchronously, once ready calls {@link OnStreetViewPanoramaReadyCallback}
+     * @param listingLoc the location of the listing
+     */
     private void getStreetView(@Nullable Bundle savedInstanceState, final LatLng listingLoc) {
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
@@ -76,6 +90,10 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
     }
 
 
+    /**
+     * Once the street view fragment is ready, set the position to be the listings location
+     * @param streetViewPanorama the created street view fragment
+     */
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
         streetViewPanorama.setPosition(thisListingLoc);

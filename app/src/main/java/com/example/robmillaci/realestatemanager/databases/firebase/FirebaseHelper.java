@@ -9,6 +9,8 @@ import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.customer_account.AccountActivity;
+import com.example.robmillaci.realestatemanager.activities.customer_account.IUserDetailsCallback;
+import com.example.robmillaci.realestatemanager.activities.customer_account.ProfileActivity;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
 import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
@@ -49,6 +51,7 @@ import io.reactivex.disposables.Disposable;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.IMAGE_URI_PATH;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_COUNTY;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_COLLECTION_PATH;
+import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_EMAIL_FIELD;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_ISADMIN_FIELD;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DOB;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_FORENAME;
@@ -109,6 +112,40 @@ public class FirebaseHelper implements MyDatabase.Model {
         return instance;
     }
 
+    public static void getUsersDetails(final IUserDetailsCallback callback) {
+        final FirebaseFirestore mFirebaseDatabase;
+        mFirebaseDatabase = FirebaseFirestore.getInstance();
+
+        mFirebaseDatabase.collection(FirebaseContract.USER_DATABASE_COLLECTION_PATH)
+                .document(loggedinUserId)
+                .get()
+                .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
+            @Override
+            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                if (task.isSuccessful()){
+                    DocumentSnapshot d = task.getResult();
+                    HashMap<String, String> data = new HashMap<>();
+
+                    data.put(USER_TITLE, d.get(USER_TITLE) != null ? (String) d.get(USER_TITLE) : "");
+                    data.put(USER_FORENAME, d.get(USER_FORENAME)!= null ? (String)d.get(USER_FORENAME) : "");
+                    data.put(USER_SURNAME, d.get(USER_SURNAME)!= null ? (String)d.get(USER_SURNAME) : "");
+                    data.put(USER_DOB, d.get(USER_DOB)!= null ? (String)d.get(USER_DOB) : "");
+                    data.put(USER_POSTCODE, d.get(USER_POSTCODE)!= null ? (String)d.get(USER_POSTCODE) : "");
+                    data.put(USER_HOUSE_NAME_NUMBER, d.get(USER_HOUSE_NAME_NUMBER)!= null ? (String)d.get(USER_HOUSE_NAME_NUMBER) : "");
+                    data.put(USER_HOUSE_STREET, d.get(USER_HOUSE_STREET)!= null ? (String)d.get(USER_HOUSE_STREET) : "");
+                    data.put(USER_TOWN, d.get(USER_TOWN)!= null ? (String)d.get(USER_TOWN) : "");
+                    data.put(USER_COUNTY, d.get(USER_COUNTY)!= null ? (String)d.get(USER_COUNTY) : "");
+                    data.put(USER_HOME_NUMBER, d.get(USER_HOME_NUMBER)!= null ? (String)d.get(USER_HOME_NUMBER) : "");
+                    data.put(USER_MOBILE, d.get(USER_MOBILE)!= null ? (String)d.get(USER_MOBILE) : "");
+                    data.put(USER_DATABASE_EMAIL_FIELD, d.get(USER_DATABASE_EMAIL_FIELD)!= null ? (String)d.get(USER_DATABASE_EMAIL_FIELD) : "");
+
+                    callback.gotUserDetails(data);
+                }
+            }
+        });
+
+    }
+
 
     public FirebaseHelper setPresenter(Model presenter) {
         this.mPresenter = presenter;
@@ -136,7 +173,6 @@ public class FirebaseHelper implements MyDatabase.Model {
 
 
     private static void getListingLastUpdateTime(final Listing listing, final AddListingCallback callback) {
-        Log.d("getListing", "getListingLastUpdateTime: called");
         final String[] lastUpdateTime = new String[1];
         FirebaseFirestore.getInstance()
                 .collection(LISTINGS_COLLECTION_PATH)
@@ -313,7 +349,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         data.put(USER_HOME_NUMBER, userDetails.get(USER_HOME_NUMBER));
         data.put(USER_MOBILE, userDetails.get(USER_MOBILE));
         data.put(USER_PRIMARY_CONTACT_NUMBER, userDetails.get(USER_PRIMARY_CONTACT_NUMBER));
-        data.put(FirebaseContract.USER_DATABASE_EMAIL_FIELD, loggedInEmail);
+        data.put(USER_DATABASE_EMAIL_FIELD, loggedInEmail);
 
         mFirebaseDatabase.collection(FirebaseContract.USER_DATABASE_COLLECTION_PATH).document(loggedinUserId).update(data);
     }
@@ -326,7 +362,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         Map<String, Object> data = new HashMap<>();
 
         data.put(FirebaseContract.USER_DATABASE_NAME_FIELD, fbUser.getDisplayName());
-        data.put(FirebaseContract.USER_DATABASE_EMAIL_FIELD, fbUser.getEmail());
+        data.put(USER_DATABASE_EMAIL_FIELD, fbUser.getEmail());
         //noinspection ConstantConditions
         data.put(FirebaseContract.USER_DATABASE_PICTURE_FIELD, (fbUser.getPhotoUrl().toString()));
         data.put(FirebaseContract.USER_DATABASE_UNIQUE_ID_FIELD, fbUser.getUid());

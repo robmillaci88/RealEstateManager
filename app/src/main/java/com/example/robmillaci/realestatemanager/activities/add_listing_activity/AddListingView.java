@@ -151,6 +151,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      * @param editingListing the listing that is being edited.
      */
     private void prepareEdit(Listing editingListing) {
+        setTitle(String.format("%s %s %s",getString(R.string.editing_title), editingListing.getAddress_number(), editingListing.getAddress_street()));
         int selection = 0;
         editing = true;
         editingId = editingListing.getId();
@@ -473,7 +474,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             mPoiEditText.getText().toString(),
                             editing ? mListingBeingEdited.getPostedDate() : Utils.getTodayDate(),
                             saleDate,
-                            FirebaseHelper.getLoggedInUser(),
+                            FirebaseHelper.getLoggedInUser() != null ? FirebaseHelper.getLoggedInUser() : getString(R.string.unknown_agent),
                             Utils.getTodayDate(),
                             !mBuyOrLetSwitch.isChecked() ? BUY_STRING : LET_STRING,
                              mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG)), editing

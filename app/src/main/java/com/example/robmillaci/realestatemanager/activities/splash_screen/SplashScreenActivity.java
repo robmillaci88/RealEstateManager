@@ -12,6 +12,10 @@ import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 
+/**
+ * A simple splash screen that is displayed to the user when the app starts.
+ * Waits for 3 seconds before starting the main activity
+ */
 public class SplashScreenActivity extends BaseActivity {
 
     @Override

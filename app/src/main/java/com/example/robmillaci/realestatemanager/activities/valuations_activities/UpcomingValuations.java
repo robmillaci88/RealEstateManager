@@ -15,6 +15,9 @@ import com.jakewharton.rxbinding3.view.RxView;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for the upcoming valuations activity
+ */
 public class UpcomingValuations extends AppCompatActivity {
 private Button refresh;
 private TextView evaluations_message;
@@ -34,6 +37,7 @@ private TextView evaluations_message;
         setViewVisibility(false);
         startCountdown();
 
+        //noinspection ResultOfMethodCallIgnored
         RxView.clicks(refresh)
                 .subscribe(new Consumer<Unit>() {
                     @Override

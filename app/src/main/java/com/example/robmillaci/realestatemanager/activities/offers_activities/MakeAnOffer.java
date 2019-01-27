@@ -14,16 +14,17 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.valuations_activities.ConfirmationActivity;
+import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.utils.DecimalFormatter;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.lang.ref.WeakReference;
+import java.util.Objects;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
@@ -31,26 +32,31 @@ import me.relex.circleindicator.CircleIndicator;
 
 import static com.example.robmillaci.realestatemanager.fragments.ListingItemFragment.LISTING_BUNDLE_KEY;
 
+/**
+ * This class is responsible for the Make an offer activity
+ */
 public class MakeAnOffer extends BaseActivity {
-    private TextView asking_price_amount;
-    private EditText offerPrice;
-    private ViewPager imageViewPager;
-    private CircleIndicator viewPagerIndicator;
-    private Listing thisListing;
-    private TextWatcher offerTextWatcher;
-    private Button submitOfferBtn;
+    private TextView asking_price_amount; //the asking price of the listings
+    private EditText offerPrice; //the price the user will offer for the listings
+    private ViewPager imageViewPager; //view pager to store the listings images
+    private CircleIndicator viewPagerIndicator; //view indicator to highlight the number of images in the view pager
+    private Listing thisListing; //the current listing the user is viewing
+    private TextWatcher offerTextWatcher; //Text watcher for the offer to append relevant commas
+    private Button submitOfferBtn; //the button to submit an offer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_make_offer);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN);
+        Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
+        getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //prevent the keyboard from displaying when the activity is created.
 
+
+        //Get the listing that this activity is created in relation to.
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
             thisListing = (Listing) intentExtras.getSerializable(LISTING_BUNDLE_KEY);
-            if (thisListing != null){
+            if (thisListing != null) {
                 setTitle(String.format("%s %s %s", thisListing.getAddress_number(), thisListing.getAddress_street(), thisListing.getAddress_town()));
             }
         }
@@ -62,6 +68,11 @@ public class MakeAnOffer extends BaseActivity {
 
     }
 
+
+    /**
+     * Creates a text watcher for the offers edit text
+     * This text watcher formats the entered value such that relevant commas are inserted into the offer amount
+     */
     private void createTextWatcher() {
         offerTextWatcher = new TextWatcher() {
             @Override
@@ -76,7 +87,7 @@ public class MakeAnOffer extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String replacementString = DecimalFormatter.formatNumber(Integer.valueOf(s.toString().replaceAll(",","")));
+                String replacementString = DecimalFormatter.formatNumber(Integer.valueOf(s.toString().replaceAll(",", "")));
                 offerPrice.removeTextChangedListener(offerTextWatcher);
                 offerPrice.setText(replacementString);
                 offerPrice.setSelection(replacementString.length());
@@ -85,18 +96,22 @@ public class MakeAnOffer extends BaseActivity {
         };
     }
 
+
+
     @SuppressLint("CheckResult")
     private void setListeners() {
-        offerPrice.addTextChangedListener(offerTextWatcher);
+        offerPrice.addTextChangedListener(offerTextWatcher); //add the text watcher to the offer edit text
 
+
+        //noinspection ResultOfMethodCallIgnored
         RxView.clicks(submitOfferBtn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
                 if (offerPrice.getText().toString().equals("")) {
                     ToastModifications.createToast(MakeAnOffer.this, getString(R.string.enter_offer_value), Toast.LENGTH_LONG);
                 } else {
-                    Intent makeAnOfferIntent = new Intent(getApplicationContext(),ConfirmationActivity.class);
-                    makeAnOfferIntent.putExtra(ConfirmationActivity.BUNDLE_KEY,ConfirmationActivity.CALLED_FROM_OFFER);
+                    Intent makeAnOfferIntent = new Intent(getApplicationContext(), ConfirmationActivity.class);
+                    makeAnOfferIntent.putExtra(ConfirmationActivity.BUNDLE_KEY, ConfirmationActivity.CALLED_FROM_OFFER);
                     startActivity(makeAnOfferIntent);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
                 }

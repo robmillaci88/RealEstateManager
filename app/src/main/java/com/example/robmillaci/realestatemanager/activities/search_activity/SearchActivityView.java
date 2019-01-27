@@ -25,29 +25,37 @@ import kotlin.Unit;
 import pub.devrel.easypermissions.AfterPermissionGranted;
 import pub.devrel.easypermissions.EasyPermissions;
 
+/**
+ * This class is the view for the search activity. Responsible for initializing the views and onClick methods
+ */
 public class SearchActivityView extends BaseActivity implements SearchActivityPresenter.View {
     @SuppressWarnings("FieldCanBeLocal")
-    private final int REQUEST_LOCATION_PERMISSION = 1;
+    private final int REQUEST_LOCATION_PERMISSION = 1; //the request code for location permission request
 
-    private ImageView your_location_img;
+    private ImageView your_location_img; //the image to call location request
 
-    private EditText location_edit_text;
+    private EditText location_edit_text; //the edit text for location search input
 
-    private RadioButton buy_radio_btn;
-    private RadioButton let_radio_btn;
+    private RadioButton buy_radio_btn; //the buy radio button search criteria
+    private RadioButton let_radio_btn; //the let radio button search criteria
     private RadioButton sold_radio_btn;
 
-    private Spinner property_type_spinner;
-    private Spinner min_price_spinner;
-    private Spinner max_price_spinner;
-    private Spinner min_bedrooms_spinner;
-    private Spinner max_bedrooms_spinner;
+    private Spinner property_type_spinner; //the type of property search criteria
+    private Spinner min_price_spinner; //the min price search criteria
+    private Spinner max_price_spinner; //the max price search criteria
+    private Spinner min_bedrooms_spinner; //the min bedroom search criteria
+    private Spinner max_bedrooms_spinner; //the max bedroom search criteria
 
-    private Button search_btn;
-    private Button reset_btn;
+    private Button search_btn; //the search button
+    private Button reset_btn; //the reset search criteria button
 
-    private SearchActivityPresenter mPresenter;
+    private SearchActivityPresenter mPresenter; //this views presenter
 
+
+    /**
+     * The following static final Strings are used to pass the search criteria values
+     * to the presenter to perform searching
+     */
     public static final String LOCATION_VALUE_KEY = "location";
     public static final String BUY_VALUE_KEY = "buy";
     public static final String LET_VALUE_KEY = "let";
@@ -66,9 +74,9 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         setContentView(R.layout.activity_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //clear the full screen flag set in base activity
 
-        this.mPresenter = new SearchActivityPresenter(this);
+        this.mPresenter = new SearchActivityPresenter(this); //initialize the presenter
 
         initializeViews();
         setOnClicks();
@@ -112,6 +120,11 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         });
     }
 
+
+    /**
+     * Set the onclick methods for this view
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
     private void setOnClicks() {
         buy_radio_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
@@ -178,7 +191,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
                 boolean soldSearch = sold_radio_btn.isChecked();
 
                 if (soldSearch){
-                    buy = true;
+                    buy = true; //If we are looking for sold properties, we will only return those that were for sale, not for rent
                 }
 
                 Intent searchResultsIntent = new Intent(SearchActivityView.this, SearchResultsView.class);
@@ -199,6 +212,10 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
 
     }
 
+
+    /**
+     * After obtaining location permission from the user, ask the presenter to get the users last known location
+     */
     @AfterPermissionGranted(REQUEST_LOCATION_PERMISSION)
     private void requestLocationPermission() {
         String[] perms = {Manifest.permission.ACCESS_FINE_LOCATION};
@@ -211,6 +228,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     }
 
 
+
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -218,10 +236,14 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     }
 
 
+    /**
+     * Reset the search criteria fields
+     */
     private void resetFields() {
         location_edit_text.setText("");
         buy_radio_btn.setChecked(false);
         let_radio_btn.setChecked(false);
+        sold_radio_btn.setChecked(false);
         property_type_spinner.setSelection(0);
         min_price_spinner.setSelection(0);
         max_price_spinner.setSelection(0);
@@ -230,6 +252,10 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     }
 
 
+    /**
+     * Callback from {@link SearchActivityPresenter#getLastKnownLocation()}
+     * @param postCode the returned post code of the user to populate the location search criteria
+     */
     @Override
     public void gotLocation(String postCode) {
         location_edit_text.setText(postCode);

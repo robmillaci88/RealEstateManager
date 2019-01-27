@@ -59,7 +59,7 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
 
         Bundle intentBundle = getIntent().getExtras();
         if (intentBundle != null){
-            if (intentBundle.getInt(LOGOUT_INTENT_KEY) == 1){
+            if (intentBundle.getInt(LOGOUT_INTENT_KEY) == LOGOUT_INTENT_VALUE){
                 //sign the user out
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();

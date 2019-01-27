@@ -58,7 +58,8 @@ import static android.net.ConnectivityManager.CONNECTIVITY_ACTION;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_ISADMIN_FIELD;
 
 /**
- * The main activity of this app
+ * The main activity of this app. Creates the nav drawer and manages administrator vs user views
+ * This activity also creates and registers a network reciever to monitor network connectivity. See {@link NetworkListener}
  */
 public class MainActivityView extends BaseActivity implements SynchListenerCallback, FirebaseHelper.AdminCheckCallback, MainActivityPresenter.View {
     private static long back_pressed; //the time between back button presses
@@ -123,7 +124,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
 
     /**
-     * Checks wether the user has updated their profile or not and displays a snackbar if not
+     * Checks whether the user has updated their profile or not and displays a snackbar if not
      */
     private void checkProfileUpdated() {
         if (new SharedPreferenceHelper(getApplicationContext()).isProfileUpdated()) {
@@ -131,6 +132,10 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         }
     }
 
+
+    /**
+     * Snackbar that informs the user to update their profile details. This is shown indefinitely until the user opens the profile activity
+     */
     private void createProfileSnackbar() {
         Snackbar.make(findViewById(R.id.coordinatorLayout), R.string.update_profile_message, Snackbar.LENGTH_INDEFINITE)
                 .setAction(R.string.update_action, new View.OnClickListener() {
@@ -145,6 +150,9 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+    /**
+     * Create the Nav drawer
+     */
     private void initializeNavDrawer() {
         Toolbar toolbar = findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
@@ -328,7 +336,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
 
     /**
-     * Configure the floating action buttons
+     * Configure the floating action buttons and adds the relevant FAB's to the admin views arraylist
      */
     @SuppressLint("CheckResult")
     private void configureFabs() {
@@ -425,6 +433,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     //  }
 
 
+
     /**
      * Handles wether the user exits the application when the back button is pressed
      */
@@ -440,6 +449,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+
     //Set the network listener for connectivity changes
     private void setNetworkListener() {
         intentFilter = new IntentFilter();
@@ -448,11 +458,12 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
+
     @Override
     protected void onResume() {
         super.onResume();
         try {
-            registerReceiver(mNetworkListener, intentFilter);
+            registerReceiver(mNetworkListener, intentFilter); //register the reciever on resume
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -462,7 +473,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     protected void onPause() {
         super.onPause();
         try {
-            unregisterReceiver(mNetworkListener);
+            unregisterReceiver(mNetworkListener); //unregister the reciever on pause
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -512,7 +523,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
 
     /**
-     * Once the synch is completed with an error or not, this method dismisses the progress dialog and displays a toast to the user
+     * Once the sync is completed with an error or not, this method dismisses the progress dialog and displays a toast to the user
      * @param error did we get an error synching or not ?
      */
     @Override

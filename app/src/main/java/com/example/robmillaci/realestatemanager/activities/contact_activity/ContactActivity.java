@@ -65,11 +65,11 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     public void onClick(View v) {
         switch (v.getTag().toString()) {
             case "call":
-                call(((Button) v).getText().toString());
+                call(((Button) v).getText().toString()); //create a call intent
                 break;
 
             case "email":
-                email();
+                email(); //create an email intent
                 break;
         }
     }

@@ -19,9 +19,13 @@ import static com.example.robmillaci.realestatemanager.activities.search_activit
 import static com.example.robmillaci.realestatemanager.activities.search_activity.SearchResultsView.SORT_CHOICE_NEWEST;
 import static com.example.robmillaci.realestatemanager.activities.search_activity.SearchResultsView.SORT_CHOICE_OLDEST;
 
+/**
+ * The Presenter for {@link SearchResultsView}
+ * Handles getting data from the database and returning it to the view. Also filters and sorts data as per the views request and returns this data so the UI can be updated
+ */
 public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.Model {
 
-    private View view;
+    private View view; //this presenters view
     private WeakReference<Context> cReference;
 
 
@@ -31,7 +35,11 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
     }
 
 
-    public void searchDatabase(Bundle extras) {
+    /**
+     * Called from the view to search and return listings from either Firebase or the local db
+     * @param extras the search parameters
+     */
+     void searchDatabase(Bundle extras) {
         if (Utils.CheckConnectivity(cReference.get())) {
             FirebaseHelper.getInstance().setPresenter(this).searchForSaleListings(extras);
         } else {
@@ -40,17 +48,37 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
     }
 
 
+    /**
+     * Callback from {@link MyDatabase#searchLocalDB(Context, Bundle, int)}
+     * Sends the listings back to the view
+     * @param listings the returned listings
+     * @param requestCode the returned request code
+     * @param c the returned context
+     */
     @Override
     public void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c) {
         view.gotAllListing(listings);
     }
 
+
+
+    /**
+     * Callback from {@link FirebaseHelper#getAllListings()}
+     * * Sends the listings back to the view
+     * @param listings the returned listings
+     */
     @Override
     public void gotListingsFromFirebase(ArrayList<Listing> listings) {
         view.gotAllListing(listings);
     }
 
-    public void filterData(String selectedValue, ArrayList<Listing> originalListings) {
+
+    /**
+     * Called from {@link SearchResultsView} to filter and return the listings
+     * @param selectedValue the chosen filter option
+     * @param originalListings the origional listings to be filtered
+     */
+    void filterData(String selectedValue, ArrayList<Listing> originalListings) {
         ArrayList<Listing> filteredListings = new ArrayList<>();
 
         if (selectedValue.equals("Any")) {
@@ -66,7 +94,13 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
 
     }
 
-    public void sortData(ArrayList<Listing> originalListings, int sortCondition) {
+
+    /**
+     * Called from {@link SearchResultsView} to sort and return the listings
+     * @param sortCondition the chosen sort criteria
+     * @param originalListings the origional listings to be filtered
+     */
+    void sortData(ArrayList<Listing> originalListings, int sortCondition) {
         switch (sortCondition) {
             case SORT_CHOICE_HIGHEST_PRICE:
                 Collections.sort(originalListings, new Comparator<Listing>() {
@@ -122,6 +156,8 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
     }
 
 
+
+//The views interface methods
     public interface View {
         void gotAllListing(ArrayList<Listing> listings);
 

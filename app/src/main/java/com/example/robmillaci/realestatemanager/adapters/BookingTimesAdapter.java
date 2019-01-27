@@ -42,6 +42,7 @@ public class BookingTimesAdapter extends RecyclerView.Adapter<BookingTimesAdapte
     public void onBindViewHolder(@NonNull final MyViewholder myViewholder, int position) {
         myViewholder.time.setText(times.get(position));
 
+        //noinspection ResultOfMethodCallIgnored
         RxView.clicks(myViewholder.itemView).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {

@@ -18,8 +18,10 @@ import java.util.List;
 import java.util.Locale;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
-
-public class SearchActivityPresenter {
+/**
+ * The presenter for {@link SearchActivityView} responsible for getting the users last known location and returning the postcode
+ */
+ class SearchActivityPresenter {
     private View view;
 
 

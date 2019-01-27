@@ -16,7 +16,7 @@ import java.io.FileInputStream;
  * This class is responsible for display a photo in Full screen when adding a listing
  */
 public class FullScreenPhotoActivity extends BaseActivity {
-    private static final String IMAGE_KEY = "image"; //The dunble key for the image passed to this activity in the intent
+    private static final String IMAGE_KEY = "image"; //The bundle key for the image passed to this activity in the intent
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {

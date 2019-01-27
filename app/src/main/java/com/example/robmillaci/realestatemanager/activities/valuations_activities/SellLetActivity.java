@@ -12,6 +12,9 @@ import com.jakewharton.rxbinding3.view.RxView;
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
+/**
+ * This class is responsible for the SellLetActivity
+ */
 public class SellLetActivity extends AppCompatActivity {
     private Button continue_btn;
 
@@ -24,7 +27,7 @@ public class SellLetActivity extends AppCompatActivity {
 
         Bundle b = getIntent().getExtras();
         if (b != null) {
-            String evaluationType = b.getString(BookEvaluationActivity.TYPE, "");
+            String evaluationType = b.getString(BookEvaluationActivity.TYPE_KEY, "");
             switch (evaluationType) {
                 case BookEvaluationActivity.LETTING_TYPE:
                     setTitle(getString(R.string.let_property_title));
@@ -42,6 +45,7 @@ public class SellLetActivity extends AppCompatActivity {
 
     @SuppressLint("CheckResult")
     private void setOnClicks() {
+        //noinspection ResultOfMethodCallIgnored
         RxView.clicks(continue_btn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
