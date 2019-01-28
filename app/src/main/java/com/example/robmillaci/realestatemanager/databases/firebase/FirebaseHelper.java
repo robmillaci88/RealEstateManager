@@ -516,7 +516,7 @@ public class FirebaseHelper implements MyDatabase.Model {
                     addListingCallback.updateProgressBarDbSync(progressBarCount[0], c.getString(R.string.local_db_sync_message));
                     progressBarCount[0]--;
 
-                    if (!(listingIndex == dbListings.size())) {
+                    if (!(listingIndex == dbListings.size()-1)) {
                         FirebaseHelper.getListingLastUpdateTime(dbListings.get(listingIndex), addListingCallback);
                     } else {
                         onComplete();

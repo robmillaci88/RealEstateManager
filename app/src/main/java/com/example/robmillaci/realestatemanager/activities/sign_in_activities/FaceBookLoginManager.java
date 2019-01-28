@@ -17,14 +17,14 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 
 class FaceBookLoginManager {
-    private final loginManagerCallback mLoginManagerCallback;
+    private final FacebookloginManagerCallback mFacebookloginManagerCallback;
     private CallbackManager mCallbackManager;
 
-    FaceBookLoginManager(loginManagerCallback callback) {
-        this.mLoginManagerCallback = callback;
+    FaceBookLoginManager(FacebookloginManagerCallback callback) {
+        this.mFacebookloginManagerCallback = callback;
     }
 
-    public void createLoginManager() {
+     void createLoginManager() {
         mCallbackManager = CallbackManager.Factory.create(); //creates an instance of callbackManager
         //register the callback and define the actions for onSuccess, onCancel and onError
 
@@ -37,12 +37,12 @@ class FaceBookLoginManager {
 
                     @Override
                     public void onCancel() {
-                        mLoginManagerCallback.facebookSignInCancelled();
+                        mFacebookloginManagerCallback.facebookSignInCancelled();
                     }
 
                     @Override
                     public void onError(FacebookException exception) {
-                        mLoginManagerCallback.facebookSignInError();
+                        mFacebookloginManagerCallback.facebookSignInError(exception);
                     }
                 });
     }
@@ -69,20 +69,20 @@ class FaceBookLoginManager {
                                assert metadata != null;
                                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
                                    // The user is new
-                                   mLoginManagerCallback.facebookSignInSuccessNewUser(thisUser);
+                                   mFacebookloginManagerCallback.facebookSignInSuccessNewUser(thisUser);
 
                                } else {
                                    //The user is not a new user
-                                   mLoginManagerCallback.facebookSignInSuccessReturningUser(thisUser);
+                                   mFacebookloginManagerCallback.facebookSignInSuccessReturningUser(thisUser);
                                }
 
                            } else {
                                // If sign in fails, display a message to the user.
-                               mLoginManagerCallback.facebookAuthFailure();
+                               mFacebookloginManagerCallback.facebookAuthFailure();
 
                            }
                        }else {
-                           mLoginManagerCallback.facebookSignInError();
+                           mFacebookloginManagerCallback.facebookSignInError(task.getException());
                        }
                    }
                });
@@ -92,7 +92,7 @@ class FaceBookLoginManager {
 
 
 
-    interface loginManagerCallback {
+    interface FacebookloginManagerCallback {
         void facebookSignInSuccessNewUser(FirebaseUser user);
 
         void facebookSignInSuccessReturningUser(FirebaseUser user);
@@ -101,6 +101,6 @@ class FaceBookLoginManager {
 
         void facebookSignInCancelled();
 
-        void facebookSignInError();
+        void facebookSignInError(Exception exception);
     }
 }

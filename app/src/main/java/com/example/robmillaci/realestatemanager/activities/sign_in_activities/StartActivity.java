@@ -4,16 +4,13 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
-
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.splash_screen.SplashScreenActivity;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
-
 import com.facebook.login.LoginManager;
 import com.facebook.login.widget.LoginButton;
 import com.google.android.gms.auth.api.signin.GoogleSignIn;
@@ -29,8 +26,7 @@ import com.google.firebase.auth.FirebaseUser;
  * This class created the first activity presented to a new user<br>
  * It deals with authenticating the user via Facebook, Google and Twitter and handles the login event
  */
-public class StartActivity extends AppCompatActivity implements FaceBookLoginManager.loginManagerCallback, FirebaseGoogleAuthManager.fireBaseGoogleAuthCallback {
-    private static final String TAG = "StartActivity";
+public class StartActivity extends AppCompatActivity implements FaceBookLoginManager.FacebookloginManagerCallback, FirebaseGoogleAuthManager.fireBaseGoogleAuthCallback {
     private static final String GOOGLE_ID_TOKEN = "23584158539-oljjebrgtrl42h6kdq5iej8t9d00je7f.apps.googleusercontent.com";
     public static final String LOGOUT_INTENT_KEY = "logout";
     public static final int LOGOUT_INTENT_VALUE = 1;
@@ -51,8 +47,8 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
 
 
         Bundle intentBundle = getIntent().getExtras();
-        if (intentBundle != null){
-            if (intentBundle.getInt(LOGOUT_INTENT_KEY) == LOGOUT_INTENT_VALUE){
+        if (intentBundle != null) {
+            if (intentBundle.getInt(LOGOUT_INTENT_KEY) == LOGOUT_INTENT_VALUE) {
                 //sign the user out
                 FirebaseAuth.getInstance().signOut();
                 LoginManager.getInstance().logOut();
@@ -60,8 +56,6 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
             }
         }
     }
-
-
 
 
     private void initializeFacebookLogin() {
@@ -129,10 +123,8 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
         } catch (ApiException e) {
             // The ApiException status code indicates the detailed failure reason.
             Toast.makeText(this, R.string.login_failed, Toast.LENGTH_LONG).show();
-            Log.d(TAG, "google login failed: " + e + "status code" + e.getStatusCode() + " " + e.getCause());
         }
     }
-
 
 
     @SuppressWarnings("ConstantConditions")
@@ -143,7 +135,7 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
         if (FirebaseHelper.getmAuth().getCurrentUser() != null) {
             Intent launchMain = new Intent(this, SplashScreenActivity.class);
             FirebaseHelper.updateUserDetails();
-            if(pd != null && pd.isShowing()) {
+            if (pd != null && pd.isShowing()) {
                 pd.dismiss();
             }
             startActivity(launchMain);
@@ -151,22 +143,9 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
     }
 
 
-
     @Override
     protected void onStart() {
         super.onStart();
-
-        FirebaseUser user= FirebaseAuth.getInstance().getCurrentUser();
-
-        if(user!=null){
-
-            Log.i("Username","user logged in "  + user.getEmail());
-        }
-        else{
-            Log.i("Username", "there is no user");
-        }
-
-
         updateUI();
     }
 
@@ -174,14 +153,14 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
     //Facebook login manager callbacks
     @Override
     public void facebookSignInSuccessNewUser(FirebaseUser user) {
-        ToastModifications.createToast(StartActivity.this,getString(R.string.welcome) + user.getDisplayName(), Toast.LENGTH_LONG);
+        ToastModifications.createToast(StartActivity.this, getString(R.string.welcome) + user.getDisplayName(), Toast.LENGTH_LONG);
         FirebaseHelper.addUserToDB(user);
         updateUI();
     }
 
     @Override
     public void facebookSignInSuccessReturningUser(FirebaseUser user) {
-        ToastModifications.createToast(StartActivity.this,getString(R.string.welcome_back) + user.getDisplayName(),Toast.LENGTH_LONG);
+        ToastModifications.createToast(StartActivity.this, getString(R.string.welcome_back) + user.getDisplayName(), Toast.LENGTH_LONG);
         updateUI();
     }
 
@@ -193,36 +172,47 @@ public class StartActivity extends AppCompatActivity implements FaceBookLoginMan
 
     @Override
     public void facebookSignInCancelled() {
-        Toast.makeText(StartActivity.this, R.string.sign_in_cancelled,Toast.LENGTH_SHORT).show();
+        Toast.makeText(StartActivity.this, R.string.sign_in_cancelled, Toast.LENGTH_SHORT).show();
     }
 
     @Override
-    public void facebookSignInError() {
-        Toast.makeText(StartActivity.this, R.string.sign_in_error,Toast.LENGTH_SHORT).show();
-
+    public void facebookSignInError(Exception exception) {
+        signInErrorMessage(exception);
     }
-
 
 
     //google login manager callbacks
     @Override
-    public void newFirebaseGoogleUsercallback(FirebaseUser  user) {
-        ToastModifications.createToast(StartActivity.this,getString(R.string.welcome) + user.getDisplayName(), Toast.LENGTH_LONG);
+    public void newFirebaseGoogleUsercallback(FirebaseUser user) {
+        ToastModifications.createToast(StartActivity.this, getString(R.string.welcome) + user.getDisplayName(), Toast.LENGTH_LONG);
         FirebaseHelper.addUserToDB(user);
         updateUI();
     }
 
     @Override
-    public void existingFirebaseGoogleUsercallback(FirebaseUser  user) {
-        ToastModifications.createToast(StartActivity.this,getString(R.string.welcome_back) + user.getDisplayName(),Toast.LENGTH_LONG);
+    public void existingFirebaseGoogleUsercallback(FirebaseUser user) {
+        ToastModifications.createToast(StartActivity.this, getString(R.string.welcome_back) + user.getDisplayName(), Toast.LENGTH_LONG);
         updateUI();
     }
 
     @Override
-    public void error() {
-        Toast.makeText(StartActivity.this, R.string.sign_in_error,Toast.LENGTH_LONG).show();
+    public void googleSignInError(Exception e) {
+        signInErrorMessage(e);
     }
-    
+
+
+
+
+    public void signInErrorMessage(Exception e){
+        StringBuilder message = new StringBuilder();
+        message.append(getString(R.string.sign_in_error));
+
+        if (e != null) {
+            message.append(" ").append(e.getMessage());
+        }
+
+        Toast.makeText(StartActivity.this, message, Toast.LENGTH_LONG).show();
+    }
 }
 
 
