@@ -12,11 +12,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-import java.util.concurrent.Executor;
 
-
-public class FirebaseGoogleAuthManager {
-    private fireBaseGoogleAuthCallback mFireBaseGoogleAuthCallback;
+class FirebaseGoogleAuthManager {
+    private final fireBaseGoogleAuthCallback mFireBaseGoogleAuthCallback;
 
     FirebaseGoogleAuthManager(fireBaseGoogleAuthCallback callback) {
         this.mFireBaseGoogleAuthCallback = callback;

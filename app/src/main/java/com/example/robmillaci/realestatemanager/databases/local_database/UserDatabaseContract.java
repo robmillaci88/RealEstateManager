@@ -6,7 +6,7 @@ import android.provider.BaseColumns;
 
 import static com.example.robmillaci.realestatemanager.databases.local_database.AppProvider.CONTENT_AUTHORITY;
 
-public class UserDatabaseContract {
+class UserDatabaseContract {
     public static final String _ID = BaseColumns._ID;
     public static final String TABLE_NAME = "user";
     public static final String TITLE = "title";

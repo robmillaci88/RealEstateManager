@@ -22,7 +22,8 @@
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_listing_fab"
-        app:srcCompat="@drawable/geolocate_icon" />
+        app:srcCompat="@drawable/geolocate_icon"
+        android:focusable="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sync_db_fab"
@@ -35,7 +36,8 @@
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/geolocate_fab"
-        app:srcCompat="@drawable/synch_db" />
+        app:srcCompat="@drawable/synch_db"
+        android:focusable="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_listing_fab"
@@ -48,7 +50,8 @@
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_fab"
-        app:srcCompat="@drawable/add_property" />
+        app:srcCompat="@drawable/add_property"
+        android:focusable="true" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/search_fab"
@@ -60,6 +63,7 @@
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search_icon" />
+        app:srcCompat="@drawable/search_icon"
+        android:focusable="true" />
 
 </android.support.constraint.ConstraintLayout>

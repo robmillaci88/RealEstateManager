@@ -1,7 +1,5 @@
 package com.example.robmillaci.realestatemanager.activities.main_activity;
 
-import android.util.Log;
-
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
@@ -16,7 +14,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * This class is the link between {@link MainActivityView} and the databases
  */
 public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListener, FirebaseHelper.AddListingCallback {
-    private View mView;
+    private final View mView;
 
     MainActivityPresenter(View view) {
         mView = view;

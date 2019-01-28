@@ -25,8 +25,8 @@ import static com.example.robmillaci.realestatemanager.activities.search_activit
  */
 public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.Model {
 
-    private View view; //this presenters view
-    private WeakReference<Context> cReference;
+    private final View view; //this presenters view
+    private final WeakReference<Context> cReference;
 
 
     SearchResultsPresenter(View view, WeakReference<Context> mWeakContext) {
@@ -43,20 +43,19 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
         if (Utils.CheckConnectivity(cReference.get())) {
             FirebaseHelper.getInstance().setPresenter(this).searchForSaleListings(extras);
         } else {
-            MyDatabase.getInstance(cReference.get()).setPresenter(this).searchLocalDB(cReference.get(), extras, 1);
+            MyDatabase.getInstance(cReference.get()).setPresenter(this).searchLocalDB(cReference.get(), extras);
         }
     }
 
 
     /**
-     * Callback from {@link MyDatabase#searchLocalDB(Context, Bundle, int)}
+     * Callback from {@link MyDatabase#searchLocalDB(Context, Bundle)}
      * Sends the listings back to the view
      * @param listings the returned listings
-     * @param requestCode the returned request code
      * @param c the returned context
      */
     @Override
-    public void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
         view.gotAllListing(listings);
     }
 

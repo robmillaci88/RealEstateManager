@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<lint>
+    <issue id="IconLocation">
+        <ignore path="src/main/res/drawable/add_picture.png" />
+        <ignore path="src/main/res/drawable/add_property.png" />
+        <ignore path="src/main/res/drawable/add_property.png" />
+        <ignore path="src/main/res/drawable/add_property.png" />
+        <ignore path="src/main/res/drawable/add_property.png" />
+        <ignore path="src/main/res/drawable/forename_icon.png" />
+    </issue>
+</lint>

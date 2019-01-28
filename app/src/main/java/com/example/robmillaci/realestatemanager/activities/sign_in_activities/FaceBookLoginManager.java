@@ -1,10 +1,8 @@
 package com.example.robmillaci.realestatemanager.activities.sign_in_activities;
 
 import android.support.annotation.NonNull;
-import android.widget.Toast;
 
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.facebook.AccessToken;
 import com.facebook.CallbackManager;
 import com.facebook.FacebookCallback;
@@ -17,12 +15,9 @@ import com.google.firebase.auth.AuthResult;
 import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
-import com.google.firebase.firestore.auth.User;
 
-import java.util.concurrent.Executor;
-
-public class FaceBookLoginManager {
-    private loginManagerCallback mLoginManagerCallback;
+class FaceBookLoginManager {
+    private final loginManagerCallback mLoginManagerCallback;
     private CallbackManager mCallbackManager;
 
     FaceBookLoginManager(loginManagerCallback callback) {
@@ -47,7 +42,7 @@ public class FaceBookLoginManager {
 
                     @Override
                     public void onError(FacebookException exception) {
-                        mLoginManagerCallback.facebookSignInError(exception);
+                        mLoginManagerCallback.facebookSignInError();
                     }
                 });
     }
@@ -87,7 +82,7 @@ public class FaceBookLoginManager {
 
                            }
                        }else {
-                           mLoginManagerCallback.facebookSignInError(null);
+                           mLoginManagerCallback.facebookSignInError();
                        }
                    }
                });
@@ -106,6 +101,6 @@ public class FaceBookLoginManager {
 
         void facebookSignInCancelled();
 
-        void facebookSignInError(Exception e);
+        void facebookSignInError();
     }
 }

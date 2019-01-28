@@ -9,38 +9,26 @@ import android.content.IntentFilter;
 import android.content.pm.PackageManager;
 import android.graphics.Bitmap;
 import android.support.v4.app.ActivityCompat;
-import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
-import android.view.View;
-import android.widget.Button;
-import android.widget.EditText;
-import android.widget.ImageView;
-import android.widget.Spinner;
 
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
-import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.utils.ArrayListTools;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
-import com.example.robmillaci.realestatemanager.utils.Utils;
 
 import java.util.ArrayList;
 
 import static com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingService.RESULTS;
-import static com.example.robmillaci.realestatemanager.data_objects.Listing.DEFAULT_LISTING_ID;
 
 /**
  * This class is the presenter layer between {@link AddListingView} and {@link AddListingService}
- *
  */
 public class AddListingPresenter extends BroadcastReceiver {
     static final int PICK_FROM_GALLERY_REQUEST_CODE = 0; //request code for Gallery images
     static final int PICK_FROM_CAMERA_REQUEST_CODE = 1; //request code for camera images
     static final String EDITING_KEY = "editing"; //bundle key for editing listing
-    AddListingPresenter myBroadCastReceiver; //Variable to hold the reference to this class acting as a broadcast reciever in order to unregister
+    private AddListingPresenter myBroadCastReceiver; //Variable to hold the reference to this class acting as a broadcast reciever in order to unregister
     static final String BROADCAST_ACTION = "com.example.robmillaci.realestatemanager.AddListingPresenter"; //the broadcast action
 
 
-    private AddListingPresenter.View view; //this presenters view in order to communicate back
+    private final AddListingPresenter.View view; //this presenters view in order to communicate back
 
     AddListingPresenter(AddListingPresenter.View view) {
         this.view = view;
@@ -49,6 +37,7 @@ public class AddListingPresenter extends BroadcastReceiver {
 
     /**
      * Called from {@link AddListingView} when saving a listing
+     *
      * @param context the context of the calling activity
      * @param listing the listing to add
      * @param editing are we editing this listing or is it new?
@@ -139,28 +128,28 @@ public class AddListingPresenter extends BroadcastReceiver {
     /**
      * Called on reciept of a broadcast from {@link AddListingService} which is sent when a listing has been added to the database
      * This method calls back to the view to update the UI when a listing is saved
+     *
      * @param context the context of the broadcast
-     * @param intent the intent passed
+     * @param intent  the intent passed
      */
     @Override
     public void onReceive(Context context, Intent intent) {
         //notify the view that the listing has been added
-        boolean error = intent.getBooleanExtra(RESULTS,false);
+        boolean error = intent.getBooleanExtra(RESULTS, false);
         unregisterReciever();
         view.addingListingCompleted(error);
     }
 
-     void unregisterReciever() {
-        if (myBroadCastReceiver!= null){
+    void unregisterReciever() {
+        if (myBroadCastReceiver != null) {
             try {
                 view.getViewActivity().unregisterReceiver(myBroadCastReceiver);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }
 
     }
-
 
 
     //The views interface methods

@@ -16,5 +16,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/estate_manager_splashscreen" />
+        app:srcCompat="@drawable/estate_manager_splashscreen"
+        tools:ignore="ContentDescription" />
 </android.support.constraint.ConstraintLayout>

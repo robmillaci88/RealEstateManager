@@ -38,7 +38,7 @@ import static com.example.robmillaci.realestatemanager.databases.local_database.
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
- * Basic database class for the application. The only class that should use this is the app provider class<br>
+ * Basic database class for the application.<br>
  * Implemented as a singleton.
  */
 public class MyDatabase extends SQLiteOpenHelper{
@@ -188,7 +188,7 @@ public class MyDatabase extends SQLiteOpenHelper{
 
 
 
-    public void searchLocalDB(Context context, Bundle searchParams, int requestCode) {
+    public void searchLocalDB(Context context, Bundle searchParams) {
         ArrayList<Listing> databaseListings = new ArrayList<>();
         String[] data;
 
@@ -327,10 +327,10 @@ public class MyDatabase extends SQLiteOpenHelper{
 
             }
             cursor.close();
-            mPresenter.gotDataFromLocalDb(databaseListings, requestCode, context.getApplicationContext());
+            mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
         }else {
             //no data returned
-            mPresenter.gotDataFromLocalDb(databaseListings, requestCode, context.getApplicationContext());
+            mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
         }
     }
 
@@ -461,21 +461,21 @@ public class MyDatabase extends SQLiteOpenHelper{
             values.put(ListingsDatabaseContract.DESCRIPTION, listingToAdd.getDescr());
 
             try {
-                values.put(ListingsDatabaseContract.PHOTO1, listingToAdd.getPhotos().get(0));
-                values.put(ListingsDatabaseContract.PHOTO2, listingToAdd.getPhotos().get(1));
-                values.put(ListingsDatabaseContract.PHOTO3, listingToAdd.getPhotos().get(2));
-                values.put(ListingsDatabaseContract.PHOTO4, listingToAdd.getPhotos().get(3));
-                values.put(ListingsDatabaseContract.PHOTO5, listingToAdd.getPhotos().get(4));
-                values.put(ListingsDatabaseContract.PHOTO6, listingToAdd.getPhotos().get(5));
-                values.put(ListingsDatabaseContract.PHOTO7, listingToAdd.getPhotos().get(6));
-                values.put(ListingsDatabaseContract.PHOTO8, listingToAdd.getPhotos().get(7));
-                values.put(ListingsDatabaseContract.PHOTO9, listingToAdd.getPhotos().get(8));
-                values.put(ListingsDatabaseContract.PHOTO10, listingToAdd.getPhotos().get(9));
-                values.put(ListingsDatabaseContract.PHOTO11, listingToAdd.getPhotos().get(10));
-                values.put(ListingsDatabaseContract.PHOTO12, listingToAdd.getPhotos().get(11));
-                values.put(ListingsDatabaseContract.PHOTO13, listingToAdd.getPhotos().get(12));
-                values.put(ListingsDatabaseContract.PHOTO14, listingToAdd.getPhotos().get(13));
-                values.put(ListingsDatabaseContract.PHOTO15, listingToAdd.getPhotos().get(14));
+                values.put(ListingsDatabaseContract.PHOTO1, listingToAdd.getLocalDbPhotos().get(0));
+                values.put(ListingsDatabaseContract.PHOTO2, listingToAdd.getLocalDbPhotos().get(1));
+                values.put(ListingsDatabaseContract.PHOTO3, listingToAdd.getLocalDbPhotos().get(2));
+                values.put(ListingsDatabaseContract.PHOTO4, listingToAdd.getLocalDbPhotos().get(3));
+                values.put(ListingsDatabaseContract.PHOTO5, listingToAdd.getLocalDbPhotos().get(4));
+                values.put(ListingsDatabaseContract.PHOTO6, listingToAdd.getLocalDbPhotos().get(5));
+                values.put(ListingsDatabaseContract.PHOTO7, listingToAdd.getLocalDbPhotos().get(6));
+                values.put(ListingsDatabaseContract.PHOTO8, listingToAdd.getLocalDbPhotos().get(7));
+                values.put(ListingsDatabaseContract.PHOTO9, listingToAdd.getLocalDbPhotos().get(8));
+                values.put(ListingsDatabaseContract.PHOTO10, listingToAdd.getLocalDbPhotos().get(9));
+                values.put(ListingsDatabaseContract.PHOTO11, listingToAdd.getLocalDbPhotos().get(10));
+                values.put(ListingsDatabaseContract.PHOTO12, listingToAdd.getLocalDbPhotos().get(11));
+                values.put(ListingsDatabaseContract.PHOTO13, listingToAdd.getLocalDbPhotos().get(12));
+                values.put(ListingsDatabaseContract.PHOTO14, listingToAdd.getLocalDbPhotos().get(13));
+                values.put(ListingsDatabaseContract.PHOTO15, listingToAdd.getLocalDbPhotos().get(14));
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -527,7 +527,7 @@ public class MyDatabase extends SQLiteOpenHelper{
 
 
     public interface Model {
-        void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c);
+        void gotDataFromLocalDb(ArrayList<Listing> listings, Context c);
     }
 
 }

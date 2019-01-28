@@ -29,7 +29,7 @@ public class ImageFilePath {
      * @param uri
      * @return path of the selected image file from gallery
      */
-    private static String nopath = "Select Video Only";
+    private static final String nopath = "Select Video Only";
 
     @TargetApi(Build.VERSION_CODES.KITKAT)
     @SuppressLint("NewApi")
@@ -119,20 +119,14 @@ public class ImageFilePath {
     private static String getDataColumn(Context context, Uri uri,
                                        String selection, String[] selectionArgs) {
 
-        Cursor cursor = null;
         final String column = "_data";
         final String[] projection = { column };
-
-        try {
-            cursor = context.getContentResolver().query(uri, projection,
-                    selection, selectionArgs, null);
+        try (Cursor cursor = context.getContentResolver().query(uri, projection,
+                selection, selectionArgs, null)) {
             if (cursor != null && cursor.moveToFirst()) {
                 final int index = cursor.getColumnIndexOrThrow(column);
                 return cursor.getString(index);
             }
-        } finally {
-            if (cursor != null)
-                cursor.close();
         }
         return nopath;
     }

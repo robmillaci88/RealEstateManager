@@ -14,7 +14,6 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
-import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.example.robmillaci.realestatemanager.activities.valuations_activities.ConfirmationActivity;
 import com.example.robmillaci.realestatemanager.adapters.BookingTimesAdapter;
 import com.example.robmillaci.realestatemanager.R;
@@ -142,7 +141,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
      */
     private void loadPhoto() {
         ArrayList<String> firebasePhoto = thisListing.getFirebasePhotos();
-        List<byte[]> localPhoto = thisListing.getPhotos();
+        List<byte[]> localPhoto = thisListing.getLocalDbPhotos();
 
         if (firebasePhoto == null || firebasePhoto.size() == 0) {
             Glide.with(getApplicationContext()).asBitmap().load(localPhoto.get(0)).into(listingImage);

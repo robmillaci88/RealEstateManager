@@ -3,7 +3,6 @@ package com.example.robmillaci.realestatemanager.activities.search_activity;
 import android.location.Address;
 import android.location.Geocoder;
 import android.os.Bundle;
-import android.support.annotation.Nullable;
 import android.view.MenuItem;
 import android.widget.Toast;
 
@@ -41,7 +40,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
         if (intentBundle != null) {
             thisListing = (Listing) intentBundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
 
-            String addressString = "";
+            String addressString;
             if (thisListing != null) {
                 addressString = String.format("%s %s %s %s", thisListing.getAddress_number(), //Created an address string from the listing
                         thisListing.getAddress_street(),
@@ -49,7 +48,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
                         thisListing.getAddress_postcode());
 
                 getListingLatLng(addressString); //pass the address string into getListingLatLng method
-                getStreetView(savedInstanceState, thisListingLoc);  //creates the street view using the listings location
+                getStreetView();  //creates the street view using the listings location
 
                 setTitle(getString(R.string.street_view_title) + addressString);
             }
@@ -61,7 +60,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
      * Using the passed in address string, this method sets the listings latitude and longitude so we can create the street view
      * @param strAddress the address of the listing to be Geo coded
      */
-    public void getListingLatLng(String strAddress) {
+    private void getListingLatLng(String strAddress) {
         Geocoder coder = new Geocoder(getApplicationContext());
         List<Address> address;
 
@@ -79,9 +78,8 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
 
     /**
      * Creates the street view fragment asynchronously, once ready calls {@link OnStreetViewPanoramaReadyCallback}
-     * @param listingLoc the location of the listing
      */
-    private void getStreetView(@Nullable Bundle savedInstanceState, final LatLng listingLoc) {
+    private void getStreetView() {
         StreetViewPanoramaFragment streetViewPanoramaFragment =
                 (StreetViewPanoramaFragment) getFragmentManager()
                         .findFragmentById(R.id.streetviewpanorama);

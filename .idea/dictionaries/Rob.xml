@@ -2,6 +2,8 @@
   <dictionary name="Rob">
     <words>
       <w>activites</w>
+      <w>descr</w>
+      <w>iactivity</w>
       <w>llite</w>
       <w>mapview</w>
       <w>realestatemanager</w>

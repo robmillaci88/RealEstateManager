@@ -2,7 +2,6 @@ package com.example.robmillaci.realestatemanager.activities.viewings_activities;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
-import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Handler;
 import android.support.annotation.Nullable;
@@ -13,7 +12,6 @@ import android.widget.Button;
 import android.widget.TextView;
 
 import com.example.robmillaci.realestatemanager.R;
-import com.example.robmillaci.realestatemanager.utils.network_utils.NetworkListener;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.util.Objects;
@@ -53,14 +51,14 @@ public class BaseViewingActivity extends AppCompatActivity {
         RxView.clicks(refresh)
                 .subscribe(new Consumer<Unit>() {
                     @Override
-                    public void accept(Unit unit) throws Exception {
+                    public void accept(Unit unit) {
                         setViewVisibility(false);
                         startSearch();
                     }
                 });
     }
 
-    protected void startSearch() {
+    private void startSearch() {
         final ProgressDialog pd = new ProgressDialog(this);
         pd.setMessage("Searching...");
         pd.show();
@@ -74,7 +72,7 @@ public class BaseViewingActivity extends AppCompatActivity {
         }, 3000);
     }
 
-    public void setViewVisibility(boolean viewVisibility) {
+    private void setViewVisibility(boolean viewVisibility) {
         if (viewVisibility) {
             action_message.setVisibility(View.VISIBLE);
             refresh.setVisibility(View.VISIBLE);

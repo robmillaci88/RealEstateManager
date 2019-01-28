@@ -7,9 +7,6 @@ import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
-import com.example.robmillaci.realestatemanager.activities.viewings_activities.AwaitingAction;
-import com.example.robmillaci.realestatemanager.activities.viewings_activities.ConfirmedViewings;
-import com.example.robmillaci.realestatemanager.activities.viewings_activities.ViewingsHistory;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 /**
  * The base activity for <br/>{@link com.example.robmillaci.realestatemanager.activities.about_activity.AboutActivity}<br/>

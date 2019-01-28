@@ -19,8 +19,8 @@ import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.valuations_activities.ConfirmationActivity;
 import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
-import com.example.robmillaci.realestatemanager.utils.DecimalFormatter;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.lang.ref.WeakReference;
@@ -87,7 +87,7 @@ public class MakeAnOffer extends BaseActivity {
 
             @Override
             public void afterTextChanged(Editable s) {
-                String replacementString = DecimalFormatter.formatNumber(Integer.valueOf(s.toString().replaceAll(",", "")));
+                String replacementString = Utils.formatNumber(Integer.valueOf(s.toString().replaceAll(",", "")));
                 offerPrice.removeTextChangedListener(offerTextWatcher);
                 offerPrice.setText(replacementString);
                 offerPrice.setSelection(replacementString.length());
@@ -95,7 +95,6 @@ public class MakeAnOffer extends BaseActivity {
             }
         };
     }
-
 
 
     @SuppressLint("CheckResult")

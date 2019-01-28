@@ -24,13 +24,16 @@ import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
-
+/**
+ * The adapter for the {@link com.example.robmillaci.realestatemanager.activities.search_activity.SearchResultsView}<br/>
+ * Displays the results of searching the database for listings
+ */
 public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdapter.MyViewholder> {
 
-    private WeakReference<Context> mContext;
-    private ArrayList<Listing> mSearchResults;
-    private SearchResultsAdapterCallback mCallback;
-    private View previouslySelectedHolder = null;
+    private final WeakReference<Context> mContext; //the weak reference to the activity that instantiated this adapter
+    private final ArrayList<Listing> mSearchResults; //An arraylist of listing results obtained whilst searching the database
+    private final SearchResultsAdapterCallback mCallback; //the callback
+    private View previouslySelectedHolder = null; //a reference to a previously selected viewholder
 
     public SearchResultsAdapter(WeakReference<Context> context, ArrayList<Listing> searchResults, SearchResultsAdapterCallback callback) {
         this.mContext = context;
@@ -48,22 +51,22 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     @SuppressLint({"CheckResult", "DefaultLocale", "SetTextI18n"})
     @Override
     public void onBindViewHolder(@NonNull MyViewholder holder, final int position) {
-        Listing thisListing = mSearchResults.get(position);
+        Listing thisListing = mSearchResults.get(position); //get the specific listing for this position
 
-        if (thisListing.getPhotos() != null && thisListing.getPhotos().size() > 0) {
+        if (thisListing.getLocalDbPhotos() != null && thisListing.getLocalDbPhotos().size() > 0) { //we are working with local DB photos (byte[]s)
             try {
                 Glide.with(mContext.get())
                         .asBitmap()
-                        .load(thisListing.getPhotos().get(0))
+                        .load(thisListing.getLocalDbPhotos().get(0)) //call getLocalDbPhotos().get(0) to get the first photo for this listing
                         .into(holder.mainImage);
             } catch (Exception e) {
                 e.printStackTrace();
             }
-        } else if (thisListing.getFirebasePhotos() != null && thisListing.getFirebasePhotos().size() > 0) {
+        } else if (thisListing.getFirebasePhotos() != null && thisListing.getFirebasePhotos().size() > 0) {  //we are working with Firebase photos (Arraylist<String>)
             try {
                 Glide.with(mContext.get())
                         .asBitmap()
-                        .load(thisListing.getFirebasePhotos().get(0))
+                        .load(thisListing.getFirebasePhotos().get(0)) //call getFirebasePhotos().get(0) to get the first photo for this listing
                         .into(holder.mainImage);
             } catch (Exception e) {
                 e.printStackTrace();
@@ -72,14 +75,14 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
             holder.mainImage.setImageResource(R.drawable.placeholder_image);
         }
 
-        holder.price.setText(String.format("%s %s", mContext.get().getString(R.string.currency_symbol), thisListing.getFormattedPrice()));
+        holder.price.setText(String.format("%s %s", mContext.get().getString(R.string.currency_symbol), thisListing.getFormattedPrice())); //set the price of the listing
 
-        holder.address.setText(String.format("%s,%s, %s.", thisListing.getAddress_street(), thisListing.getAddress_town(),
+        holder.address.setText(String.format("%s,%s, %s.", thisListing.getAddress_street(), thisListing.getAddress_town(), //update the address for the listing
                 thisListing.getAddress_postcode().toUpperCase()));
 
-        holder.desc.setText(String.format("%d %s %s.", thisListing.getNumbOfBedRooms(),mContext.get().getString(R.string.bedrooms), thisListing.getType()));
+        holder.desc.setText(String.format("%d %s %s.", thisListing.getNumbOfBedRooms(),mContext.get().getString(R.string.bedrooms), thisListing.getType())); //get the type of listing
 
-        setOnClickEvent(holder.itemView, holder.getAdapterPosition());
+        setOnClickEvent(holder.itemView, holder.getAdapterPosition()); //set the viewholders on click event
     }
 
     @Override
@@ -87,6 +90,14 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         return mSearchResults == null ? 0 : mSearchResults.size();
     }
 
+
+    /**
+     * The on click event for the viewholders. Creates a fragment displaying the full details of a specific listing when clicked.
+     * If the users device is a tablet,we will update the selected view holders background colour.
+     * @param holder the view to be updated
+     * @param position the position of the view
+     */
+    @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
     private void setOnClickEvent(final View holder, final int position) {
         RxView.clicks(holder).subscribe(new Consumer<Unit>() {
@@ -110,10 +121,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
 
 
     static class MyViewholder extends RecyclerView.ViewHolder {
-        ImageView mainImage;
-        TextView price;
-        TextView address;
-        TextView desc;
+        final ImageView mainImage;
+        final TextView price;
+        final TextView address;
+        final TextView desc;
 
         MyViewholder(View v) {
             super(v);

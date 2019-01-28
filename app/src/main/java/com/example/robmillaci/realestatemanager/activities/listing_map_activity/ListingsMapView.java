@@ -37,7 +37,7 @@ import static com.example.robmillaci.realestatemanager.activities.search_activit
  * This class is responsible for displaying a map view with all listings added
  */
 public class ListingsMapView extends AppCompatActivity implements ListingsMapPresenter.View, GoogleMap.OnMarkerClickListener {
-    public static final int REQUEST_LOCATION_PERMISSION = 2;
+    private static final int REQUEST_LOCATION_PERMISSION = 2;
 
     private ListingsMapPresenter mPresenter; //this activities presenter
     private MapView mMapView; //the map view
@@ -64,7 +64,6 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Creates the google map and assigned the on marker click listeners
      * This method also gets the latlng of the listing using {@link ListingsMapPresenter#geoLocationListing(String, int)}
-     * @param listings
      */
     private void createMap(final ArrayList<Listing> listings) {
         mMapView = findViewById(R.id.listings_map_view);
@@ -176,7 +175,6 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * The on click method for the markers
      * @param marker the marker clicked
-     * @return
      */
     @Override
     public boolean onMarkerClick(Marker marker) {

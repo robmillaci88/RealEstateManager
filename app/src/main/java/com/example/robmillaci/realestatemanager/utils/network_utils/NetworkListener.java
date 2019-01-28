@@ -3,7 +3,6 @@ package com.example.robmillaci.realestatemanager.utils.network_utils;
 import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.Intent;
-import android.util.Log;
 import android.widget.Toast;
 
 import com.example.robmillaci.realestatemanager.R;
@@ -18,11 +17,11 @@ import java.util.ArrayList;
 
 /**
  * This class is responsible for handling internet state changes. Receives a broadcast when network state changes and if connection is available
- * will sync the local DB with Firebase
+ * will sync the local DB and Firebase
  */
 public class NetworkListener extends BroadcastReceiver implements FirebaseHelper.Model, DbSyncListener, FirebaseHelper.AddListingCallback {
     private WeakReference<Context> mContextWeakReference; //weak reference to the context of the activity instantiating this class
-    private SynchListenerCallback mSynchListenerCallback; //the callback for synching updates
+    private final SynchListenerCallback mSynchListenerCallback; //the callback for synching updates
     @SuppressWarnings("FieldCanBeLocal")
     private final int SYNC_FREQUENCY = 60 * 60 * 1000; //the frequency at which we auto sync the databases
     public static final String LASTSYNCKEY = "lastSync"; //the key to store the last sync time in shared prefs
@@ -56,7 +55,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
 
 
     /**
-     * Checks to see if the last time we synched the databases is at least an hour sinsce now
+     * Checks to see if the last time we synced the databases is at least an hour sinsce now
      * @param c context
      * @return true - we can sync, false - we don't sync
      */

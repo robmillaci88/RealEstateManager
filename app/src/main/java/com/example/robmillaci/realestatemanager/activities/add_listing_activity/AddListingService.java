@@ -5,7 +5,6 @@ import android.content.Intent;
 import android.os.Handler;
 import android.os.Looper;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
@@ -30,10 +29,6 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
      */
     public AddListingService() {
         super(SERVICE_NAME);
-    }
-
-    public void onCreate() {
-        super.onCreate();
     }
 
 
@@ -107,7 +102,4 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
         }
     }
 
-    interface AddListingServiceCallback {
-        void listingAddedComplete();
-    }
 }

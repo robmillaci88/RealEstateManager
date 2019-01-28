@@ -10,7 +10,7 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent">
+        android:layout_height="wrap_content">
 
         <android.support.constraint.ConstraintLayout
             android:id="@+id/constraintLayout2"
@@ -31,7 +31,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="SMS"
+                android:text="@string/sms"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -40,30 +40,13 @@
                 app:layout_constraintTop_toBottomOf="@+id/switch1" />
 
             <Switch
-                android:id="@+id/switch4"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginBottom="8dp"
-                android:layout_marginEnd="8dp"
-                android:layout_marginStart="8dp"
-                android:layout_marginTop="8dp"
-                android:text="Switch"
-                android:textColor="@android:color/darker_gray"
-                android:textSize="12sp"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintHorizontal_bias="0.0"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/switch3" />
-
-            <Switch
                 android:id="@+id/switch3"
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Phone"
+                android:text="@string/phone"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -77,7 +60,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Real Estate Manager marketing"
+                android:text="@string/real_estate_manager_marketing"
                 android:textSize="14sp"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
@@ -89,12 +72,13 @@
                 android:layout_height="wrap_content"
                 android:layout_marginEnd="8dp"
                 android:layout_marginTop="8dp"
-                android:text="We really value our relationship with you and wish to keep you informed on your terms. By choosing the best way(s) to contact you we can keep you informed of our services."
+                android:text="@string/we_really_value_our_relationship_with_you_and_wish_to_keep_you_informed_on_your_terms_by_choosing_the_best_way_s_to_contact_you_we_can_keep_you_informed_of_our_services"
                 android:textColor="@color/colorAccent"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView2"
-                app:layout_constraintTop_toBottomOf="@+id/textView2" />
+                app:layout_constraintTop_toBottomOf="@+id/textView2"
+                tools:ignore="SmallSp" />
 
             <Switch
                 android:id="@+id/switch1"
@@ -103,7 +87,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Email"
+                android:text="@string/email"
                 android:textColor="@android:color/darker_gray"
                 android:textSize="12sp"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -129,7 +113,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="My EstateManager Texts"
+                android:text="@string/my_estatemanager_texts"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -141,12 +125,13 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="We will send you transaction text alerts at certain instances when using the Real Estate Manager app, such as when you need to confirm a viewing appointment. You can stop receiving these alerts at any time by turning this off below. Should you wish to start receiving these alerts again by text messange, please turn this on."
+                android:text="@string/we_will_send_you_transaction_text_alerts_at_certain_instances_when_using_the_real_estate_manager_app_such_as_when_you_need_to_confirm_a_viewing_appointment_you_can_stop_receiving_these_alerts_at_any_time_by_turning_this_off_below_should_you_wish_to_start_receiving_these_alerts_again_by_text_messange_please_turn_this_on"
                 android:textColor="@color/colorAccent"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView23" />
+                app:layout_constraintTop_toBottomOf="@+id/textView23"
+                tools:ignore="SmallSp" />
 
             <Switch
                 android:id="@+id/switch6"
@@ -156,7 +141,7 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
-                android:text="SMS"
+                android:text="@string/sms"
                 android:textSize="12sp"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintEnd_toEndOf="@+id/textView23"
@@ -183,7 +168,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="My Property Alerts"
+                android:text="@string/my_property_alerts"
                 android:textStyle="bold"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent" />
@@ -195,12 +180,13 @@
                 android:layout_marginEnd="8dp"
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
-                android:text="Be the first to see any new properties meeting all your search criteria. Please select if you would like to receive these."
+                android:text="@string/be_the_first_to_see_any_new_properties_meeting_all_your_search_criteria_please_select_if_you_would_like_to_receive_these"
                 android:textColor="@color/colorAccent"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toBottomOf="@+id/textView37" />
+                app:layout_constraintTop_toBottomOf="@+id/textView37"
+                tools:ignore="SmallSp" />
 
             <Switch
                 android:id="@+id/switch7"
@@ -208,7 +194,7 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="8dp"
                 android:layout_marginTop="16dp"
-                android:text="Subscribe to alerts?             "
+                android:text="@string/subscribe_to_alerts"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/textView38"
                 app:layout_constraintTop_toBottomOf="@+id/textView38" />
@@ -233,23 +219,25 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="8dp"
                 android:gravity="center_vertical|center_horizontal|fill_horizontal"
-                android:text="We keep your personal data secure and use it to you as you have requested. We will not share or sell your data and you can amend your preferences at any times. You can view our perms of service policy for more details"
+                android:text="@string/we_keep_your_personal_data_secure_and_use_it_to_you_as_you_have_requested_we_will_not_share_or_sell_your_data_and_you_can_amend_your_preferences_at_any_times_you_can_view_our_perms_of_service_policy_for_more_details"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent" />
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="SmallSp" />
 
             <TextView
                 android:id="@+id/textView40"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="12dp"
-                android:text="If you have any questions, please contact us."
+                android:text="@string/if_you_have_any_questions_please_contact_us"
                 android:textColor="@android:color/white"
                 android:textSize="10sp"
                 app:layout_constraintStart_toStartOf="@+id/textView39"
-                app:layout_constraintTop_toBottomOf="@+id/textView39" />
+                app:layout_constraintTop_toBottomOf="@+id/textView39"
+                tools:ignore="SmallSp" />
 
             <Button
                 android:id="@+id/contact_us_btn"
@@ -259,7 +247,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="12dp"
                 android:background="@color/colorPrimary"
-                android:text="Contact Us"
+                android:text="@string/contact_us"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
@@ -273,7 +261,7 @@
                 android:layout_marginStart="8dp"
                 android:layout_marginTop="16dp"
                 android:background="@color/pastel_green"
-                android:text="Save Settings"
+                android:text="@string/save_settings"
                 android:textColor="@android:color/white"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"

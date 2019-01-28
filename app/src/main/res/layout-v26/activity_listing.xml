@@ -149,7 +149,7 @@
             app:layout_constraintTop_toBottomOf="@+id/poi_edit_text"
             tools:text="sn3 4we"
             android:importantForAutofill="no"
-            tools:ignore="RtlSymmetry,UnusedAttribute" />
+            tools:ignore="RtlSymmetry" />
 
         <EditText
             android:id="@+id/address_street_et"
@@ -319,7 +319,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/rooms_spinner"
-            tools:ignore="Autofill,RtlHardcoded,RtlSymmetry" />
+            tools:ignore="Autofill,RtlSymmetry" />
 
         <ImageView
             android:id="@+id/imageView2"
@@ -376,7 +376,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/description"
             android:ems="10"
-            android:hint="@string/description_et"
+            android:hint="@string/description"
             android:imeOptions="actionNext"
             android:inputType="textPersonName|textMultiLine"
             android:paddingStart="10dp"

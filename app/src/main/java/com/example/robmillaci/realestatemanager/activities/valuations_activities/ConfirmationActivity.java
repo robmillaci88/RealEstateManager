@@ -10,6 +10,8 @@ import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.jakewharton.rxbinding3.view.RxView;
 
+import java.util.Objects;
+
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
 
@@ -21,13 +23,13 @@ public class ConfirmationActivity extends AppCompatActivity {
     public static final int CALLED_FROM_OFFER = 1; //int to determine wether this activity was created from the Offer activity
     public static final int CALLED_FROM_VALUATION = 2; //int to determine wether this activity was created from the valuation activity
     public static final int CALLED_FROM_BOOK_VIEWING = 3;//int to determiner whether this activity was created from book a viewing activity
-    public static String BUNDLE_KEY = "confirmationActivity"; //the bundle key when passing data into the intent to start this activity
+    public static final String BUNDLE_KEY = "confirmationActivity"; //the bundle key when passing data into the intent to start this activity
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        int callingFrom = getIntent().getExtras().getInt(BUNDLE_KEY); //determine which activity created the ConfirmationActivity
+        int callingFrom = Objects.requireNonNull(getIntent().getExtras()).getInt(BUNDLE_KEY); //determine which activity created the ConfirmationActivity
 
         switch (callingFrom) {
             case CALLED_FROM_OFFER:
@@ -57,7 +59,7 @@ public class ConfirmationActivity extends AppCompatActivity {
         RxView.clicks(return_btn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
-                    public void accept(Unit unit) throws Exception {
+                    public void accept(Unit unit) {
                         startActivity(new Intent(getApplicationContext(), MainActivityView.class));
                         finish();
                     }

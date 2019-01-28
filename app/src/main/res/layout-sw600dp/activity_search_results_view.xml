@@ -23,7 +23,7 @@
         android:id="@+id/property_type_filter_title"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        android:text="Property type"
+        android:text="@string/type_of_property"
         app:layout_constraintEnd_toEndOf="@+id/type_filter_spinner"
         app:layout_constraintStart_toStartOf="@+id/type_filter_spinner"
         app:layout_constraintTop_toTopOf="parent" />
@@ -47,7 +47,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="TextView"
+        android:text="@string/no_results"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/type_filter_spinner"
         app:layout_constraintStart_toStartOf="parent"

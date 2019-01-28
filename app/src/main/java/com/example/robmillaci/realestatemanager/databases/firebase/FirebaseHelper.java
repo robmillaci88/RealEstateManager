@@ -1,31 +1,24 @@
 package com.example.robmillaci.realestatemanager.databases.firebase;
 
 import android.content.Context;
-import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
-import com.example.robmillaci.realestatemanager.activities.customer_account.AccountActivity;
 import com.example.robmillaci.realestatemanager.activities.customer_account.IUserDetailsCallback;
-import com.example.robmillaci.realestatemanager.activities.customer_account.ProfileActivity;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
-import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.local_database.ListingsDatabaseContract;
 import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
 import com.example.robmillaci.realestatemanager.utils.Utils;
-import com.facebook.login.LoginManager;
-import com.google.android.gms.auth.api.signin.GoogleSignInClient;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
 import com.google.android.gms.tasks.Task;
 import com.google.firebase.auth.FirebaseAuth;
 import com.google.firebase.auth.FirebaseUser;
-import com.google.firebase.auth.GoogleAuthProvider;
 import com.google.firebase.firestore.DocumentSnapshot;
 import com.google.firebase.firestore.FirebaseFirestore;
 import com.google.firebase.firestore.FirebaseFirestoreSettings;
@@ -72,11 +65,10 @@ import static com.example.robmillaci.realestatemanager.databases.local_database.
 public class FirebaseHelper implements MyDatabase.Model {
     private static final String LISTINGS_COLLECTION_PATH = "listings"; //the firebase collection path for our listings
 
-    private static FirebaseAuth mAuth = FirebaseAuth.getInstance(); //The entry point of the Firebase Authentication SDK
+    private static final FirebaseAuth mAuth = FirebaseAuth.getInstance(); //The entry point of the Firebase Authentication SDK
     private static String loggedInUser; //the logged in user
     private static String loggedInEmail; //the logged in users email
     private static String loggedinUserId; //the logged in users picture
-    private static int dBListingCount = 0; //the number of listings returned from local database
 
     private ArrayList<Listing> returnedListings; //all listings returned from Firebase
     private ArrayList<Listing> dbListings;
@@ -220,7 +212,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         String[] photoDescr;
         if (s.get(ListingsDatabaseContract.PHOTO_DESCR) != null) {
             photoDescrList = (ArrayList<String>) s.get(ListingsDatabaseContract.PHOTO_DESCR);
-            photoDescr = photoDescrList.toArray(new String[photoDescrList.size()]);
+            photoDescr = photoDescrList.toArray(new String[0]);
         } else {
             photoDescr = null;
         }
@@ -394,12 +386,12 @@ public class FirebaseHelper implements MyDatabase.Model {
 
 
     private static void uploadImageFiles(final Listing listingToAdd, final AddListingCallback addListingCallback) {
-        final int[] count = {listingToAdd.getPhotos().size()};
+        final int[] count = {listingToAdd.getLocalDbPhotos().size()};
 
-        for (int i = 0; i < listingToAdd.getPhotos().size(); i++) {
+        for (int i = 0; i < listingToAdd.getLocalDbPhotos().size(); i++) {
             final StorageReference listingRef = FirebaseStorage.getInstance().getReference().child(listingToAdd.getId());
             final StorageReference pictureRef = listingRef.child(String.valueOf(i));
-            byte[] thisPhoto = listingToAdd.getPhotos().get(i);
+            byte[] thisPhoto = listingToAdd.getLocalDbPhotos().get(i);
 
             pictureRef.putBytes(thisPhoto).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
                 @Override
@@ -499,11 +491,11 @@ public class FirebaseHelper implements MyDatabase.Model {
 
 
     public void synchWithLocalDb(Context c) {
-        MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null, 1);
+        MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null);
     }
 
 
-    public void gotDataFromLocalDb(final ArrayList<Listing> listings, int requestCode, final Context c) {
+    public void gotDataFromLocalDb(final ArrayList<Listing> listings, final Context c) {
         final int[] iterationCount = {-1};
 
         if (listings != null && listings.size() >= 1) {

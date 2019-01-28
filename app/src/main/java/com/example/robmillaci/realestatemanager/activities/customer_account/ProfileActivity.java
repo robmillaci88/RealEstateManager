@@ -34,21 +34,23 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 /**
  * This class is responsible for the users profile
  */
+@SuppressWarnings({"ResultOfMethodCallIgnored", "FieldCanBeLocal"})
 public class ProfileActivity extends BaseActivity implements IUserDetailsCallback {
-    EditText user_title; //the title of the user
-    EditText user_forename; //the forename of the user
-    EditText user_surname; //the surname of the user
-    EditText user_dob; //the users DOB
-    EditText user_postcode; //the users postcode
-    EditText user_houseNameNumb; //the users house number
-    EditText user_street; //the users house address street
-    EditText user_town; //the users house address street
-    EditText user_email; //the users email
-    EditText user_county;//the users house address county
-    EditText user_home_numb; // the users home phone number
-    EditText user_mobile_numb; //the users mobile number
-    EditText user_primary_contact_numb; //the users primary contact number
-    Button saveBtn; //the save button
+    private EditText user_title; //the title of the user
+    private EditText user_forename; //the forename of the user
+    private EditText user_surname; //the surname of the user
+    private EditText user_dob; //the users DOB
+    private EditText user_postcode; //the users postcode
+    private EditText user_houseNameNumb; //the users house number
+    private EditText user_street; //the users house address street
+    private EditText user_town; //the users house address street
+    @SuppressWarnings("FieldCanBeLocal")
+    private EditText user_email; //the users email
+    private EditText user_county;//the users house address county
+    private EditText user_home_numb; // the users home phone number
+    private EditText user_mobile_numb; //the users mobile number
+    private EditText user_primary_contact_numb; //the users primary contact number
+    private Button saveBtn; //the save button
 
 
     @Override

@@ -16,7 +16,8 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/add_property_toast" />
+        app:srcCompat="@drawable/add_property_toast"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/toast_message_view"
@@ -26,7 +27,7 @@
         android:layout_marginEnd="32dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Listing saved!"
+        android:text="@string/listing_saved"
         android:textColor="@android:color/black"
         android:textSize="12sp"
         android:textStyle="bold"

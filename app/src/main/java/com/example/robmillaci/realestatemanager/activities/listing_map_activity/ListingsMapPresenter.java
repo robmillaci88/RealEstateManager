@@ -34,7 +34,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * The listing are obtained from the databases, the users location is also returned to the view from this class as well as geo locating the listings
  */
 public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Model {
-    private View view;
+    private final View view;
 
     ListingsMapPresenter(View v) {
         this.view = v;
@@ -43,22 +43,18 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
 
     /**
      * Get all the listings from either the local database or from Firebase
-     * @param weakContext
      */
     void getAllListings(WeakReference<Context> weakContext) {
         Context c = weakContext.get();
         if (Utils.CheckConnectivity(c)) {
             FirebaseHelper.getInstance().setPresenter(this).getAllListings();
         } else {
-            MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null, 1);
+            MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null);
         }
     }
 
 
     @SuppressLint("MissingPermission")
-    /**
-     * Gets the users last known location and returns this to the view to display on the map
-     */
     void getLastKnownLocation() {
         FusedLocationProviderClient mFusedLocationClient = LocationServices.getFusedLocationProviderClient(getApplicationContext());
         mFusedLocationClient.getLastLocation()
@@ -92,13 +88,12 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
 
 
     /**
-     * Interface callback method from {@link MyDatabase#searchLocalDB(Context, Bundle, int)}
+     * Interface callback method from {@link MyDatabase#searchLocalDB(Context, Bundle)}
      * @param listings listings returned
-     * @param requestCode any returned request code
      * @param c the context returned
      */
     @Override
-    public void gotDataFromLocalDb(ArrayList<Listing> listings, int requestCode, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
         view.gotAllListings(listings);
     }
 

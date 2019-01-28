@@ -8,12 +8,11 @@
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:background="@color/colorAccent"
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-        <requestFocus />
 
         <EditText
             android:id="@+id/home_phone_et"
@@ -26,11 +25,12 @@
             android:drawableStart="@drawable/home_phone_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title13" />
+            app:layout_constraintTop_toBottomOf="@+id/title13"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields" />
 
         <EditText
             android:id="@+id/primary_contact_num_et"
@@ -43,11 +43,12 @@
             android:drawableStart="@drawable/primary_contact_numb"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title6" />
+            app:layout_constraintTop_toBottomOf="@+id/title6"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields" />
 
         <EditText
             android:id="@+id/mobile_num_et"
@@ -60,11 +61,12 @@
             android:drawableStart="@drawable/mobile_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title3" />
+            app:layout_constraintTop_toBottomOf="@+id/title3"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/email_et"
@@ -77,11 +79,12 @@
             android:drawableStart="@drawable/email_icon"
             android:ems="10"
             android:inputType="textMultiLine|textEmailAddress"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title2" />
+            app:layout_constraintTop_toBottomOf="@+id/title2"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/postcode_et"
@@ -94,9 +97,10 @@
             android:drawableStart="@drawable/postcode_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title8" />
+            app:layout_constraintTop_toBottomOf="@+id/title8"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry" />
 
 
         <EditText
@@ -110,11 +114,12 @@
             android:drawableStart="@drawable/town_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title14" />
+            app:layout_constraintTop_toBottomOf="@+id/title14"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/county_et"
@@ -127,11 +132,12 @@
             android:drawableStart="@drawable/country_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title10" />
+            app:layout_constraintTop_toBottomOf="@+id/title10"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/street_et"
@@ -144,11 +150,12 @@
             android:drawableStart="@drawable/street_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title9" />
+            app:layout_constraintTop_toBottomOf="@+id/title9"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/surname_et"
@@ -161,11 +168,12 @@
             android:drawableStart="@drawable/forename_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title11" />
+            app:layout_constraintTop_toBottomOf="@+id/title11"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/dob_et"
@@ -178,11 +186,12 @@
             android:drawableStart="@drawable/dateofbirth_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title7" />
+            app:layout_constraintTop_toBottomOf="@+id/title7"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/housename_numb_et"
@@ -195,11 +204,12 @@
             android:drawableStart="@drawable/house_number"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title12" />
+            app:layout_constraintTop_toBottomOf="@+id/title12"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/forename_et"
@@ -212,11 +222,12 @@
             android:drawableStart="@drawable/forename_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title4" />
+            app:layout_constraintTop_toBottomOf="@+id/title4"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <EditText
             android:id="@+id/title_et"
@@ -229,11 +240,12 @@
             android:drawableStart="@drawable/title_icon"
             android:ems="10"
             android:inputType="textMultiLine|textPersonName"
-            android:paddingLeft="10dp"
+            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/title" />
+            app:layout_constraintTop_toBottomOf="@+id/title"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <TextView
             android:id="@+id/title"
@@ -241,10 +253,11 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Title"
+            android:text="@string/title"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent" />
+            app:layout_constraintTop_toTopOf="parent"
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <TextView
             android:id="@+id/title2"
@@ -252,7 +265,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Email"
+            android:text="@string/email"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/county_et" />
@@ -263,7 +276,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Town"
+            android:text="@string/town"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/street_et" />
@@ -274,7 +287,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Home telephone"
+            android:text="@string/home_telephone"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/email_et" />
@@ -285,7 +298,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Name/number"
+            android:text="@string/name_number"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/postcode_et" />
@@ -296,7 +309,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Surname"
+            android:text="@string/surname"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/forename_et" />
@@ -307,7 +320,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="County"
+            android:text="@string/county_profile_text"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/town_et" />
@@ -318,7 +331,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Street"
+            android:text="@string/street"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/housename_numb_et" />
@@ -329,7 +342,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Postcode"
+            android:text="@string/post_code"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/dob_et" />
@@ -340,7 +353,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Date of birth"
+            android:text="@string/dob_text"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/surname_et" />
@@ -351,7 +364,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Primary contact number"
+            android:text="@string/primary_contact_number"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/mobile_num_et" />
@@ -362,7 +375,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Forename(s)"
+            android:text="@string/forename_s"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title_et" />
@@ -373,7 +386,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="16dp"
             android:layout_marginTop="24dp"
-            android:text="Mobile"
+            android:text="@string/mobile"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/home_phone_et" />
@@ -387,7 +400,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="32dp"
             android:background="@color/pastel_green"
-            android:text="Save"
+            android:text="@string/save"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"

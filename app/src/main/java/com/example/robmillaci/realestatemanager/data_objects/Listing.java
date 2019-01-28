@@ -1,6 +1,5 @@
 package com.example.robmillaci.realestatemanager.data_objects;
 
-import com.example.robmillaci.realestatemanager.utils.DecimalFormatter;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 
 import java.io.Serializable;
@@ -15,27 +14,27 @@ public class Listing implements Serializable {
     private static final long serialVersionUID = 137356756725454L; //the UID for serialization
     public static final String DEFAULT_LISTING_ID = "0"; //the default listing ID
 
-    private String id; //the id of the listing
-    private String type; //the type of listing
-    private double price; //the price of the listing
-    private double surfaceArea; //the surface area of the listing
-    private int numbOfBedRooms; //the number of bedrooms
-    private String descr; //the description of the listing
+    private final String id; //the id of the listing
+    private final String type; //the type of listing
+    private final double price; //the price of the listing
+    private final double surfaceArea; //the surface area of the listing
+    private final int numbOfBedRooms; //the number of bedrooms
+    private final String descr; //the description of the listing
     private List<byte[]> photos; //list of byte arrays representing the photos (this is for listings stored on the local database
     private ArrayList<String> firebasePhotos; //List of string URIs that point to firebase storage locations where the photos are saved
-    private String[] photoDescriptions; //string array to hold the photo descriptions
-    private String address_postcode; //the listings postcode
-    private String address_number; //the listings address number
-    private String address_street; //the listings street
-    private String address_town; //the listings town
-    private String address_county; //the listing country
-    private String poi; //the listing poi
-    private String postedDate; //the listing posted date
-    private String saleDate; //the listing sale date
-    private String agent; //the agent responsible for the listing
-    private String lastUpdateTime; //the last update time of the listing
-    private boolean forSaleStatus; //whether the listing is for sale or sold
-    private String buyOrLet; //whether the listing is buy or let
+    private final String[] photoDescriptions; //string array to hold the photo descriptions
+    private final String address_postcode; //the listings postcode
+    private final String address_number; //the listings address number
+    private final String address_street; //the listings street
+    private final String address_town; //the listings town
+    private final String address_county; //the listing country
+    private final String poi; //the listing poi
+    private final String postedDate; //the listing posted date
+    private final String saleDate; //the listing sale date
+    private final String agent; //the agent responsible for the listing
+    private final String lastUpdateTime; //the last update time of the listing
+    private final boolean forSaleStatus; //whether the listing is for sale or sold
+    private final String buyOrLet; //whether the listing is buy or let
 
 
     /**
@@ -43,7 +42,7 @@ public class Listing implements Serializable {
      */
     public Listing(String id, String type, double price, double surfaceArea, int numbOfBedRooms, String descr, List<byte[]> photo, String[] photoDescriptions,
                    String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String postedDate, String saleDate,
-                   String agent, String lastUpdateTime, String buyOrLet,boolean forSaleStatus) {
+                   String agent, String lastUpdateTime, String buyOrLet, boolean forSaleStatus) {
         this.id = id.equals(DEFAULT_LISTING_ID) ? createTransactionID() : id;
         this.type = type;
         this.price = price;
@@ -96,6 +95,7 @@ public class Listing implements Serializable {
 
     /**
      * creates a unique id for each listing created
+     *
      * @return the returned unique id
      */
     private String createTransactionID() {
@@ -113,28 +113,16 @@ public class Listing implements Serializable {
         return id;
     }
 
-    public void setId(String id) {
-        this.id = id;
-    }
-
     public String getType() {
         return type;
-    }
-
-    public void setType(String type) {
-        this.type = type;
     }
 
     public double getPrice() {
         return price;
     }
 
-    public String getFormattedPrice(){
-       return DecimalFormatter.formatNumber(((Double) this.getPrice()).intValue());
-    }
-
-    public void setPrice(double price) {
-        this.price = price;
+    public String getFormattedPrice() {
+        return Utils.formatNumber(((Double) this.getPrice()).intValue());
     }
 
     public double getSurfaceArea() {
@@ -149,7 +137,7 @@ public class Listing implements Serializable {
         return descr;
     }
 
-    public List<byte[]> getPhotos() {
+    public List<byte[]> getLocalDbPhotos() {
         return photos;
     }
 
@@ -186,12 +174,12 @@ public class Listing implements Serializable {
         return postedDate;
     }
 
-    public String getFormattedPostedDate(){
-        return postedDate.substring(0,10);
+    public String getFormattedPostedDate() {
+        return postedDate.substring(0, 10);
     }
 
-    public String getFormattedLastUpdateTime(){
-        return lastUpdateTime.substring(0,10);
+    public String getFormattedLastUpdateTime() {
+        return lastUpdateTime.substring(0, 10);
     }
 
     public String getAgent() {

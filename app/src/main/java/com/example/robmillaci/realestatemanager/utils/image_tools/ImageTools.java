@@ -16,19 +16,28 @@ import java.net.URLConnection;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * Helper class for converting bitmaps to byte[]s, saving bitmaps as jpegs, converting image URLS to byte[]s and converting byte[]s to bitmaps
+ */
 public class ImageTools {
-
 
     /**
      * @param bitmap the bitmap to be converted to a string for storage
      * @return converting bitmap and return a string
      */
-    public static byte[] BitMapToByteArray(Bitmap bitmap) {
+    private static byte[] BitMapToByteArray(Bitmap bitmap) {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         bitmap.compress(Bitmap.CompressFormat.PNG, 80, baos);
         return baos.toByteArray();
     }
 
+
+    /**
+     * Opens a connection to a passed URL, reads the data and then returns it as a byte[]
+     *
+     * @param url the url to open and download data
+     * @return byte[] of image data
+     */
     public static byte[] UrlToByteArray(String url) {
         try {
             URL imageUrl = new URL(url);
@@ -38,7 +47,7 @@ public class ImageTools {
             BufferedInputStream bis = new BufferedInputStream(is);
 
             ByteArrayBuffer baf = new ByteArrayBuffer(500);
-            int current = 0;
+            int current;
             while ((current = bis.read()) != -1) {
                 baf.append((byte) current);
             }
@@ -51,6 +60,13 @@ public class ImageTools {
     }
 
 
+    /**
+     * Save a bitmap to a Jpeg and returns the path
+     *
+     * @param mContext context
+     * @param bitmap   the bitmap to be converted
+     * @return the path of the converted image
+     */
     public static String saveBitmapToJpeg(Context mContext, Bitmap bitmap) {
         try {
             //Write file
@@ -70,6 +86,12 @@ public class ImageTools {
     }
 
 
+    /**
+     * Recieves a List<byte[]> of image data, returns an ArrayList<Bitmap> containing the converted images
+     *
+     * @param images the list of byte[]s containing the image data
+     * @return ArrayList<Bitmaps>
+     */
     public static ArrayList<Bitmap> byteArrayToBitmaps(List<byte[]> images) {
         ArrayList<Bitmap> returnedBitmaps = new ArrayList<>();
 
@@ -78,6 +100,16 @@ public class ImageTools {
         }
 
         return returnedBitmaps;
+    }
+
+
+    public static ArrayList<byte[]> BitmapsToByteArray(ArrayList<Bitmap> images) {
+        final ArrayList<byte[]> imagesArray = new ArrayList<>();
+
+        for (Bitmap b : images) {
+            imagesArray.add(ImageTools.BitMapToByteArray(b));
+        }
+        return imagesArray;
     }
 
 }

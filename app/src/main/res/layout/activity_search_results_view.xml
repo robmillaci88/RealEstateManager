@@ -24,7 +24,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Property type"
+        android:text="@string/type_of_property"
         app:layout_constraintEnd_toEndOf="@+id/type_filter_spinner"
         app:layout_constraintStart_toStartOf="@+id/type_filter_spinner"
         app:layout_constraintTop_toTopOf="parent" />
@@ -48,7 +48,7 @@
         android:layout_marginBottom="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="No Results"
+        android:text="@string/no_results"
         android:textStyle="bold"
         app:layout_constraintBottom_toBottomOf="@+id/type_filter_spinner"
         app:layout_constraintStart_toStartOf="parent"

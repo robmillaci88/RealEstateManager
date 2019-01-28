@@ -22,7 +22,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * The presenter for {@link SearchActivityView} responsible for getting the users last known location and returning the postcode
  */
  class SearchActivityPresenter {
-    private View view;
+    private final View view;
 
 
     SearchActivityPresenter(View view) {

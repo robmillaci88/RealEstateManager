@@ -1,12 +1,8 @@
 package com.example.robmillaci.realestatemanager.activities.splash_screen;
 
 import android.content.Intent;
-import android.os.Build;
 import android.os.Handler;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.view.Window;
-import android.view.WindowManager;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;

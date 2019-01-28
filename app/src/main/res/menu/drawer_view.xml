@@ -3,5 +3,5 @@
 
     <item
         android:icon="@drawable/add_property"
-        android:title="Item" />
+        android:title="@string/item" />
 </menu>

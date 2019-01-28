@@ -48,7 +48,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Asking price :"
+            android:text="@string/asking_price_text"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="parent"
@@ -75,7 +75,7 @@
             android:layout_marginBottom="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Offer : "
+            android:text="@string/offer"
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintBottom_toBottomOf="@+id/offer_edit_text"
@@ -95,7 +95,8 @@
             android:textSize="24sp"
             android:textStyle="bold"
             app:layout_constraintStart_toEndOf="@+id/textView45"
-            app:layout_constraintTop_toBottomOf="@+id/asking_price_tv" />
+            app:layout_constraintTop_toBottomOf="@+id/asking_price_tv"
+            tools:ignore="Autofill,LabelFor" />
 
         <Button
             android:id="@+id/button4"
@@ -106,7 +107,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
             android:background="@color/colorAccent"
-            android:text="Submit Offer"
+            android:text="@string/submit_offer"
             android:textColor="@android:color/white"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
@@ -122,14 +123,15 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="32dp"
             android:ems="10"
-            android:hint="Comments"
+            android:hint="@string/comments"
             android:inputType="textMultiLine|textPersonName"
             android:singleLine="false"
             android:textColor="@color/colorAccent"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/offer_edit_text" />
+            app:layout_constraintTop_toBottomOf="@+id/offer_edit_text"
+            tools:ignore="Autofill" />
     </android.support.constraint.ConstraintLayout>
 
 </ScrollView>

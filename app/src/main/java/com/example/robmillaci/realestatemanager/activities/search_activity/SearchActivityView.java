@@ -7,7 +7,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.text.Editable;
 import android.text.TextWatcher;
-import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -58,7 +57,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
      */
     public static final String LOCATION_VALUE_KEY = "location";
     public static final String BUY_VALUE_KEY = "buy";
-    public static final String LET_VALUE_KEY = "let";
+    private static final String LET_VALUE_KEY = "let";
     public static final String PROPERTY_TYPE_VALUE_KEY = "propType";
     public static final String MIN_PRICE_VALUE_KEY = "minPrice";
     public static final String MAX_PRICE_VALUE_KEY = "maxPrice";

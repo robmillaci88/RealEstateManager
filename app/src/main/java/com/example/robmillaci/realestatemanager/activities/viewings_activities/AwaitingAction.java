@@ -1,7 +1,8 @@
 package com.example.robmillaci.realestatemanager.activities.viewings_activities;
 
 import android.os.Bundle;
-import android.view.MenuItem;
+
+import com.example.robmillaci.realestatemanager.R;
 
 public class AwaitingAction extends BaseViewingActivity {
     @Override
@@ -9,11 +10,7 @@ public class AwaitingAction extends BaseViewingActivity {
         super.onCreate(savedInstanceState);
 
         setTitle("Awaiting Action");
-        action_message.setText("You do not have any viewings booked requiring actions");
+        action_message.setText(R.string.no_bookings_requiring_action);
     }
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        return super.onOptionsItemSelected(item);
-    }
 }

@@ -62,7 +62,7 @@ private TextView evaluations_message;
         },3000);
     }
 
-    public void setViewVisibility(boolean viewVisibility) {
+    private void setViewVisibility(boolean viewVisibility) {
         if (viewVisibility){
             evaluations_message.setVisibility(View.VISIBLE);
             refresh.setVisibility(View.VISIBLE);

@@ -61,6 +61,7 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
  * The main activity of this app. Creates the nav drawer and manages administrator vs user views
  * This activity also creates and registers a network reciever to monitor network connectivity. See {@link NetworkListener}
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class MainActivityView extends BaseActivity implements SynchListenerCallback, FirebaseHelper.AdminCheckCallback, MainActivityPresenter.View {
     private static long back_pressed; //the time between back button presses
 

@@ -26,17 +26,21 @@ import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
-
+/**
+ * The adapter for the {@link com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView}<br/>
+ * Displays the mImages associated with a property when adding or editing a listing
+ */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecyclerViewAdapter.MyViewholder> {
-    private ArrayList<Bitmap> images;
-    private ArrayList<String> images_descr;
-    private Context mContext;
-    private IactivityCallback mIactivityCallback;
+    private final ArrayList<Bitmap> mImages; //the arraylist of images for a specific listing (bitmaps)
+    private final ArrayList<String> mImagesDescr; //the arraylist of image descriptions
+    private final Context mContext; //the context of the activity that instantiated this class
+    private final IactivityCallback mIactivityCallback; //the callback
 
     public ImagesRecyclerViewAdapter(Context context, ArrayList<Bitmap> images, ArrayList<String> imageDesc, IactivityCallback activityCallback) {
-        this.images = images;
+        this.mImages = images;
         this.mContext = context;
-        images_descr = imageDesc;
+        mImagesDescr = imageDesc;
         mIactivityCallback = activityCallback;
     }
 
@@ -51,12 +55,12 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
     @SuppressLint("CheckResult")
     @Override
     public void onBindViewHolder(@NonNull final MyViewholder holder, final int position) {
-        Glide.with(mContext)
-                .load(images.get(holder.getAdapterPosition()))
+        Glide.with(mContext) //the load images into the viewholder with Glide
+                .load(mImages.get(holder.getAdapterPosition()))
                 .into(holder.mImageView);
 
         try {
-            holder.pic_desc_et.setText(images_descr.get(holder.getAdapterPosition()));
+            holder.pic_desc_et.setText(mImagesDescr.get(holder.getAdapterPosition())); //get the description for a specific image and update the viewholder
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -68,7 +72,7 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
             }
 
             @Override
-            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {
+            public void onTextChanged(CharSequence charSequence, int i, int i1, int i2) {//Callback to the View to inform the presenter that the image description has been changed
                 mIactivityCallback.changedImageDescr(holder.pic_desc_et.getText().toString(), holder.getAdapterPosition());
             }
 
@@ -77,16 +81,20 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
             }
         });
 
+
+        //clicking on an image will launch the full screen photo activity, showing the user the photo in full size
         RxView.clicks(holder.mImageView).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                String filePath = ImageTools.saveBitmapToJpeg(mContext, images.get(holder.getAdapterPosition()));
+                String filePath = ImageTools.saveBitmapToJpeg(mContext, mImages.get(holder.getAdapterPosition()));
                 Intent i = new Intent(mContext, FullScreenPhotoActivity.class);
                 i.putExtra("image", filePath);
                 mContext.startActivity(i);
             }
         });
 
+
+        //for deleting an image
         RxView.clicks(holder.deleteimg_btn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
@@ -106,14 +114,14 @@ public class ImagesRecyclerViewAdapter extends RecyclerView.Adapter<ImagesRecycl
 
     @Override
     public int getItemCount() {
-        return images == null ? 0 : images.size();
+        return mImages == null ? 0 : mImages.size();
     }
 
 
     static class MyViewholder extends RecyclerView.ViewHolder {
-        ImageView mImageView;
-        EditText pic_desc_et;
-        ImageView deleteimg_btn;
+        final ImageView mImageView;
+        final EditText pic_desc_et;
+        final ImageView deleteimg_btn;
 
         MyViewholder(View v) {
             super(v);

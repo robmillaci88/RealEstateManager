@@ -15,28 +15,33 @@ import com.example.robmillaci.realestatemanager.data_objects.Listing;
 
 import java.lang.ref.WeakReference;
 
+/**
+ * The page adapter class for <br/>{@link com.example.robmillaci.realestatemanager.fragments.ListingItemFragment} <br/> and <br/>
+ * {@link com.example.robmillaci.realestatemanager.activities.offers_activities.MakeAnOffer }
+ * Populate the view pager with a listings images to provide image swipe change abilities
+ */
 public class ImagesViewPagerAdapter extends PagerAdapter {
-    private static final int PHOTOS_FROM_FIREBASE = 0;
-    private static final int PHOTOS_FROM_LOCAL_DB = 1;
-    private static final int NO_PHOTOS = -1;
+    private static final int PHOTOS_FROM_FIREBASE = 0; //identifier that photos are from firebase
+    private static final int PHOTOS_FROM_LOCAL_DB = 1; //identifier that photos are from the local DB
+    private static final int NO_PHOTOS = -1; //identifier that no photos are available
 
-    private Listing thisListing;
-    private WeakReference<Context> mContextWeakReference;
-    private int photoSource;
+    private final Listing mThisListing; //the listing of which the photos are part of
+    private final WeakReference<Context> mContextWeakReference; //the weak reference to the activity that instantiated this Page Adapter
+    private final int mPhotosource; //the source of the photos
 
 
     public ImagesViewPagerAdapter(WeakReference<Context> c, Listing l) {
-        thisListing = l;
+        mThisListing = l;
         mContextWeakReference = c;
 
-        if (l.getPhotos() == null && l.getFirebasePhotos() != null) {
-            photoSource = PHOTOS_FROM_FIREBASE;
-        } else if (l.getFirebasePhotos() == null && l.getPhotos() != null) {
-            photoSource = PHOTOS_FROM_LOCAL_DB;
-        } else if (l.getPhotos() == null && l.getFirebasePhotos() == null) {
-            photoSource = NO_PHOTOS;
+        if (l.getLocalDbPhotos() == null && l.getFirebasePhotos() != null) { //Photos are firebase photos (URI strings)
+            mPhotosource = PHOTOS_FROM_FIREBASE;
+        } else if (l.getFirebasePhotos() == null && l.getLocalDbPhotos() != null) { //Photos are local DB photos (byte[]s)
+            mPhotosource = PHOTOS_FROM_LOCAL_DB;
+        } else if (l.getLocalDbPhotos() == null && l.getFirebasePhotos() == null) { //there are no photos - this is unlikely to happen unless there is an error with the data
+            mPhotosource = NO_PHOTOS;
         } else {
-            photoSource = NO_PHOTOS;
+            mPhotosource = NO_PHOTOS;
         }
     }
 
@@ -48,24 +53,25 @@ public class ImagesViewPagerAdapter extends PagerAdapter {
                 .findViewById(R.id.imageviewpageritem);
 
         final TextView imageDesc = imageLayout.findViewById(R.id.image_descr_tv);
-        String[] imageDescription = thisListing.getPhotoDescriptions();
+        String[] imageDescription = mThisListing.getPhotoDescriptions();
 
-        switch (photoSource) {
-            case PHOTOS_FROM_FIREBASE:
+
+        switch (mPhotosource) {
+            case PHOTOS_FROM_FIREBASE: //if the photos are Firebase photos , call getFirebasePhotos()
                 Glide.with(mContextWeakReference.get())
                         .asBitmap()
-                        .load(thisListing.getFirebasePhotos().get(position))
+                        .load(mThisListing.getFirebasePhotos().get(position))
                         .into(imageView);
                 break;
 
-            case PHOTOS_FROM_LOCAL_DB:
+            case PHOTOS_FROM_LOCAL_DB://if the photos are local db photos , call getLocalDbPhotos()
                 Glide.with(mContextWeakReference.get())
                         .asBitmap()
-                        .load(thisListing.getPhotos().get(position))
+                        .load(mThisListing.getLocalDbPhotos().get(position))
                         .into(imageView);
                 break;
 
-            case NO_PHOTOS:
+            case NO_PHOTOS: //no photos, do nothing
                 break;
 
             default:
@@ -86,12 +92,12 @@ public class ImagesViewPagerAdapter extends PagerAdapter {
 
     @Override
     public int getCount() {
-        switch (photoSource) {
+        switch (mPhotosource) {
             case PHOTOS_FROM_FIREBASE:
-                return thisListing.getFirebasePhotos().size();
+                return mThisListing.getFirebasePhotos().size();
 
             case PHOTOS_FROM_LOCAL_DB:
-                return thisListing.getPhotos().size();
+                return mThisListing.getLocalDbPhotos().size();
 
             case NO_PHOTOS:
                 return 0;

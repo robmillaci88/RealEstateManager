@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/colorAccent"
-    tools:context=".activities.valuations_activities.ConfirmationActivity">
+    tools:context=".activities.valuations_activities.ConfirmationActivity"
+    tools:ignore="Overdraw">
 
     <android.support.constraint.Guideline
         android:id="@+id/guideline3"
@@ -21,7 +22,7 @@
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="Thank you!"
+        android:text="@string/thank_you"
         android:textColor="@android:color/white"
         android:textSize="36sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -51,7 +52,7 @@
         android:layout_marginStart="8dp"
         android:layout_marginTop="24dp"
         android:background="@color/pastel_green"
-        android:text="Return"
+        android:text="@string/return_btn_text"
         android:textColor="@android:color/white"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

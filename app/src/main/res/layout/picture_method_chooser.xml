@@ -9,27 +9,26 @@
         android:id="@+id/camera_choice"
         android:layout_width="100dp"
         android:layout_height="100dp"
-        android:layout_marginLeft="8dp"
-        android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toStartOf="@+id/gallery_choice"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/photo_camera" />
+        app:srcCompat="@drawable/photo_camera"
+        tools:ignore="ContentDescription" />
 
     <ImageView
         android:id="@+id/gallery_choice"
         android:layout_width="100dp"
         android:layout_height="100dp"
         android:layout_marginEnd="8dp"
-        android:layout_marginRight="8dp"
         android:layout_marginTop="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/camera_choice"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/gallery_icon" />
+        app:srcCompat="@drawable/gallery_icon"
+        tools:ignore="ContentDescription" />
 
     <TextView
         android:id="@+id/textView25"
@@ -40,7 +39,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="From Camera"
+        android:text="@string/from_camera"
         app:layout_constraintEnd_toEndOf="@+id/camera_choice"
         app:layout_constraintStart_toStartOf="@+id/camera_choice"
         app:layout_constraintTop_toBottomOf="@+id/camera_choice" />
@@ -54,7 +53,7 @@
         android:layout_marginRight="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:text="From Gallery"
+        android:text="@string/from_gallery"
         app:layout_constraintEnd_toEndOf="@+id/gallery_choice"
         app:layout_constraintStart_toStartOf="@+id/gallery_choice"
         app:layout_constraintTop_toBottomOf="@+id/gallery_choice" />

@@ -6,7 +6,6 @@ import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.view.LayoutInflater;
-import android.view.Menu;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Toast;
@@ -24,12 +23,15 @@ import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.List;
 
+/**
+ * Fragment to display the mapView of a listing
+ */
 public class MapViewFragment extends BaseFragment {
-    public static final int DEFAULT_ZOOM = 17;
+    private static final int DEFAULT_ZOOM = 17; //the default zoom for the map
 
-    private Listing thisListing;
-    private GoogleMap mGoogleMap;
-    private LatLng thisListingLoc;
+    private Listing mThisListing; //the listing to display the mapview
+    private GoogleMap mGoogleMap; //the google map to display the listings marker on
+    private LatLng mThisListingLoc; //this listings location
 
     @Nullable
     @Override
@@ -41,27 +43,51 @@ public class MapViewFragment extends BaseFragment {
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
 
-        getListing();
+        getListing(); //get the listing passed into the arguments when creating this fragment
 
-        String addressString = String.format("%s %s %s %s", thisListing.getAddress_number(),
-                thisListing.getAddress_street(),
-                thisListing.getAddress_town(),
-                thisListing.getAddress_postcode());
+        String addressString = String.format("%s %s %s %s", mThisListing.getAddress_number(), //generate an address string used to geo locate the listing
+                mThisListing.getAddress_street(),
+                mThisListing.getAddress_town(),
+                mThisListing.getAddress_postcode());
 
-        getListingLatLng(addressString);
+        getListingLatLng(addressString); //get the lat long of a listing
 
-        createMap(view, savedInstanceState);
+        createMap(view, savedInstanceState); //create the map view
     }
+
 
 
     private void getListing() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
-            thisListing = (Listing) bundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
+            mThisListing = (Listing) bundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
         }
     }
 
 
+    /**
+     * Uses {@link Geocoder} to return the latlng of a listing based on the address
+     * @param strAddress the address of the listing in order to retrieve the lat lng
+     */
+    private void getListingLatLng(String strAddress) {
+        @SuppressWarnings("ConstantConditions") Geocoder coder = new Geocoder(getActivity().getApplicationContext());
+        List<Address> address;
+
+        try {
+            address = coder.getFromLocationName(strAddress, 5);
+            if (address != null) {
+                Address location = address.get(0);
+                mThisListingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+            }
+        } catch (Exception e) {
+            ToastModifications.createToast(getActivity().getApplicationContext(), getString(R.string.could_not_find_address_on_map), Toast.LENGTH_LONG);
+        }
+    }
+
+
+    /**
+     * Creates a map view which displays a single marker related to a listings lat lng location
+     */
     private void createMap(View view, @Nullable Bundle savedInstanceState) {
         final MapView mapView = view.findViewById(R.id.mapView);
 
@@ -74,40 +100,19 @@ public class MapViewFragment extends BaseFragment {
 
                 MarkerOptions markerOptions = new MarkerOptions();
 
-                if (thisListingLoc != null) {
-                    markerOptions.position(thisListingLoc);
+                if (mThisListingLoc != null) {
+                    markerOptions.position(mThisListingLoc);
 
                     mGoogleMap.addMarker(markerOptions);
 
-                    CameraPosition cameraPosition = new CameraPosition.Builder().target(thisListingLoc).zoom(DEFAULT_ZOOM).build();
+                    CameraPosition cameraPosition = new CameraPosition.Builder().target(mThisListingLoc).zoom(DEFAULT_ZOOM).build();
                     mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
                 }else{
-                    Toast.makeText(getContext(),"Could not find location. Is GPS/Internet available?",Toast.LENGTH_LONG).show();
+                    ToastModifications.createToast(getContext(),getString(R.string.no_location),Toast.LENGTH_LONG);
                 }
             }
         });
     }
 
-
-    public void getListingLatLng(String strAddress) {
-        @SuppressWarnings("ConstantConditions") Geocoder coder = new Geocoder(getActivity().getApplicationContext());
-        List<Address> address;
-
-        try {
-            address = coder.getFromLocationName(strAddress, 5);
-            if (address != null) {
-                Address location = address.get(0);
-                thisListingLoc = new LatLng(location.getLatitude(), location.getLongitude());
-            }
-        } catch (Exception e) {
-            ToastModifications.createToast(getActivity().getApplicationContext(), getString(R.string.could_not_find_address_on_map), Toast.LENGTH_LONG);
-        }
-    }
-
-
-    @Override
-    public void onPrepareOptionsMenu(Menu menu) {
-        super.onPrepareOptionsMenu(menu);
-    }
 
 }

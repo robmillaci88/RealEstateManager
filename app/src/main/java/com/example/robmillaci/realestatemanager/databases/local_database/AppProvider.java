@@ -8,7 +8,6 @@ import android.database.sqlite.SQLiteQueryBuilder;
 import android.net.Uri;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.util.Log;
 
 /**
  * Create by Roberto Millaci 07/12/2018
@@ -19,13 +18,13 @@ public class AppProvider extends android.content.ContentProvider {
     public static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
     private MyDatabase mMyDatabaseHelper;
-    public static final UriMatcher sUriMatcher = buildURIMatcher();
+    private static final UriMatcher sUriMatcher = buildURIMatcher();
 
     //static final ints for URI matcher return codes
-    public static final int LISTINGS = 100;
-    public static final int LISTINGS_ID = 101;
-    public static final int USERS = 200;
-    public static final int USERS_ID = 201;
+    private static final int LISTINGS = 100;
+    private static final int LISTINGS_ID = 101;
+    private static final int USERS = 200;
+    private static final int USERS_ID = 201;
 
 
     private static UriMatcher buildURIMatcher() {

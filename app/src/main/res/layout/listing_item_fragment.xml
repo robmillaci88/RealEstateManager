@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -46,7 +47,6 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textColor="@color/colorAccent"
             android:textSize="18sp"
             android:textStyle="bold"
@@ -58,7 +58,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textStyle="bold"
             app:layout_constraintStart_toStartOf="@+id/price_text_view"
             app:layout_constraintTop_toBottomOf="@+id/price_text_view" />
@@ -69,7 +68,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/guideline10" />
@@ -79,7 +77,6 @@
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginTop="16dp"
-            android:text="TextView"
             app:layout_constraintStart_toStartOf="@+id/type"
             app:layout_constraintTop_toBottomOf="@+id/type" />
 
@@ -103,7 +100,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/desc_icon"
             android:gravity="center_vertical"
-            android:text="Description"
+            android:text="@string/description"
             android:textColor="@color/com_facebook_button_background_color_focused_disabled"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageView6"
@@ -132,7 +129,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/description_tv"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/description_tv"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
 
         <View
             android:id="@+id/divider11"
@@ -156,7 +154,7 @@
             android:drawablePadding="11dp"
             android:drawableStart="@drawable/map_icon"
             android:gravity="center_vertical"
-            android:text="Map"
+            android:text="@string/map"
             android:textColor="@color/com_facebook_button_background_color_focused_disabled"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageView13"
@@ -169,7 +167,6 @@
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
-            android:text="TextView"
             android:textStyle="italic"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/posted_date_tv" />
@@ -182,7 +179,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/mapbtn"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/mapbtn"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/streetView"
@@ -194,7 +192,7 @@
             android:drawablePadding="11dp"
             android:drawableStart="@drawable/street_view"
             android:gravity="center_vertical"
-            android:text="Street View"
+            android:text="@string/street_view_btn_text"
             android:textColor="@color/com_facebook_button_background_color_focused_disabled"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageView15"
@@ -209,7 +207,8 @@
             app:layout_constraintBottom_toBottomOf="@+id/streetView"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintTop_toTopOf="@+id/streetView"
-            app:srcCompat="@drawable/right_arrow" />
+            app:srcCompat="@drawable/right_arrow"
+            tools:ignore="ContentDescription" />
 
         <android.support.design.widget.FloatingActionButton
             android:id="@+id/edit_listing_fab"
@@ -222,7 +221,8 @@
             app:fabSize="mini"
             app:layout_constraintEnd_toEndOf="@+id/edit_date_tv"
             app:layout_constraintTop_toBottomOf="@+id/edit_date_tv"
-            app:srcCompat="@drawable/edit_listing" />
+            app:srcCompat="@drawable/edit_listing"
+            android:focusable="true" />
 
         <View
             android:id="@+id/divider12"
@@ -253,7 +253,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@drawable/green_outline_button"
-            android:text="Book a viewing"
+            android:text="@string/book_a_viewing"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/divider12" />
@@ -266,7 +266,7 @@
             android:layout_marginStart="16dp"
             android:layout_marginTop="16dp"
             android:background="@color/colorAccent"
-            android:text="Make an offer"
+            android:text="@string/make_an_offer"
             android:textColor="@android:color/white"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"

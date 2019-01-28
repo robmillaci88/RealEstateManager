@@ -19,7 +19,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -40,7 +39,6 @@ import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.utils.ArrayListTools;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.example.robmillaci.realestatemanager.utils.image_tools.BitmapMods;
@@ -67,13 +65,14 @@ import static com.example.robmillaci.realestatemanager.fragments.ListingItemFrag
 /**
  * This class is responsible for handling the view related events of Adding listings
  */
+@SuppressWarnings("ResultOfMethodCallIgnored")
 public class AddListingView extends BaseActivity implements AddListingPresenter.View, ImagesRecyclerViewAdapter.IactivityCallback {
     private static final int MAX_NUM_IMAGES = 15; //max number of images for a listing
     private static final int FIREBASE_ID = 1; //Id to represent Firebase
     private static final int LOCAL_DB_ID = 0; //Id to represent local DB
 
-    public static final String SOLD_TAG = "sold"; //the tag to assign if a listing is sold
-    public static final String FOR_SALE_TAG = "forSale"; //the tag to assign if a listing is for sale
+    private static final String SOLD_TAG = "sold"; //the tag to assign if a listing is sold
+    private static final String FOR_SALE_TAG = "forSale"; //the tag to assign if a listing is for sale
     private static final String BUY_STRING = "buy"; //the database value if the listing is categorized as BUY
     private static final String LET_STRING = "let";//the database value if the listing is categorized as BUY
 
@@ -207,7 +206,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
         //todo get an error when trying to edit offline
         if (editingListing.getFirebasePhotos() == null) {
-            restoreImages(editingListing.getPhotos(), editingListing.getPhotoDescriptions(), LOCAL_DB_ID);
+            restoreImages(editingListing.getLocalDbPhotos(), editingListing.getPhotoDescriptions(), LOCAL_DB_ID);
         } else {
             restoreImages(editingListing.getFirebasePhotos(), editingListing.getPhotoDescriptions(), FIREBASE_ID);
         }
@@ -442,8 +441,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String[] imageDescrps = image_description.toArray(new String[image_description.size()]);
-                    String saleDate = "";
+                    String[] imageDescrps = image_description.toArray(new String[0]);
+                    String saleDate;
 
                     if (mListingBeingEdited != null) {
                         String editingListingSoldDate = mListingBeingEdited.getSaleDate();
@@ -464,7 +463,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             Double.valueOf(mSurfaceAreaText.getText().toString()),
                             Integer.valueOf(mBedroomsSpinner.getSelectedItem().toString()),
                             mDescriptionEditText.getText().toString(),
-                            ArrayListTools.BitmapsToByteArray(images),
+                            ImageTools.BitmapsToByteArray(images),
                             imageDescrps,
                             mAddressPostcodeEditText.getText().toString(),
                             mAddressNumberEditText.getText().toString(),
@@ -724,7 +723,6 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     /**
      * Handles the events of the home button being pressed
      * @param item the menu item selected
-     * @return
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {

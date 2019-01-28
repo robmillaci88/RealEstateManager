@@ -27,13 +27,16 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_TOWN;
 import static com.example.robmillaci.realestatemanager.utils.network_utils.NetworkListener.LASTSYNCKEY;
 
+/**
+ * Helper class for Share preferences operations
+ */
 public class SharedPreferenceHelper {
-    private static final String LISTING_KEY = "listing";
-    private static final String SHARED_PREFERENCES_NAME = "myprefs";
-    private static final String PROFILE_UPDATE = "profileUpdate";
+    private static final String LISTING_KEY = "listing"; //the shared preferences listing key
+    private static final String SHARED_PREFERENCES_NAME = "myprefs"; //the shared preferences name
+    private static final String PROFILE_UPDATE = "profileUpdate"; //the profile update key
 
 
-    private SharedPreferences sharedPreferences;
+    private final SharedPreferences sharedPreferences;
 
     public SharedPreferenceHelper(Context mContext) {
         sharedPreferences = mContext.getSharedPreferences(SHARED_PREFERENCES_NAME, Context.MODE_PRIVATE);
@@ -46,6 +49,10 @@ public class SharedPreferenceHelper {
     }
 
 
+    /**
+     * Gets the listing stored in shared preferences
+     * @return the listing
+     */
     public Listing getListingFromSharedPrefs() {
         Gson gson = new Gson();
         Type type = new TypeToken<Listing>() {
@@ -55,6 +62,10 @@ public class SharedPreferenceHelper {
     }
 
 
+    /**
+     * Gets the users profile details from shared preferences
+     * @return HashMap containing the users details
+     */
     public HashMap<String, String> getUsersDetails() {
         HashMap<String, String> userDetails = new HashMap<>();
 
@@ -77,6 +88,21 @@ public class SharedPreferenceHelper {
     }
 
 
+    /**
+     * Save the users details to shared preferences
+     * @param title the users title
+     * @param forename the users forename
+     * @param surname the users surname
+     * @param dob the users DOB
+     * @param postCode the users postcode
+     * @param houseNameNumb the users house name/number
+     * @param street the users street
+     * @param town the users town
+     * @param county the users county
+     * @param homeNumber the users home number
+     * @param mobile the users mobile number
+     * @param primaryContactNumb the users primary contact number
+     */
     @SuppressLint("ApplySharedPref")
     public void saveUserDetailsToSharedPreferences(String title, String forename, String surname, String dob, String postCode, String houseNameNumb,
                                                    String street, String town, String county, String homeNumber, String mobile, String primaryContactNumb) {
@@ -99,6 +125,9 @@ public class SharedPreferenceHelper {
     }
 
 
+    /**
+     * Updates the time of the latest database sync
+     */
     @SuppressLint("ApplySharedPref")
     public void updateLastSyncDate() {
         SharedPreferences.Editor spEditor = sharedPreferences.edit();
@@ -106,15 +135,26 @@ public class SharedPreferenceHelper {
         spEditor.commit();
     }
 
+
+    /**
+     * Returns the last time the database was synched
+     */
     public long getLastSyncTime() {
         return sharedPreferences.getLong(LASTSYNCKEY, new Date(0L).getTime());
     }
 
 
+    /**
+     * Returns whether a user has previously updated their profile
+     */
     public boolean isProfileUpdated() {
         return sharedPreferences.getBoolean(PROFILE_UPDATE, true);
     }
 
+
+    /**
+     * Sets that a user has previoulsy updated their profile
+     */
     @SuppressLint("ApplySharedPref")
     public void setProfileUpdated() {
         sharedPreferences.edit().putBoolean(PROFILE_UPDATE, false).commit();

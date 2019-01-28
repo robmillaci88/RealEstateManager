@@ -3,6 +3,9 @@ package com.example.robmillaci.realestatemanager.web_services;
 import retrofit2.Retrofit;
 import retrofit2.converter.gson.GsonConverterFactory;
 
+/**
+ * Creates an instance of Retrofit used to get Json data from google maps
+ */
 public class ServiceGenerator {
     private static Retrofit retrofit;
 

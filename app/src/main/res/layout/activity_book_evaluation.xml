@@ -5,7 +5,8 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@drawable/evaluation_background"
-    tools:context=".activities.valuations_activities.BookEvaluationActivity">
+    tools:context=".activities.valuations_activities.BookEvaluationActivity"
+    tools:ignore="Overdraw">
 
     <android.support.constraint.ConstraintLayout
         android:layout_width="0dp"
@@ -26,7 +27,7 @@
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
-            android:text="Book a valuation"
+            android:text="@string/book_a_valuation"
             android:textColor="@color/colorAccent"
             android:textStyle="bold"
             app:layout_constraintEnd_toEndOf="parent"
@@ -41,7 +42,7 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="8dp"
             android:gravity="center_vertical|center_horizontal"
-            android:text="Our property experts want to provide you the very best service, please tell us if you want to"
+            android:text="@string/our_property_experts_want_to_provide_you_the_very_best_service_please_tell_us_if_you_want_to"
             android:textColor="@color/colorAccent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -54,9 +55,9 @@
             android:layout_marginEnd="8dp"
             android:layout_marginTop="16dp"
             android:background="@color/pastel_green"
-            android:text="Sell a property"
+            android:text="@string/sell_a_property"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintEnd_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView34" />
 
@@ -68,9 +69,9 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:background="@color/colorAccent"
-            android:text="Let a property"
+            android:text="@string/let_a_property"
             android:textColor="@android:color/white"
-            android:textSize="10sp"
+            android:textSize="12sp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/guideline2"
             app:layout_constraintTop_toBottomOf="@+id/textView34" />

@@ -1,5 +1,7 @@
 package com.example.robmillaci.realestatemanager.json_location_objects;
 
+import android.support.annotation.NonNull;
+
 import java.util.List;
 import com.google.gson.annotations.Expose;
 import com.google.gson.annotations.SerializedName;
@@ -19,6 +21,7 @@ public class LocationObject {
         return results;
     }
 
+    @NonNull
     @Override
     public String toString() {
         return status;
