@@ -1,4 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
+
 <ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
@@ -14,233 +15,168 @@
         android:focusableInTouchMode="true">
 
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/home_phone_et"
+            android:drawableStart="@drawable/home_phone_icon"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
-            android:drawableStart="@drawable/home_phone_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title13"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields" />
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/primary_contact_num_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/primary_contact_numb"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title6"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields" />
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/mobile_num_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/mobile_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title3"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/email_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/email_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textEmailAddress"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title2"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/postcode_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/postcode_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title8"
             tools:ignore="Autofill,LabelFor,RtlSymmetry" />
 
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/town_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/town_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title14"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/county_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/country_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title10"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/street_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/street_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title9"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/surname_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/forename_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title11"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/dob_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/dateofbirth_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title7"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/housename_numb_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/house_number"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title12"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/forename_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/forename_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title4"
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
-        <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/title_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/title_icon"
-            android:ems="10"
-            android:inputType="textMultiLine|textPersonName"
-            android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"

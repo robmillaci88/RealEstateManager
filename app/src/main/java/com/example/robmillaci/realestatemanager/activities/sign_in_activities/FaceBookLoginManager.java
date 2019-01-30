@@ -16,6 +16,7 @@ import com.google.firebase.auth.FacebookAuthProvider;
 import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 
+
 class FaceBookLoginManager {
     private final FacebookloginManagerCallback mFacebookloginManagerCallback;
     private CallbackManager mCallbackManager;
@@ -47,7 +48,7 @@ class FaceBookLoginManager {
                 });
     }
 
-    public CallbackManager getCallbackManager() {
+    CallbackManager getCallbackManager() {
         return mCallbackManager;
     }
 

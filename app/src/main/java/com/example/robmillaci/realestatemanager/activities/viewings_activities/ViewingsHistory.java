@@ -10,7 +10,7 @@ public class ViewingsHistory extends BaseViewingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Viewings History");
-        action_message.setText(R.string.no_viewings_history);
+        mActionMessage.setText(R.string.no_viewings_history);
     }
 
 }

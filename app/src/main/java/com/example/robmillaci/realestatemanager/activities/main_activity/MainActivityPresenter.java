@@ -24,7 +24,7 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
      * Syncs the local database with firebase
      */
     public void syncData() {
-        FirebaseHelper.getInstance().setAddListingCallback(this).synchWithLocalDb(getApplicationContext());
+        FirebaseHelper.getInstance().setAddlistingcallback(this).synchWithLocalDb(getApplicationContext());
     }
 
 
@@ -50,17 +50,6 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
     }
 
 
-    /**
-     * Updates the progress dialog whilst syncing the local DB with Firebase.
-     * Calls back to {@link MainActivityView#updateManualSyncProgress(int, String)}
-     * @param count the listings remaining to be synched
-     * @param message the message to display
-     */
-    @Override
-    public void updateProgressBarFirebaseSync(int count, String message) {
-       mView.updateManualSyncProgress(count, message);
-    }
-
 
     /**
      * Called from {@link FirebaseHelper} when all local DB listings have been added to Firebase.
@@ -78,22 +67,9 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
 
 
     /**
-     * Updates the progress dialog whilst syncing Firebase with the local DB.
-     * Calls back to the view to update the UI
-     * @param count the number of listings remaining to be synced
-     * @param message the message to display on the progress dialog
-     */
-    @Override
-    public void updateProgressBarDbSync(int count, String message) {
-        mView.updateManualSyncProgress(count,message);
-    }
-
-
-    /**
      * The views interface methods
      */
     interface View {
         void syncDataComplete(boolean error);
-        void updateManualSyncProgress(int count,String message);
     }
 }

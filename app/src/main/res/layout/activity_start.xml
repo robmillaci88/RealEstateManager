@@ -50,22 +50,34 @@
         android:id="@+id/facebook_login"
         android:layout_width="260dp"
         android:layout_height="60dp"
-        android:layout_marginBottom="8dp"
-        android:layout_marginEnd="24dp"
         android:layout_marginStart="24dp"
+        android:layout_marginEnd="24dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/login_with_facebook"
         app:layout_constraintBottom_toTopOf="@+id/google_login"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.514"
         app:layout_constraintStart_toStartOf="parent" />
 
     <Button
         android:id="@+id/google_login"
         android:layout_width="262dp"
         android:layout_height="65dp"
-        android:layout_marginBottom="60dp"
+        android:layout_marginBottom="8dp"
         android:background="@drawable/signin_with_google"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/email_password_signup"
         app:layout_constraintEnd_toEndOf="@+id/facebook_login"
+        app:layout_constraintHorizontal_bias="1.0"
         app:layout_constraintStart_toStartOf="@+id/facebook_login" />
+
+    <Button
+        android:id="@+id/email_password_signup"
+        android:layout_width="260dp"
+        android:layout_height="55dp"
+        android:layout_marginBottom="32dp"
+        android:background="@drawable/sign_in_with_email"
+        app:layout_constraintBottom_toBottomOf="@+id/imageView4"
+        app:layout_constraintEnd_toEndOf="@+id/google_login"
+        app:layout_constraintStart_toStartOf="@+id/google_login" />
 
 </android.support.constraint.ConstraintLayout>

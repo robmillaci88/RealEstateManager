@@ -37,10 +37,10 @@ import kotlin.Unit;
  * This class is responsible for displaying the Book a view activity
  */
 public class BookViewingActivity extends AppCompatActivity implements BookingTimesAdapter.BookingAdapterCallback {
-    private Listing thisListing; //the listing of which a viewing is being booked
-    private ImageView listingImage; //the imageview to display the listings image
-    private RecyclerView times_recycler_view; //the recyclerview to display the available booking times
-    private Button continue_btn; //the continue button
+    private Listing mThisListing; //the listing of which a viewing is being booked
+    private ImageView mListingImage; //the imageview to display the listings image
+    private RecyclerView mTimesRecyclerView; //the recyclerview to display the available booking times
+    private Button mContinueBtn; //the continue button
 
     private static final int MAX_BOOKINGS_PER_DAY = 25; //the maximum number of bookings per day
 
@@ -90,8 +90,8 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
         BookingTimesAdapter timesAdapter = new BookingTimesAdapter(dateTimes, new WeakReference<Context>(this));
         timesAdapter.setCallbackListener(this);
 
-        times_recycler_view.setLayoutManager(new GridLayoutManager(this,4,GridLayoutManager.VERTICAL,false));
-        times_recycler_view.setAdapter(timesAdapter);
+        mTimesRecyclerView.setLayoutManager(new GridLayoutManager(this,4,GridLayoutManager.VERTICAL,false));
+        mTimesRecyclerView.setAdapter(timesAdapter);
     }
 
 
@@ -101,29 +101,29 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
     private void getListing() {
         Bundle bundle = getIntent().getExtras();
         if (bundle != null) {
-            thisListing = (Listing) bundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
+            mThisListing = (Listing) bundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
         }
     }
 
     private void initializeViews() {
-        listingImage = findViewById(R.id.listing_image);
+        mListingImage = findViewById(R.id.listing_image);
         TextView address_text = findViewById(R.id.address_text);
-        times_recycler_view = findViewById(R.id.times_recycler_view);
+        mTimesRecyclerView = findViewById(R.id.times_recycler_view);
 
-        continue_btn = findViewById(R.id.continue_btn);
-        continue_btn.setClickable(false);
-        continue_btn.setBackgroundColor(getResources().getColor(R.color.lightGrey));
+        mContinueBtn = findViewById(R.id.continue_btn);
+        mContinueBtn.setClickable(false);
+        mContinueBtn.setBackgroundColor(getResources().getColor(R.color.lightGrey));
 
-        address_text.setText(String.format("%s %s, %s, %s", thisListing.getAddress_number(),
-                thisListing.getAddress_street(),
-                thisListing.getAddress_county(),
-                thisListing.getAddress_postcode()));
+        address_text.setText(String.format("%s %s, %s, %s", mThisListing.getAddress_number(),
+                mThisListing.getAddress_street(),
+                mThisListing.getAddress_county(),
+                mThisListing.getAddress_postcode()));
     }
 
     @SuppressLint("CheckResult")
     private void setOnClickListeners(){
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(continue_btn)
+        RxView.clicks(mContinueBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -140,13 +140,13 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
      * First we must determine if the photo data is being obtained from Firebase or from the local DB
      */
     private void loadPhoto() {
-        ArrayList<String> firebasePhoto = thisListing.getFirebasePhotos();
-        List<byte[]> localPhoto = thisListing.getLocalDbPhotos();
+        ArrayList<String> firebasePhoto = mThisListing.getFirebasePhotos();
+        List<byte[]> localPhoto = mThisListing.getLocalDbPhotos();
 
         if (firebasePhoto == null || firebasePhoto.size() == 0) {
-            Glide.with(getApplicationContext()).asBitmap().load(localPhoto.get(0)).into(listingImage);
+            Glide.with(getApplicationContext()).asBitmap().load(localPhoto.get(0)).into(mListingImage);
         } else {
-            Glide.with(getApplicationContext()).asBitmap().load(firebasePhoto.get(0)).into(listingImage);
+            Glide.with(getApplicationContext()).asBitmap().load(firebasePhoto.get(0)).into(mListingImage);
         }
     }
 
@@ -187,7 +187,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
 
     @Override
     public void timeSelected() {
-        continue_btn.setClickable(true);
-        continue_btn.setBackgroundResource(R.drawable.green_button_round_edges);
+        mContinueBtn.setClickable(true);
+        mContinueBtn.setBackgroundResource(R.drawable.green_button_round_edges);
     }
 }

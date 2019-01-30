@@ -15,6 +15,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
+import android.widget.EditText;
 import android.widget.TextView;
 
 import com.example.robmillaci.realestatemanager.R;
@@ -127,11 +128,33 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(mDescr).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) { //display the description of the listing
-                new AlertDialog.Builder(c)
+                @SuppressLint("InflateParams") View alertDialogView = getLayoutInflater().inflate(R.layout.listing_description_dialog_layout,null);
+
+                AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
+                dialogBuilder.setView(alertDialogView);
+
+                TextView listingDescription = alertDialogView.findViewById(R.id.listing_description_et);
+                TextView listingPoi = alertDialogView.findViewById(R.id.poi_text);
+
+                dialogBuilder
                         .setTitle(String.format("%s %s %s", getString(R.string.about), mThisListing.getAddress_number(), mThisListing.getAddress_street()))
                         .setPositiveButton(getString(R.string.close_button), null)
-                        .setMessage(mThisListing.getDescr())
                         .show();
+
+                listingDescription.setText(mThisListing.getDescr());
+
+                String[] poiArray = mThisListing.getPoi().split(",");
+
+                StringBuilder sb = new StringBuilder();
+
+                for (int a = 0; a < poiArray.length; a++){
+                    if (a == 0){
+                       sb.append("-").append(" ").append(poiArray[a]);
+                    }else {
+                        sb.append("\n").append("-").append(poiArray[a]);
+                    }
+                }
+                listingPoi.setText(sb.toString());
             }
         });
 
@@ -232,18 +255,23 @@ public class ListingItemFragment extends BaseFragment {
                 getResources().getString(R.string.bedrooms),
                 mThisListing.getType()));
 
-        mAddress.setText(String.format("%s %s, %s, %s.", mThisListing.getAddress_number(),
+        mAddress.setText(String.format("%s %s, %s, %s.",
+                mThisListing.getAddress_number(),
                 mThisListing.getAddress_street(),
                 mThisListing.getAddress_town(),
                 mThisListing.getAddress_postcode().toUpperCase()));
 
-        mPostedDateTv.setText(String.format("%s %s" ,
+        mPostedDateTv.setText(String.format("%s %s %s %s" ,
                 getString(R.string.posted_on),
-                mThisListing.getFormattedPostedDate()));
+                mThisListing.getFormattedPostedDate(),
+                getString(R.string.by_text),
+                mThisListing.getAgent()));
 
-        mEditDateTv.setText(String.format("%s %s",
+        mEditDateTv.setText(String.format("%s %s %s %s",
                 getString(R.string.last_edit),
-                mThisListing.getFormattedLastUpdateTime()));
+                mThisListing.getFormattedLastUpdateTime(),
+                getString(R.string.by_text),
+                mThisListing.getAgent()));
 
         mCircleIndicator.setViewPager(mViewPager);
     }

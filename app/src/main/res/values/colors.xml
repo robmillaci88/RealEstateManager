@@ -2,13 +2,13 @@
 
 <resources>
 
-    <color name="pastel_green">#77dd91</color>
+    <color name="pastel_green">#4db6ac</color>
 
-    <color name="colorPrimary">#77dd91</color>
+    <color name="colorPrimary">#4db6ac</color>
 
-    <color name="colorPrimaryDark">#009688</color>
+    <color name="colorPrimaryDark">#00867d</color>
 
-    <color name="primary_light">#C5CAE9</color>
+    <color name="primary_light">#82e9de</color>
 
     <color name="colorAccent">#009688</color>
 

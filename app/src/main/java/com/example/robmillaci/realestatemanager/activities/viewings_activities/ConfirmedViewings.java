@@ -10,7 +10,7 @@ public class ConfirmedViewings extends BaseViewingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle("Confirmed Viewings");
-        action_message.setText(R.string.no_confirmed_viewings);
+        mActionMessage.setText(R.string.no_confirmed_viewings);
     }
 
 }

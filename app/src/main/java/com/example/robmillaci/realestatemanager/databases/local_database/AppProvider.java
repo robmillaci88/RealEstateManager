@@ -11,7 +11,7 @@ import android.support.annotation.Nullable;
 
 /**
  * Create by Roberto Millaci 07/12/2018
- * Provider for this app. This is the only class that knows about {@link MyDatabase}.
+ * Provider for this app.
  */
 public class AppProvider extends android.content.ContentProvider {
     static final String CONTENT_AUTHORITY = "com.example.robmillaci.realestatemanager.provider";
@@ -27,6 +27,10 @@ public class AppProvider extends android.content.ContentProvider {
     private static final int USERS_ID = 201;
 
 
+    /**
+     * Create a URI matcher that is used to determine how to process queries, inserts, deletes and updates
+     * @return a UriMatcher object containing our Uri's
+     */
     private static UriMatcher buildURIMatcher() {
         final UriMatcher matcher = new UriMatcher(UriMatcher.NO_MATCH);
 
@@ -49,6 +53,16 @@ public class AppProvider extends android.content.ContentProvider {
         return true;
     }
 
+
+    /**
+     * Query the database based on the recieved uri
+     * @param uri the uri recieved to determine which table to query
+     * @param projection the database columns to return
+     * @param selection selection arguments formatted as a WHERE clause
+     * @param selectionArgs the WHERE arguments
+     * @param sortOrder the sort order of the returned data
+     * @return a cursor containing the database records
+     */
     @Nullable
     @Override
     public Cursor query(@NonNull Uri uri, @Nullable String[] projection, @Nullable String selection, @Nullable String[] selectionArgs, @Nullable String sortOrder) {
@@ -85,6 +99,8 @@ public class AppProvider extends android.content.ContentProvider {
         return queryBuilder.query(db, projection, selection, selectionArgs, null, null, sortOrder);
     }
 
+
+    //Returns a String representing the content type based on the passed URI
     @Nullable
     @Override
     public String getType(@NonNull Uri uri) {
@@ -105,6 +121,11 @@ public class AppProvider extends android.content.ContentProvider {
 
 
 
+    /**
+     * Insert into the database
+     * @param uri the uri recieved used against our matcher to determine which table to insert into
+     * @param values the values to insert
+     */
     @Nullable
     @Override
     public Uri insert(@NonNull Uri uri, @Nullable ContentValues values) {
@@ -144,7 +165,13 @@ public class AppProvider extends android.content.ContentProvider {
     }
 
 
-
+    /**
+     * Delete from the database
+     * @param uri the uri recieved used against our matcher to determine which table to insert into
+     * @param selection selection arguments formatted as a WHERE clause
+     * @param selectionArgs the WHERE arguments
+     * @return the number of rows affected
+     */
     @Override
     public int delete(@NonNull Uri uri, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);
@@ -197,7 +224,14 @@ public class AppProvider extends android.content.ContentProvider {
     }
 
 
-
+    /**
+     * Updates the database
+     * @param uri the uri recieved used against our matcher to determine which table to update
+     * @param values the update values
+     * @param selection the SQL WHERE statement for which rows to update
+     * @param selectionArgs the arguments for the WHERE statements
+     * @return count of the rows affected
+     */
     @Override
     public int update(@NonNull Uri uri, @Nullable ContentValues values, @Nullable String selection, @Nullable String[] selectionArgs) {
         final int match = sUriMatcher.match(uri);

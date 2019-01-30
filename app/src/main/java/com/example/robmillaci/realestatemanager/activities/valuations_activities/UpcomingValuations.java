@@ -19,8 +19,8 @@ import kotlin.Unit;
  * This class is responsible for the upcoming valuations activity
  */
 public class UpcomingValuations extends AppCompatActivity {
-private Button refresh;
-private TextView evaluations_message;
+private Button mRefresh;
+private TextView mEvaluationsMessage;
 
     @SuppressLint("CheckResult")
     @Override
@@ -31,14 +31,14 @@ private TextView evaluations_message;
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        refresh = findViewById(R.id.refresh_btn);
-        evaluations_message = findViewById(R.id.message);
+        mRefresh = findViewById(R.id.refresh_btn);
+        mEvaluationsMessage = findViewById(R.id.message);
 
         setViewVisibility(false);
         startCountdown();
 
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(refresh)
+        RxView.clicks(mRefresh)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -64,11 +64,11 @@ private TextView evaluations_message;
 
     private void setViewVisibility(boolean viewVisibility) {
         if (viewVisibility){
-            evaluations_message.setVisibility(View.VISIBLE);
-            refresh.setVisibility(View.VISIBLE);
+            mEvaluationsMessage.setVisibility(View.VISIBLE);
+            mRefresh.setVisibility(View.VISIBLE);
         }else {
-            evaluations_message.setVisibility(View.GONE);
-            refresh.setVisibility(View.GONE);
+            mEvaluationsMessage.setVisibility(View.GONE);
+            mRefresh.setVisibility(View.GONE);
         }
     }
 }

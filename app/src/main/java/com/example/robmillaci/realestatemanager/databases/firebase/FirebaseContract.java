@@ -1,14 +1,18 @@
 package com.example.robmillaci.realestatemanager.databases.firebase;
 
+/**
+ * Contract class for Firebase field references
+ */
 public class FirebaseContract {
-    public static final String USER_DATABASE_COLLECTION_PATH = "users";
-    public static final String USER_DATABASE_NAME_FIELD = "username";
-    public static final String USER_DATABASE_EMAIL_FIELD = "userEmail";
-    public static final String USER_DATABASE_PICTURE_FIELD = "picture";
-    public static final String USER_DATABASE_UNIQUE_ID_FIELD = "uniqueID";
+    static final String USER_DATABASE_COLLECTION_PATH = "users";
+    static final String USER_DATABASE_NAME_FIELD = "username";
+    static final String USER_DATABASE_EMAIL_FIELD = "userEmail";
+    static final String USER_DATABASE_PICTURE_FIELD = "picture";
+    static final String USER_DATABASE_UNIQUE_ID_FIELD = "uniqueID";
     public static final String USER_DATABASE_ISADMIN_FIELD = "isAdmin";
-    public static final String USER_DATABASE_TOKEN_PATH = "token";
+    static final String USER_DATABASE_TOKEN_PATH = "token";
 
+    static final String LISTING_DATABASE_COLLECTION_PATH = "listings";
     public static final String USER_TITLE = "title";
     public static final String USER_FORENAME = "forename";
     public static final String USER_SURNAME = "surname";
@@ -22,7 +26,5 @@ public class FirebaseContract {
     public static final String USER_HOME_NUMBER = "homeNumber";
     public static final String USER_MOBILE = "mobile";
     public static final String USER_PRIMARY_CONTACT_NUMBER = "primary_contact_number";
-    public static final String IMAGE_URI_PATH = "imageUrls";
-
-    static final String LISTING_DATABASE_COLLECTION_PATH = "listings";
+    static final String IMAGE_URI_PATH = "imageUrls";
 }

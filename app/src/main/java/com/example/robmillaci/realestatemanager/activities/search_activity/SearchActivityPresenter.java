@@ -22,11 +22,11 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * The presenter for {@link SearchActivityView} responsible for getting the users last known location and returning the postcode
  */
  class SearchActivityPresenter {
-    private final View view;
+    private final View mView;
 
 
     SearchActivityPresenter(View view) {
-        this.view = view;
+        this.mView = view;
     }
 
 
@@ -47,7 +47,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
                                 e.printStackTrace();
                             }
 
-                            view.gotLocation(addresses.get(0).getPostalCode() != null ? addresses.get(0).getPostalCode() : "");
+                            mView.gotLocation(addresses.get(0).getPostalCode() != null ? addresses.get(0).getPostalCode() : "");
                         }else {
                             Toast.makeText(getApplicationContext(), R.string.error_getting_gps, Toast.LENGTH_LONG).show();
                         }

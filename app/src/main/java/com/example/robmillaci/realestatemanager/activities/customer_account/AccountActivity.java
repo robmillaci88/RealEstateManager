@@ -22,9 +22,9 @@ import static com.example.robmillaci.realestatemanager.activities.sign_in_activi
  * This class is responsible for the customer account activity
  */
 public class AccountActivity extends BaseActivity {
-    private Button yourDetails; //Your details button
-    private Button privacySettings; //Privacy settings button
-    private Button logout; //logout of the app button
+    private Button mYourDetails; //Your details button
+    private Button mPrivacySettings; //Privacy settings button
+    private Button mLogout; //mLogout of the app button
     private CompositeDisposable mCompositeDisposable; //holds any disposables
 
 
@@ -44,15 +44,15 @@ public class AccountActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        yourDetails = findViewById(R.id.your_details_button);
-        privacySettings = findViewById(R.id.privacy_settings_button);
-        logout = findViewById(R.id.logout_button);
+        mYourDetails = findViewById(R.id.your_details_button);
+        mPrivacySettings = findViewById(R.id.privacy_settings_button);
+        mLogout = findViewById(R.id.logout_button);
     }
 
     private void setOnClicks() {
         mCompositeDisposable = new CompositeDisposable();
 
-        Disposable yourDetailsDisposable = RxView.clicks(yourDetails)
+        Disposable yourDetailsDisposable = RxView.clicks(mYourDetails)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -62,7 +62,7 @@ public class AccountActivity extends BaseActivity {
         mCompositeDisposable.add(yourDetailsDisposable);
 
 
-        Disposable privacyDisposable = RxView.clicks(privacySettings)
+        Disposable privacyDisposable = RxView.clicks(mPrivacySettings)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -72,7 +72,7 @@ public class AccountActivity extends BaseActivity {
         mCompositeDisposable.add(privacyDisposable);
 
 
-        Disposable logOutBtn = RxView.clicks(logout)
+        Disposable logOutBtn = RxView.clicks(mLogout)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {

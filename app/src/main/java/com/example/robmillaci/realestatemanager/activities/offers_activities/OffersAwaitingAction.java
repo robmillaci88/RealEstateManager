@@ -13,7 +13,7 @@ public class OffersAwaitingAction extends BaseViewingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.offers_title));
-        action_message.setText(R.string.no_offers);
+        mActionMessage.setText(R.string.no_offers);
     }
 
 }

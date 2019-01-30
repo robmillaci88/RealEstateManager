@@ -19,7 +19,7 @@ import kotlin.Unit;
  * This class is responsible for the users privacy settings activity
  */
 public class PrivacySettingsActivity extends BaseActivity {
-    private Button contactUs;
+    private Button mContactUs;
     private CompositeDisposable mCompositeDisposable;
 
     @Override
@@ -36,14 +36,14 @@ public class PrivacySettingsActivity extends BaseActivity {
     }
 
     private void initializeViews() {
-        contactUs = findViewById(R.id.contact_us_btn);
+        mContactUs = findViewById(R.id.contact_us_btn);
     }
 
 
     private void setOnClicks() {
         mCompositeDisposable = new CompositeDisposable();
 
-        Disposable contactUsDisposable = RxView.clicks(contactUs)
+        Disposable contactUsDisposable = RxView.clicks(mContactUs)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {

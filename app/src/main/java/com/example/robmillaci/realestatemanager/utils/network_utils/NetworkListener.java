@@ -40,7 +40,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
                 mSynchListenerCallback.showProgressDialog(); //call back to the view to show the progress bar
 
                 //we are online - sync local DB with fireStore and then sync firestore with localDB
-                FirebaseHelper.getInstance().setAddListingCallback(this).synchWithLocalDb(context.getApplicationContext());
+                FirebaseHelper.getInstance().setAddlistingcallback(this).synchWithLocalDb(context.getApplicationContext());
 
                 new SharedPreferenceHelper(context).updateLastSyncDate(); //update the last time we have synched the databases
 
@@ -99,27 +99,6 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
         }
     }
 
-
-    /**
-     * Called whilst syncing local DB with Firebase - this provides visual updates to the user
-     * @param count the number of listings remaining to be updated
-     * @param message the message to be displayed in the progress dialog
-     */
-    @Override
-    public void updateProgressBarFirebaseSync(int count, String message) {
-        mSynchListenerCallback.updateProgressDialog(count,message);
-    }
-
-
-    /**
-     * Called whilst syncing Firebase with local DB - this provides visual updates to the user
-     * @param count the number of listings remaining to be updated
-     * @param message the message to be displayed in the progress dialog
-     */
-    @Override
-    public void updateProgressBarDbSync(int count, String message) {
-        mSynchListenerCallback.updateProgressDialog(count,message);
-    }
 
 }
 

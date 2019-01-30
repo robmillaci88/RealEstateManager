@@ -3,6 +3,8 @@ package com.example.robmillaci.realestatemanager.utils;
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
+import android.text.Editable;
+import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
 
@@ -75,5 +77,30 @@ public class Utils {
     public static String formatNumber(int number) {
         DecimalFormat formatter = new DecimalFormat("#,###,###");
         return formatter.format(number);
+    }
+
+    public static boolean isPasswordValid(Editable text) {
+        //Password criteria
+        //at least 8 characters
+        //1 Upper case letter
+        //1 number
+        int numOfUpperLetters = 0;
+        int numOfDigits = 0;
+        boolean passwordLength = text.length() >= 8;
+
+        byte[] bytes = text.toString().getBytes();
+        for (byte tempByte : bytes) {
+
+            char tempChar = (char) tempByte;
+            if (Character.isDigit(tempChar)) {
+                numOfDigits++;
+            }
+
+            if (Character.isUpperCase(tempChar)) {
+                numOfUpperLetters++;
+            }
+        }
+        Log.d("isPasswordValid", "isPasswordValid: length is " + passwordLength + " number of digits is " + numOfDigits + " number of upper case is " + numOfUpperLetters);
+        return passwordLength && numOfDigits >= 1 && numOfUpperLetters >= 1;
     }
 }

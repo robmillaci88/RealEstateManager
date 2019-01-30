@@ -110,6 +110,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         //this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
         //this caused an initial error because it is refering to a textview defined in second activity and we are trying to find the ID
         //after inflating the View for the main activity.
+
         //This should be this.textViewMain = findViewByID(R.id.activity_main_activity_text_view_main)
 
         // this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
@@ -504,24 +505,6 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
-    /**
-     * Updates the progress dialog while the databases are synching
-     * @param count the number of listings remaining
-     * @param message the message to display
-     */
-    @Override
-    public void updateProgressDialog(final int count, final String message) {
-        runOnUiThread(new Runnable() {
-            @Override
-            public void run() {
-                if (pd != null && pd.isShowing()) {
-                    pd.setMessage(message + " " + String.valueOf(count) + " " + getString(R.string.listings_remaining));
-                }
-            }
-        });
-
-    }
-
 
     /**
      * Once the sync is completed with an error or not, this method dismisses the progress dialog and displays a toast to the user
@@ -618,15 +601,5 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
     }
 
-
-    /**
-     * Updated the progress dialog when performing a manual synch
-     * @param count the number of listings remaining to be synched
-     * @param message the message to display in the progress dialog
-     */
-    @Override
-    public void updateManualSyncProgress(int count, String message) {
-        this.updateProgressDialog(count, message);
-    }
 }
 

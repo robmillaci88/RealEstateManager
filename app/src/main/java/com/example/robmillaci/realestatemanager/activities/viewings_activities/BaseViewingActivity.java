@@ -30,8 +30,8 @@ import kotlin.Unit;
  * Currently in this application all the above classes are for visual representational purposes only and don't have functionality
  */
 public class BaseViewingActivity extends AppCompatActivity {
-    private Button refresh;
-    protected TextView action_message;
+    private Button mRefresh;
+    protected TextView mActionMessage;
 
     @SuppressLint("CheckResult")
     @Override
@@ -40,15 +40,15 @@ public class BaseViewingActivity extends AppCompatActivity {
         setContentView(R.layout.viewings);
         Objects.requireNonNull(getSupportActionBar()).setDisplayHomeAsUpEnabled(true);
 
-        refresh = findViewById(R.id.refresh_btn);
-        action_message = findViewById(R.id.message);
+        mRefresh = findViewById(R.id.refresh_btn);
+        mActionMessage = findViewById(R.id.message);
 
         setViewVisibility(false);
 
         startSearch();
 
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(refresh)
+        RxView.clicks(mRefresh)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -74,11 +74,11 @@ public class BaseViewingActivity extends AppCompatActivity {
 
     private void setViewVisibility(boolean viewVisibility) {
         if (viewVisibility) {
-            action_message.setVisibility(View.VISIBLE);
-            refresh.setVisibility(View.VISIBLE);
+            mActionMessage.setVisibility(View.VISIBLE);
+            mRefresh.setVisibility(View.VISIBLE);
         } else {
-            action_message.setVisibility(View.GONE);
-            refresh.setVisibility(View.GONE);
+            mActionMessage.setVisibility(View.GONE);
+            mRefresh.setVisibility(View.GONE);
         }
     }
 

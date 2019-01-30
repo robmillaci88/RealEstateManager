@@ -14,12 +14,12 @@ import com.example.robmillaci.realestatemanager.activities.BaseActivity;
  * This class is responsible for the contact activity
  */
 public class ContactActivity extends BaseActivity implements View.OnClickListener {
-    private Button enquiries_call_btn; //the button for calling the enquiries
-    private Button sold_call_button; //the button for calling sold properties
-    private Button lettings_call_btn; //the button for calling lettings
-    private Button enquiries_email_btn;//the button for emailing enquiries
-    private Button sold_email_btn;//the button for emailing sold properties
-    private Button lettings_email_btn;//the button for emailing lettings
+    private Button mEnquiriesCallBtn; //the button for calling the enquiries
+    private Button mSoldCallButton; //the button for calling sold properties
+    private Button mLettingsCallBtn; //the button for calling lettings
+    private Button mEnquiriesEmailBtn;//the button for emailing enquiries
+    private Button mSoldEmailBtn;//the button for emailing sold properties
+    private Button mLettingsEmailBtn;//the button for emailing lettings
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,21 +44,21 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
     }
 
     private void initializeButtons() {
-        enquiries_call_btn = findViewById(R.id.enquiries_call_btn);
-        sold_call_button = findViewById(R.id.sold_call_button);
-        lettings_call_btn = findViewById(R.id.lettings_call_btn);
-        enquiries_email_btn = findViewById(R.id.enquiries_email_btn);
-        sold_email_btn = findViewById(R.id.sold_email_btn);
-        lettings_email_btn = findViewById(R.id.lettings_email_btn);
+        mEnquiriesCallBtn = findViewById(R.id.enquiries_call_btn);
+        mSoldCallButton = findViewById(R.id.sold_call_button);
+        mLettingsCallBtn = findViewById(R.id.lettings_call_btn);
+        mEnquiriesEmailBtn = findViewById(R.id.enquiries_email_btn);
+        mSoldEmailBtn = findViewById(R.id.sold_email_btn);
+        mLettingsEmailBtn = findViewById(R.id.lettings_email_btn);
     }
 
     private void initializeButtonClicks() {
-        enquiries_call_btn.setOnClickListener(this);
-        sold_call_button.setOnClickListener(this);
-        lettings_call_btn.setOnClickListener(this);
-        enquiries_email_btn.setOnClickListener(this);
-        sold_email_btn.setOnClickListener(this);
-        lettings_email_btn.setOnClickListener(this);
+        mEnquiriesCallBtn.setOnClickListener(this);
+        mSoldCallButton.setOnClickListener(this);
+        mLettingsCallBtn.setOnClickListener(this);
+        mEnquiriesEmailBtn.setOnClickListener(this);
+        mSoldEmailBtn.setOnClickListener(this);
+        mLettingsEmailBtn.setOnClickListener(this);
     }
 
     @Override

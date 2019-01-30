@@ -36,13 +36,13 @@ import static com.example.robmillaci.realestatemanager.fragments.ListingItemFrag
  * This class is responsible for the Make an offer activity
  */
 public class MakeAnOffer extends BaseActivity {
-    private TextView asking_price_amount; //the asking price of the listings
-    private EditText offerPrice; //the price the user will offer for the listings
-    private ViewPager imageViewPager; //view pager to store the listings images
-    private CircleIndicator viewPagerIndicator; //view indicator to highlight the number of images in the view pager
-    private Listing thisListing; //the current listing the user is viewing
-    private TextWatcher offerTextWatcher; //Text watcher for the offer to append relevant commas
-    private Button submitOfferBtn; //the button to submit an offer
+    private TextView mAskingPriceAmount; //the asking price of the listings
+    private EditText mOfferPrice; //the price the user will offer for the listings
+    private ViewPager mImageViewPager; //view pager to store the listings images
+    private CircleIndicator mViewPagerIndicator; //view indicator to highlight the number of images in the view pager
+    private Listing mThisListing; //the current listing the user is viewing
+    private TextWatcher mOfferTextWatcher; //Text watcher for the offer to append relevant commas
+    private Button mSubmitOfferBtn; //the button to submit an offer
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,9 +55,9 @@ public class MakeAnOffer extends BaseActivity {
         //Get the listing that this activity is created in relation to.
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
-            thisListing = (Listing) intentExtras.getSerializable(LISTING_BUNDLE_KEY);
-            if (thisListing != null) {
-                setTitle(String.format("%s %s %s", thisListing.getAddress_number(), thisListing.getAddress_street(), thisListing.getAddress_town()));
+            mThisListing = (Listing) intentExtras.getSerializable(LISTING_BUNDLE_KEY);
+            if (mThisListing != null) {
+                setTitle(String.format("%s %s %s", mThisListing.getAddress_number(), mThisListing.getAddress_street(), mThisListing.getAddress_town()));
             }
         }
 
@@ -74,7 +74,7 @@ public class MakeAnOffer extends BaseActivity {
      * This text watcher formats the entered value such that relevant commas are inserted into the offer amount
      */
     private void createTextWatcher() {
-        offerTextWatcher = new TextWatcher() {
+        mOfferTextWatcher = new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -88,10 +88,10 @@ public class MakeAnOffer extends BaseActivity {
             @Override
             public void afterTextChanged(Editable s) {
                 String replacementString = Utils.formatNumber(Integer.valueOf(s.toString().replaceAll(",", "")));
-                offerPrice.removeTextChangedListener(offerTextWatcher);
-                offerPrice.setText(replacementString);
-                offerPrice.setSelection(replacementString.length());
-                offerPrice.addTextChangedListener(offerTextWatcher);
+                mOfferPrice.removeTextChangedListener(mOfferTextWatcher);
+                mOfferPrice.setText(replacementString);
+                mOfferPrice.setSelection(replacementString.length());
+                mOfferPrice.addTextChangedListener(mOfferTextWatcher);
             }
         };
     }
@@ -99,14 +99,14 @@ public class MakeAnOffer extends BaseActivity {
 
     @SuppressLint("CheckResult")
     private void setListeners() {
-        offerPrice.addTextChangedListener(offerTextWatcher); //add the text watcher to the offer edit text
+        mOfferPrice.addTextChangedListener(mOfferTextWatcher); //add the text watcher to the offer edit text
 
 
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(submitOfferBtn).subscribe(new Consumer<Unit>() {
+        RxView.clicks(mSubmitOfferBtn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                if (offerPrice.getText().toString().equals("")) {
+                if (mOfferPrice.getText().toString().equals("")) {
                     ToastModifications.createToast(MakeAnOffer.this, getString(R.string.enter_offer_value), Toast.LENGTH_LONG);
                 } else {
                     Intent makeAnOfferIntent = new Intent(getApplicationContext(), ConfirmationActivity.class);
@@ -120,24 +120,24 @@ public class MakeAnOffer extends BaseActivity {
 
 
     private void initializeViews() {
-        asking_price_amount = findViewById(R.id.asking_price_amount);
-        offerPrice = findViewById(R.id.offer_edit_text);
-        imageViewPager = findViewById(R.id.image_viewpager);
-        viewPagerIndicator = findViewById(R.id.image_indicator);
-        submitOfferBtn = findViewById(R.id.submit_offer_button);
+        mAskingPriceAmount = findViewById(R.id.asking_price_amount);
+        mOfferPrice = findViewById(R.id.offer_edit_text);
+        mImageViewPager = findViewById(R.id.image_viewpager);
+        mViewPagerIndicator = findViewById(R.id.image_indicator);
+        mSubmitOfferBtn = findViewById(R.id.submit_offer_button);
     }
 
     private void updateViews() {
-        if (thisListing != null) {
-            asking_price_amount.setText(String.format("%s %s", getString(R.string.currency_symbol), thisListing.getFormattedPrice()));
+        if (mThisListing != null) {
+            mAskingPriceAmount.setText(String.format("%s %s", getString(R.string.currency_symbol), mThisListing.getFormattedPrice()));
             createViewPager();
         }
     }
 
     private void createViewPager() {
-        ImagesViewPagerAdapter adapter = new ImagesViewPagerAdapter(new WeakReference<Context>(this), thisListing);
-        imageViewPager.setAdapter(adapter);
-        viewPagerIndicator.setViewPager(imageViewPager);
+        ImagesViewPagerAdapter adapter = new ImagesViewPagerAdapter(new WeakReference<Context>(this), mThisListing);
+        mImageViewPager.setAdapter(adapter);
+        mViewPagerIndicator.setViewPager(mImageViewPager);
 
     }
 

@@ -19,7 +19,7 @@ import kotlin.Unit;
  * This class is responsible for the confirmation activity when a user chooses to buy,sell or make an offer on a listing
  */
 public class ConfirmationActivity extends AppCompatActivity {
-    private Button return_btn;
+    private Button mReturnBtn;
     public static final int CALLED_FROM_OFFER = 1; //int to determine wether this activity was created from the Offer activity
     public static final int CALLED_FROM_VALUATION = 2; //int to determine wether this activity was created from the valuation activity
     public static final int CALLED_FROM_BOOK_VIEWING = 3;//int to determiner whether this activity was created from book a viewing activity
@@ -50,13 +50,13 @@ public class ConfirmationActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        return_btn = findViewById(R.id.return_btn);
+        mReturnBtn = findViewById(R.id.return_btn);
     }
 
     @SuppressLint("CheckResult")
     private void setOnClicks() {
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(return_btn)
+        RxView.clicks(mReturnBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {

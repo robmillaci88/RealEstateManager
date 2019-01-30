@@ -19,6 +19,7 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -27,16 +28,19 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.ImageView;
+import android.widget.MultiAutoCompleteTextView;
 import android.widget.Spinner;
 import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.robmillaci.realestatemanager.adapters.ImagesRecyclerViewAdapter;
+import com.example.robmillaci.realestatemanager.custom_objects.MyTokenizer;
+import com.example.robmillaci.realestatemanager.custom_objects.SquareEditText;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
+import com.example.robmillaci.realestatemanager.adapters.ImagesRecyclerViewAdapter;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
@@ -67,27 +71,27 @@ import static com.example.robmillaci.realestatemanager.fragments.ListingItemFrag
  */
 @SuppressWarnings("ResultOfMethodCallIgnored")
 public class AddListingView extends BaseActivity implements AddListingPresenter.View, ImagesRecyclerViewAdapter.IactivityCallback {
-    private static final int MAX_NUM_IMAGES = 15; //max number of images for a listing
+    private static final int MAX_NUM_IMAGES = 15; //max number of mImages for a listing
     private static final int FIREBASE_ID = 1; //Id to represent Firebase
     private static final int LOCAL_DB_ID = 0; //Id to represent local DB
 
     private static final String SOLD_TAG = "sold"; //the tag to assign if a listing is sold
     private static final String FOR_SALE_TAG = "forSale"; //the tag to assign if a listing is for sale
-    private static final String BUY_STRING = "buy"; //the database value if the listing is categorized as BUY
-    private static final String LET_STRING = "let";//the database value if the listing is categorized as BUY
+    public static final String BUY_STRING = "buy"; //the database value if the listing is categorized as BUY
+    public static final String LET_STRING = "let";//the database value if the listing is categorized as BUY
 
-    private ArrayList<Bitmap> images; //Arraylist of bitmap images to holder the listings images
-    private ArrayList<String> image_description; //Arraylist of Strings = to holder the listings images descriptions
-    private ArrayList<View> allEditTexts; //Arraylist to hold all edit texts in this view, in order to perform checks that required information is entered
-    private boolean editing = false; //are we editing or adding a new listing?
-    private String editingId = null; //the id of the listing that we are editing
+    private ArrayList<Bitmap> mImages; //Arraylist of bitmap mImages to holder the listings mImages
+    private ArrayList<String> mImageDescription; //Arraylist of Strings = to holder the listings mImages descriptions
+    private ArrayList<View> mAllEditTexts; //Arraylist to hold all edit texts in this view, in order to perform checks that required information is entered
+    private boolean mEditing = false; //are we mEditing or adding a new listing?
+    private String mEditingId = null; //the id of the listing that we are mEditing
     private Listing mListingBeingEdited; //the listing being edited
 
     private AddListingPresenter mPresenter; //the mPresenter of this class responsible for obtaining or sending any data to the model
 
     private CompositeDisposable mCompositeDisposable; //holds all disposables
 
-    private RecyclerView mImagesRecyclerView; //the recyclerview to display the listings images
+    private RecyclerView mImagesRecyclerView; //the recyclerview to display the listings mImages
     private ImagesRecyclerViewAdapter mAdapter; //the adapter for the recyclerview
 
     private Button mAddPictureBtn; //the add button
@@ -98,18 +102,20 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     private Spinner mTypeSpinner; //the type of listing spinner
     private Spinner mBedroomsSpinner; //the number of bedrooms spinner
 
-    private EditText mSurfaceAreaText; //listings surface area
+    private SquareEditText mSurfaceAreaText; //listings surface area
     private EditText mPriceEditText; //listings price
-    private EditText mPoiEditText; //listings P.O.I
-    private EditText mAddressPostcodeEditText; //listings post code
-    private EditText mAddressNumberEditText; //listings address number
-    private EditText mAddressStreetEditText; //listings address street
-    private EditText mAddressTownEditText;//listings address town
-    private EditText mAddressCountyEditText;//listings address county
+    private MultiAutoCompleteTextView mPoiAutocomplete; //listings P.O.I
+    private SquareEditText mAddressPostcodeEditText; //listings post code
+    private SquareEditText mAddressNumberEditText; //listings address number
+    private SquareEditText mAddressStreetEditText; //listings address street
+    private SquareEditText mAddressTownEditText;//listings address town
+    private SquareEditText mAddressCountyEditText;//listings address county
     private EditText mDescriptionEditText;//listings address description
 
     private SwitchCompat mBuyOrLetSwitch; //the buy or let switch
     private ProgressDialog mProgressDialog; //the progress dialog displayed when saving a listing
+
+    private ArrayList<String> mEnteredPoisArrayList;
 
 
     @Override
@@ -124,36 +130,103 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         this.mPresenter = new AddListingPresenter(this); //create the presented
         mCompositeDisposable = new CompositeDisposable(); //create a composite disposable to hold all disposables
 
-        images = new ArrayList<>(); //create a new arraylist to hold the listings images
-        image_description = new ArrayList<>();//create a new arraylist to hold the listings images description
+        mImages = new ArrayList<>(); //create a new arraylist to hold the listings mImages
+        mImageDescription = new ArrayList<>();//create a new arraylist to hold the listings mImages description
+        mEnteredPoisArrayList = new ArrayList<>(); //holds the users entered poi's
 
         initializeViews(); //see method comments
+        configurePoiAutoComplete();
         initializeClickEvents();  //see method comments
         initializeRecyclerView();  //see method comments
 
 
         /*
-         *check to see if we have a listing in the intent that created this activity, if we do then we are editing a pre existing listing
+         *check to see if we have a listing in the intent that created this activity, if we do then we are mEditing a pre existing listing
          */
         Bundle intentExtras = getIntent().getExtras();
         if (intentExtras != null) {
             Listing editingListing = (Listing) intentExtras.getSerializable(EDIT_LISTING_BUNDLE_KEY);
-            if (editingListing != null){
+            if (editingListing != null) {
                 prepareEdit(editingListing);
             }
         }
     }
 
+    private void configurePoiAutoComplete() {
+        mPoiAutocomplete = findViewById(R.id.poi_multi_autocomplete);
+
+        ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
+                android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.poi_types));
+
+        mPoiAutocomplete.setAdapter(adapter);
+        mPoiAutocomplete.setTokenizer(new MyTokenizer());
+
+
+        mPoiAutocomplete.setOnFocusChangeListener(new View.OnFocusChangeListener() {
+            @Override
+            public void onFocusChange(View view, boolean b) {
+                boolean sendToast = false;
+
+                if (!b) {
+                    // on focus off
+                    String str = mPoiAutocomplete.getText().toString().trim();
+                    String[] enteredPoisArray = str.split(",");
+
+                    for (int i = 0 ; i < enteredPoisArray.length; i++){
+                        enteredPoisArray[i] = enteredPoisArray[i].trim();
+                    }
+
+                    Log.d("onFocusChange", "onFocusChange: enteres pois are " + Arrays.toString(enteredPoisArray));
+                    if (str.equals("")) {
+                        sendToast = true;
+                    }
+
+                    String[] allowed_values = getResources().getStringArray(R.array.poi_types);
+                    for (String temp : allowed_values) {
+                        for (String s : enteredPoisArray) {
+                            if (s.trim().compareTo(temp) == 0) {
+                                Log.d("onFocusChange", "onFocusChange: adding to array list");
+                                mEnteredPoisArrayList.add(s.trim() +",");
+                            }
+                        }
+                    }
+
+
+                    StringBuilder sb = new StringBuilder();
+                    for (String s : mEnteredPoisArrayList) {
+                        sb.append(s);
+                    }
+
+
+                    Log.d("onFocusChange", "onFocusChange: string entered length " + str.length() + " and string is " + str);
+                    Log.d("onFocusChange", "onFocusChange: Stringbuilder length is " +  sb.toString().trim().length() + " and string is " + sb.toString());
+                    if (str.length() != sb.toString().trim().length()){
+                        //text is being removed
+                        sendToast = true;
+                    }
+
+                    mPoiAutocomplete.setText(sb.toString());
+                    mEnteredPoisArrayList.clear();
+
+                    if (sendToast)
+                        ToastModifications.createToast(AddListingView.this, getString(R.string.poi_selection_error), Toast.LENGTH_LONG);
+
+                }
+            }
+        });
+    }
+
 
     /**
      * populate the views in this activity with the values defined for an already existing listing
+     *
      * @param editingListing the listing that is being edited.
      */
     private void prepareEdit(Listing editingListing) {
-        setTitle(String.format("%s %s %s",getString(R.string.editing_title), editingListing.getAddress_number(), editingListing.getAddress_street()));
+        setTitle(String.format("%s %s %s", getString(R.string.editing_title), editingListing.getAddress_number(), editingListing.getAddress_street()));
         int selection = 0;
-        editing = true;
-        editingId = editingListing.getId();
+        mEditing = true;
+        mEditingId = editingListing.getId();
         mListingBeingEdited = editingListing;
 
         switch (editingListing.getType()) {
@@ -183,8 +256,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         mTypeSpinner.setSelection(selection);
         mBedroomsSpinner.setSelection(editingListing.getNumbOfBedRooms() - 1);
         mSurfaceAreaText.setText(String.valueOf(editingListing.getSurfaceArea()));
-        mPriceEditText.setText(String.valueOf(editingListing.getPrice()).substring(0,String.valueOf(editingListing.getPrice()).indexOf(".")));
-        mPoiEditText.setText(editingListing.getPoi());
+        mPriceEditText.setText(String.valueOf(editingListing.getPrice()).substring(0, String.valueOf(editingListing.getPrice()).indexOf(".")));
+        mPoiAutocomplete.setText(editingListing.getPoi());
         mAddressPostcodeEditText.setText(editingListing.getAddress_postcode());
         mAddressNumberEditText.setText(editingListing.getAddress_number());
         mAddressStreetEditText.setText(editingListing.getAddress_street());
@@ -214,11 +287,12 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
     /**
-     * If we are editing a listing, this method will retrieve either a byte[] or arraylist of uris that are used to restore the images for the listing
-     * These images are then passed into the recyclerview adapter to display to the user
-     * @param photos the photos byte[]'s or the uris (as a string)
+     * If we are mEditing a listing, this method will retrieve either a byte[] or arraylist of uris that are used to restore the mImages for the listing
+     * These mImages are then passed into the recyclerview adapter to display to the user
+     *
+     * @param photos            the photos byte[]'s or the uris (as a string)
      * @param photoDescriptions the descriptions of the photos
-     * @param id the id used in the switch to determine if we are working with the local db or with Firebase
+     * @param id                the id used in the switch to determine if we are working with the local db or with Firebase
      */
     @SuppressWarnings("unchecked")
     private void restoreImages(Object photos, final String[] photoDescriptions, int id) {
@@ -226,8 +300,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             switch (id) {
                 case LOCAL_DB_ID:
                     List<byte[]> localPhotos = (List<byte[]>) photos;
-                    images = ImageTools.byteArrayToBitmaps(localPhotos);
-                    image_description = new ArrayList<>(Arrays.asList(photoDescriptions));
+                    mImages = ImageTools.byteArrayToBitmaps(localPhotos);
+                    mImageDescription = new ArrayList<>(Arrays.asList(photoDescriptions));
                     initializeRecyclerView();
                     break;
 
@@ -239,8 +313,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             Glide.with(getApplicationContext()).asBitmap().load(s).into(new SimpleTarget<Bitmap>() {
                                 @Override
                                 public void onResourceReady(@NonNull Bitmap resource, @Nullable Transition<? super Bitmap> transition) {
-                                    images.add(resource);
-                                    image_description = new ArrayList<>(Arrays.asList(photoDescriptions));
+                                    mImages.add(resource);
+                                    mImageDescription = new ArrayList<>(Arrays.asList(photoDescriptions));
                                     initializeRecyclerView();
                                 }
                             });
@@ -258,7 +332,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      * Initialize all views in this activity, set any relevant tags and create the spinners
      */
     private void initializeViews() {
-        allEditTexts = new ArrayList<>();
+        mAllEditTexts = new ArrayList<>();
 
         mImagesRecyclerView = findViewById(R.id.images_recycler_view);
         mAddPictureBtn = findViewById(R.id.add_picture_btn);
@@ -269,12 +343,11 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         mTypeSpinner = findViewById(R.id.type_spinner);
         mBedroomsSpinner = findViewById(R.id.rooms_spinner);
 
-        mTypeSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_types)));
-        mBedroomsSpinner.setAdapter(new ArrayAdapter<>(this,R.layout.spinner_item,getResources().getStringArray(R.array.spinner_number_of_rooms)));
+        mTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.spinner_types)));
+        mBedroomsSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.spinner_number_of_rooms)));
 
         mSurfaceAreaText = findViewById(R.id.surface_area_text);
         mPriceEditText = findViewById(R.id.price_edit_text);
-        mPoiEditText = findViewById(R.id.poi_edit_text);
         mAddressPostcodeEditText = findViewById(R.id.address_postcode_et);
         mAddressNumberEditText = findViewById(R.id.address_number_et);
         mAddressStreetEditText = findViewById(R.id.address_street_et);
@@ -285,31 +358,30 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
         mSaveButton = findViewById(R.id.savebtn);
 
-        allEditTexts.add(mSurfaceAreaText);
-        allEditTexts.add(mPriceEditText);
-        allEditTexts.add(mPoiEditText);
-        allEditTexts.add(mAddressPostcodeEditText);
-        allEditTexts.add(mAddressNumberEditText);
-        allEditTexts.add(mAddressStreetEditText);
-        allEditTexts.add(mAddressTownEditText);
-        allEditTexts.add(mAddressCountyEditText);
-        allEditTexts.add(mDescriptionEditText);
+        mAllEditTexts.add(mSurfaceAreaText);
+        mAllEditTexts.add(mPriceEditText);
+        mAllEditTexts.add(mAddressPostcodeEditText);
+        mAllEditTexts.add(mAddressNumberEditText);
+        mAllEditTexts.add(mAddressStreetEditText);
+        mAllEditTexts.add(mAddressTownEditText);
+        mAllEditTexts.add(mAddressCountyEditText);
+        mAllEditTexts.add(mDescriptionEditText);
 
     }
 
 
-    //Created the recycler view to display a listings images
+    //Created the recycler view to display a listings mImages
     private void initializeRecyclerView() {
-        if (images != null) {
-            if (images.size() > 0) {
+        if (mImages != null) {
+            if (mImages.size() > 0) {
                 mImagesRecyclerView.setBackground(null);
             } else {
                 mImagesRecyclerView.setBackgroundResource(R.drawable.placeholder_image);
             }
 
-            mImagesRecyclerView.setLayoutManager(new GridLayoutManager(this,3));
+            mImagesRecyclerView.setLayoutManager(new GridLayoutManager(this, 3));
 
-            mAdapter = new ImagesRecyclerViewAdapter(this, images, image_description, this);
+            mAdapter = new ImagesRecyclerViewAdapter(this, mImages, mImageDescription, this);
             mImagesRecyclerView.setAdapter(mAdapter);
         }
     }
@@ -325,7 +397,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        if (images.size() < MAX_NUM_IMAGES) {
+                        if (mImages.size() < MAX_NUM_IMAGES) {
                             displayPictureMethodDialog();
                         } else {
                             Toast.makeText(AddListingView.this, R.string.maximum_images, Toast.LENGTH_LONG).show();
@@ -366,6 +438,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     /**
      * update the sold status of a listing, changes the sales status image and tag depending on wether the listing is sold or not
+     *
      * @param sold true if sold, false if available
      */
     private void updateListingSoldStatus(boolean sold) {
@@ -417,17 +490,16 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      * Do all the edit texts have a value? <br/>
      * <br/>
      * If ok to save, a listing object is passed to the presenter to save the data
-     *
      */
     @SuppressLint("CheckResult")
     private void saveData() {
         boolean okToSave = true;
 
-        if (images.size() == 0) {
+        if (mImages.size() == 0) {
             okToSave = false;
             ToastModifications.createToast(this, getString(R.string.at_least_one_photo), Toast.LENGTH_LONG);
         } else {
-            for (View v : allEditTexts) {
+            for (View v : mAllEditTexts) {
                 EditText thisEditText = (EditText) v;
                 if (thisEditText.getText().toString().equals("")) {
                     okToSave = false;
@@ -441,42 +513,42 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             new Thread(new Runnable() {
                 @Override
                 public void run() {
-                    String[] imageDescrps = image_description.toArray(new String[0]);
+                    String[] imageDescrps = mImageDescription.toArray(new String[0]);
                     String saleDate;
 
                     if (mListingBeingEdited != null) {
                         String editingListingSoldDate = mListingBeingEdited.getSaleDate();
                         if (!editingListingSoldDate.equals("")) { //it has been sold previously
                             saleDate = determineSaveDate(true);
-                        }else { //it has not been sold
+                        } else { //it has not been sold
                             saleDate = determineSaveDate(false);
                         }
 
-                    }else {
+                    } else {
                         saleDate = determineSaveDate(false);
                     }
 
                     mPresenter.addListing(getApplicationContext(), new Listing(
-                            editingId == null ? DEFAULT_LISTING_ID : editingId,
+                            mEditingId == null ? DEFAULT_LISTING_ID : mEditingId,
                             mTypeSpinner.getSelectedItem().toString(),
                             Double.valueOf(mPriceEditText.getText().toString()),
                             Double.valueOf(mSurfaceAreaText.getText().toString()),
                             Integer.valueOf(mBedroomsSpinner.getSelectedItem().toString()),
                             mDescriptionEditText.getText().toString(),
-                            ImageTools.BitmapsToByteArray(images),
+                            ImageTools.BitmapsToByteArray(mImages),
                             imageDescrps,
                             mAddressPostcodeEditText.getText().toString(),
                             mAddressNumberEditText.getText().toString(),
                             mAddressStreetEditText.getText().toString(),
                             mAddressTownEditText.getText().toString(),
                             mAddressCountyEditText.getText().toString(),
-                            mPoiEditText.getText().toString(),
-                            editing ? mListingBeingEdited.getPostedDate() : Utils.getTodayDate(),
+                            mPoiAutocomplete.getText().toString(),
+                            mEditing ? mListingBeingEdited.getPostedDate() : Utils.getTodayDate(),
                             saleDate,
                             FirebaseHelper.getLoggedInUser() != null ? FirebaseHelper.getLoggedInUser() : getString(R.string.unknown_agent),
                             Utils.getTodayDate(),
                             !mBuyOrLetSwitch.isChecked() ? BUY_STRING : LET_STRING,
-                             mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG)), editing
+                            mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG)), mEditing
                     );
                 }
             }).start();
@@ -488,20 +560,21 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     /**
      * Determines the date we should show for the sale date
-     * @param soldPreviously has the property been sold previously and we are editing it to change the sale status?
+     *
+     * @param soldPreviously has the property been sold previously and we are mEditing it to change the sale status?
      * @return the string to be saved relating to the sold date
      */
-    private String determineSaveDate(boolean soldPreviously){
-        if (soldPreviously){
+    private String determineSaveDate(boolean soldPreviously) {
+        if (soldPreviously) {
             switch (mSaleStatusImage.getTag().toString()) {
                 case FOR_SALE_TAG:
-                   return "";
+                    return "";
 
                 case SOLD_TAG:
                     return mListingBeingEdited.getSaleDate();
 
             }
-        }else {
+        } else {
             switch (mSaleStatusImage.getTag().toString()) {
                 case FOR_SALE_TAG:
                     return "";
@@ -512,7 +585,6 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         }
         return "";
     }
-
 
 
     private void createSaveListingProgressBar() {
@@ -535,7 +607,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                     try {
                         bitmap = MediaStore.Images.Media.getBitmap(getContentResolver(), targetUri);
                         Bitmap finalBitmap = BitmapMods.modifyOrientation(bitmap, path);
-                        images.add(BitmapMods.getResizedBitmap(finalBitmap, 400));
+                        mImages.add(BitmapMods.getResizedBitmap(finalBitmap, 400));
                         initializeRecyclerView();
                     } catch (Exception e) {
                         onPhotoError();
@@ -548,7 +620,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                 if (resultCode == RESULT_OK) {
                     try {
                         @SuppressWarnings("ConstantConditions") Bitmap photo = (Bitmap) data.getExtras().get("data");
-                        images.add(photo);
+                        mImages.add(photo);
                         initializeRecyclerView();
                     } catch (Exception e) {
                         onPhotoError();
@@ -569,8 +641,9 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     /**
      * Callback for the result from requesting permissions. This method is invoked for every call on requestPermissions(String[], int).
-     * @param requestCode the request code, in this case either PICK_FROM_GALLERY_REQUEST_CODE or PICK_FROM_CAMERA_REQUEST_CODE
-     * @param permissions the permissions requested
+     *
+     * @param requestCode  the request code, in this case either PICK_FROM_GALLERY_REQUEST_CODE or PICK_FROM_CAMERA_REQUEST_CODE
+     * @param permissions  the permissions requested
      * @param grantResults the results of the persmission request
      */
     @Override
@@ -621,6 +694,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     /**
      * Called by this activites presenter when required
+     *
      * @return this
      */
     @Override
@@ -631,19 +705,20 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
     /**
      * Callback from the presenter when a listing has been added in order to update the UI
+     *
      * @param error wether an error occurred saving the listing
      */
     @Override
     public void addingListingCompleted(boolean error) {
-        if (mProgressDialog !=null && mProgressDialog.isShowing()) {
+        if (mProgressDialog != null && mProgressDialog.isShowing()) {
             mProgressDialog.dismiss();
         }
 
-        if (error){
+        if (error) {
             ToastModifications.createToast(AddListingView.this, getString(R.string.error_saving), Toast.LENGTH_LONG);
-        }else {
+        } else {
             ToastModifications.createToast(AddListingView.this, getString(R.string.listing_saved), Toast.LENGTH_LONG);
-            editing = false;
+            mEditing = false;
             mListingBeingEdited = null;
             onBackPressed();
         }
@@ -683,45 +758,47 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
     /**
-     * Called from within the recyclerview adapter when an images description is changes, the presented will then handle updating the arrayList and callback to
+     * Called from within the recyclerview adapter when an mImages description is changes, the presented will then handle updating the arrayList and callback to
      * {@link AddListingView#imageDescriptionsChanged}
-     * @param desc the new description
+     *
+     * @param desc     the new description
      * @param position the position in the arraylist
      */
     @Override
     public void changedImageDescr(String desc, int position) {
-        mPresenter.changedImageDescr(desc, position, image_description);
+        mPresenter.changedImageDescr(desc, position, mImageDescription);
     }
 
 
     @Override
     public void imageDescriptionsChanged(ArrayList<String> image_description) {
-        this.image_description = image_description;
+        this.mImageDescription = image_description;
     }
 
 
     /**
      * Called when an image is removed from within the recyclerview adapter. The neccessary changes are passed onto the presented to handle
      * which will then call back to {@link AddListingView#imageDeleted(ArrayList, ArrayList)}
+     *
      * @param position the position of the image in the ArrayList
      */
     @Override
     public void deletedImage(int position) {
-        mPresenter.deleteImage(images, image_description, position);
+        mPresenter.deleteImage(mImages, mImageDescription, position);
     }
-
 
 
     @Override
     public void imageDeleted(ArrayList<Bitmap> images, ArrayList<String> image_descs) {
-        this.images = images;
-        this.image_description = image_descs;
+        this.mImages = images;
+        this.mImageDescription = image_descs;
         mAdapter.notifyDataSetChanged();
     }
 
 
     /**
      * Handles the events of the home button being pressed
+     *
      * @param item the menu item selected
      */
     @Override

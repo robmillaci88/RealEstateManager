@@ -17,8 +17,8 @@ import kotlin.Unit;
  * This class is responsible for the booking evaluation activity
  */
 public class BookEvaluationActivity extends AppCompatActivity {
-    private Button sell_property_btn; //the sell a property button
-    private Button let_property_btn; //the let a property button
+    private Button mSellPropertyBtn; //the sell a property button
+    private Button mLetPropertyBtn; //the let a property button
     private CompositeDisposable mCompositeDisposable; //hold all disposables
 
     static final String TYPE_KEY = "type"; //the key for the tye of booking activity passed into the intent for SellLetActivity
@@ -38,14 +38,14 @@ public class BookEvaluationActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        sell_property_btn = findViewById(R.id.sell_property_button);
-        let_property_btn = findViewById(R.id.let_property_btn);
+        mSellPropertyBtn = findViewById(R.id.sell_property_button);
+        mLetPropertyBtn = findViewById(R.id.let_property_btn);
     }
 
     private void setOnClicks() {
         mCompositeDisposable = new CompositeDisposable();
 
-        Disposable sellBtnClick = RxView.clicks(sell_property_btn).
+        Disposable sellBtnClick = RxView.clicks(mSellPropertyBtn).
                 subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit){
@@ -57,7 +57,7 @@ public class BookEvaluationActivity extends AppCompatActivity {
 
 
 
-        Disposable letBtnClick = RxView.clicks(let_property_btn).
+        Disposable letBtnClick = RxView.clicks(mLetPropertyBtn).
                 subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit){

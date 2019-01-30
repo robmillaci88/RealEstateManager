@@ -31,14 +31,14 @@ import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * This class is the link between {@link ListingsMapView} and both {@link FirebaseHelper} & {@link MyDatabase}
- * The listing are obtained from the databases, the users location is also returned to the view from this class as well as geo locating the listings
+ * The listing are obtained from the databases, the users location is also returned to the mView from this class as well as geo locating the listings
  */
 public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Model {
-    private final View view;
+    private final View mView;
 
     ListingsMapPresenter(View v) {
-        this.view = v;
-    } //the view for this presenter
+        this.mView = v;
+    } //the mView for this presenter
 
 
     /**
@@ -63,7 +63,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
                     public void onSuccess(Location location) {
                         // GPS location can be null if GPS is switched off
                         if (location != null) {
-                            view.gotUsersLocation(location.getLatitude(), location.getLongitude());
+                            mView.gotUsersLocation(location.getLatitude(), location.getLongitude());
                         }
                     }
                 })
@@ -83,7 +83,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
      */
     @Override
     public void gotListingsFromFirebase(ArrayList<Listing> listings) {
-        view.gotAllListings(listings);
+        mView.gotAllListings(listings);
     }
 
 
@@ -94,7 +94,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
      */
     @Override
     public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
-        view.gotAllListings(listings);
+        mView.gotAllListings(listings);
     }
 
 
@@ -119,16 +119,16 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
 
                 try {
                     //noinspection ConstantConditions
-                    view.gotPlaceLatLng(thisLocation.getResults().get(0).getGeometry().getLocation().getLat(),
+                    mView.gotPlaceLatLng(thisLocation.getResults().get(0).getGeometry().getLocation().getLat(),
                             thisLocation.getResults().get(0).getGeometry().getLocation().getLng(), markerIndex);
                 } catch (Exception e) {
-                    view.gotPlaceLatLng(0, 0, 0);
+                    mView.gotPlaceLatLng(0, 0, 0);
                 }
             }
 
             @Override
             public void onFailure(@NonNull Call<LocationObject> call, @NonNull Throwable t) {
-                view.gotPlaceLatLng(0, 0, 0);
+                mView.gotPlaceLatLng(0, 0, 0);
             }
         });
     }

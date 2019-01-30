@@ -59,7 +59,7 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
 
         if(Utils.CheckConnectivity(getApplicationContext())) { //if we have internet connection, we will now add the listing to firebase,
                                                                 // if not we send a broadcast after 5 seconds to the presenter to inform the view that the listing has been saved
-            FirebaseHelper.addListing(listingToAdd, this);
+            FirebaseHelper.getInstance().addListing(listingToAdd, this);
         }else {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
@@ -78,11 +78,6 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
     @Override
     public void dBListingsAddedToFirebase(boolean error) {
         sendMyBroadCast(error);
-    }
-
-    @Override
-    public void updateProgressBarDbSync(int count, String message) {
-        //not used here
     }
 
 

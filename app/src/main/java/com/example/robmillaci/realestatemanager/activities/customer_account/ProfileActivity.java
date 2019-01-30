@@ -4,8 +4,8 @@ import android.annotation.SuppressLint;
 import android.os.Bundle;
 import android.view.WindowManager;
 import android.widget.Button;
-import android.widget.EditText;
 
+import com.example.robmillaci.realestatemanager.custom_objects.RoundEditText;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
@@ -36,21 +36,21 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
  */
 @SuppressWarnings({"ResultOfMethodCallIgnored", "FieldCanBeLocal"})
 public class ProfileActivity extends BaseActivity implements IUserDetailsCallback {
-    private EditText user_title; //the title of the user
-    private EditText user_forename; //the forename of the user
-    private EditText user_surname; //the surname of the user
-    private EditText user_dob; //the users DOB
-    private EditText user_postcode; //the users postcode
-    private EditText user_houseNameNumb; //the users house number
-    private EditText user_street; //the users house address street
-    private EditText user_town; //the users house address street
+    private RoundEditText mUserTitle; //the title of the user
+    private RoundEditText mUserForename; //the forename of the user
+    private RoundEditText mUserSurname; //the surname of the user
+    private RoundEditText mUserDob; //the users DOB
+    private RoundEditText mUserPostcode; //the users postcode
+    private RoundEditText mUserHouseNameNumb; //the users house number
+    private RoundEditText mUserStreet; //the users house address street
+    private RoundEditText mUserTown; //the users house address street
     @SuppressWarnings("FieldCanBeLocal")
-    private EditText user_email; //the users email
-    private EditText user_county;//the users house address county
-    private EditText user_home_numb; // the users home phone number
-    private EditText user_mobile_numb; //the users mobile number
-    private EditText user_primary_contact_numb; //the users primary contact number
-    private Button saveBtn; //the save button
+    private RoundEditText mUserEmail; //the users email
+    private RoundEditText mUserCounty;//the users house address county
+    private RoundEditText mUserHomeNumb; // the users home phone number
+    private RoundEditText mUserMobileNumb; //the users mobile number
+    private RoundEditText mUserPrimaryContactNumb; //the users primary contact number
+    private Button mSaveBtn; //the save button
 
 
     @Override
@@ -71,7 +71,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
 
     @SuppressLint("CheckResult")
     private void setOnClicks() {
-        RxView.clicks(saveBtn).subscribe(new Consumer<Unit>() {
+        RxView.clicks(mSaveBtn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit){
                 saveValues();
@@ -98,18 +98,18 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
      * @param userDetails the returned user information
      */
     private void setUserDetails(HashMap<String, String> userDetails) {
-        user_title.setText(userDetails.get(USER_TITLE));
-        user_forename.setText(userDetails.get(USER_FORENAME));
-        user_surname.setText(userDetails.get(USER_SURNAME));
-        user_dob.setText(userDetails.get(USER_DOB));
-        user_postcode.setText(userDetails.get(USER_POSTCODE));
-        user_houseNameNumb.setText(userDetails.get(USER_HOUSE_NAME_NUMBER));
-        user_street.setText(userDetails.get(USER_HOUSE_STREET));
-        user_town.setText(userDetails.get(USER_TOWN));
-        user_home_numb.setText(userDetails.get(USER_HOME_NUMBER));
-        user_mobile_numb.setText(userDetails.get(USER_MOBILE));
-        user_primary_contact_numb.setText(userDetails.get(USER_PRIMARY_CONTACT_NUMBER));
-        user_county.setText(userDetails.get(USER_COUNTY));
+        mUserTitle.setText(userDetails.get(USER_TITLE));
+        mUserForename.setText(userDetails.get(USER_FORENAME));
+        mUserSurname.setText(userDetails.get(USER_SURNAME));
+        mUserDob.setText(userDetails.get(USER_DOB));
+        mUserPostcode.setText(userDetails.get(USER_POSTCODE));
+        mUserHouseNameNumb.setText(userDetails.get(USER_HOUSE_NAME_NUMBER));
+        mUserStreet.setText(userDetails.get(USER_HOUSE_STREET));
+        mUserTown.setText(userDetails.get(USER_TOWN));
+        mUserHomeNumb.setText(userDetails.get(USER_HOME_NUMBER));
+        mUserMobileNumb.setText(userDetails.get(USER_MOBILE));
+        mUserPrimaryContactNumb.setText(userDetails.get(USER_PRIMARY_CONTACT_NUMBER));
+        mUserCounty.setText(userDetails.get(USER_COUNTY));
     }
 
 
@@ -119,18 +119,18 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     private void saveValues() {
         SharedPreferenceHelper spHelper = new SharedPreferenceHelper(getApplicationContext());
 
-        String title = user_title.getText().toString();
-        String forename = user_forename.getText().toString();
-        String surname = user_surname.getText().toString();
-        String dob = user_dob.getText().toString();
-        String postCode = user_postcode.getText().toString();
-        String houseNameNumb = user_houseNameNumb.getText().toString();
-        String street = user_street.getText().toString();
-        String town = user_town.getText().toString();
-        String county = user_county.getText().toString();
-        String homeNumber = user_home_numb.getText().toString();
-        String mobile = user_mobile_numb.getText().toString();
-        String primaryContactNumb = user_primary_contact_numb.getText().toString();
+        String title = mUserTitle.getText().toString();
+        String forename = mUserForename.getText().toString();
+        String surname = mUserSurname.getText().toString();
+        String dob = mUserDob.getText().toString();
+        String postCode = mUserPostcode.getText().toString();
+        String houseNameNumb = mUserHouseNameNumb.getText().toString();
+        String street = mUserStreet.getText().toString();
+        String town = mUserTown.getText().toString();
+        String county = mUserCounty.getText().toString();
+        String homeNumber = mUserHomeNumb.getText().toString();
+        String mobile = mUserMobileNumb.getText().toString();
+        String primaryContactNumb = mUserPrimaryContactNumb.getText().toString();
 
         spHelper.saveUserDetailsToSharedPreferences(title,forename,surname,dob,postCode,houseNameNumb,street,town,county,homeNumber,mobile,primaryContactNumb);
 
@@ -139,25 +139,21 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     }
 
     private void initializeViews() {
-        user_title = findViewById(R.id.title_et);
-        user_forename = findViewById(R.id.forename_et);
-        user_surname = findViewById(R.id.surname_et);
-        user_dob = findViewById(R.id.dob_et);
-        user_postcode = findViewById(R.id.postcode_et);
-        user_houseNameNumb = findViewById(R.id.housename_numb_et);
-        user_street = findViewById(R.id.street_et);
-        user_town = findViewById(R.id.town_et);
+        mUserTitle = findViewById(R.id.title_et);
+        mUserForename = findViewById(R.id.forename_et);
+        mUserSurname = findViewById(R.id.surname_et);
+        mUserDob = findViewById(R.id.dob_et);
+        mUserPostcode = findViewById(R.id.postcode_et);
+        mUserHouseNameNumb = findViewById(R.id.housename_numb_et);
+        mUserStreet = findViewById(R.id.street_et);
+        mUserTown = findViewById(R.id.town_et);
+        mUserEmail = findViewById(R.id.email_et);
+        mUserHomeNumb = findViewById(R.id.home_phone_et);
+        mUserMobileNumb = findViewById(R.id.mobile_num_et);
+        mUserPrimaryContactNumb = findViewById(R.id.primary_contact_num_et);
+        mUserCounty = findViewById(R.id.county_et);
 
-        user_email = findViewById(R.id.email_et);
-        user_email.setFocusable(false);
-        user_email.setTextIsSelectable(false);
-
-        user_home_numb = findViewById(R.id.home_phone_et);
-        user_mobile_numb = findViewById(R.id.mobile_num_et);
-        user_primary_contact_numb = findViewById(R.id.primary_contact_num_et);
-        user_county = findViewById(R.id.county_et);
-
-        saveBtn=findViewById(R.id.savebtn);
+        mSaveBtn =findViewById(R.id.savebtn);
     }
 
 

@@ -33,7 +33,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     private final WeakReference<Context> mContext; //the weak reference to the activity that instantiated this adapter
     private final ArrayList<Listing> mSearchResults; //An arraylist of listing results obtained whilst searching the database
     private final SearchResultsAdapterCallback mCallback; //the callback
-    private View previouslySelectedHolder = null; //a reference to a previously selected viewholder
+    private View mPreviouslySelectedHolder = null; //a reference to a previously selected viewholder
 
     public SearchResultsAdapter(WeakReference<Context> context, ArrayList<Listing> searchResults, SearchResultsAdapterCallback callback) {
         this.mContext = context;
@@ -110,10 +110,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 if (Utils.isTablet(mContext.get())){
                     holder.setBackgroundColor(mContext.get().getResources().getColor(R.color.colorPrimaryDark));
 
-                    if (previouslySelectedHolder != null){
-                        previouslySelectedHolder.setBackgroundColor(Color.WHITE);
+                    if (mPreviouslySelectedHolder != null){
+                        mPreviouslySelectedHolder.setBackgroundColor(Color.WHITE);
                     }
-                    previouslySelectedHolder = holder;
+                    mPreviouslySelectedHolder = holder;
                 }
             }
         });

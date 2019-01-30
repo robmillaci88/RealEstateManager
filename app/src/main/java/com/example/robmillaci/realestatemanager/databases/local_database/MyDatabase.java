@@ -9,7 +9,6 @@ import android.database.sqlite.SQLiteOpenHelper;
 import android.os.Bundle;
 import android.util.Log;
 
-import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.utils.Utils;
@@ -41,7 +40,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Basic database class for the application.<br>
  * Implemented as a singleton.
  */
-public class MyDatabase extends SQLiteOpenHelper{
+public class MyDatabase extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "listings.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -187,7 +186,6 @@ public class MyDatabase extends SQLiteOpenHelper{
     }
 
 
-
     public void searchLocalDB(Context context, Bundle searchParams) {
         ArrayList<Listing> databaseListings = new ArrayList<>();
         String[] data;
@@ -203,7 +201,7 @@ public class MyDatabase extends SQLiteOpenHelper{
             String maxPrice = searchParams.getString(SearchActivityView.MAX_PRICE_VALUE_KEY, String.valueOf(Integer.MAX_VALUE));
             String minBedrooms = searchParams.getString(SearchActivityView.MIN_BEDROOMS_VALUE_KEY, String.valueOf(Integer.MIN_VALUE));
             String maxBedrooms = searchParams.getString(SearchActivityView.MAX_BEDROOMS_VALUE_KEY, String.valueOf(Integer.MAX_VALUE));
-            boolean soldSearch = searchParams.getBoolean(SearchActivityView.SOLD_SEARCH,false);
+            boolean soldSearch = searchParams.getBoolean(SearchActivityView.SOLD_SEARCH, false);
 
             StringBuilder selection = new StringBuilder();
             StringBuilder selectionArgsString = new StringBuilder();
@@ -228,11 +226,11 @@ public class MyDatabase extends SQLiteOpenHelper{
                 selectionArgsString.append(",").append("let");
             }
 
-            if (soldSearch){
+            if (soldSearch) {
                 selection.append(" AND ");
                 selection.append(STATUS + " = ").append("?");
                 selectionArgsString.append(",").append(0);
-            }else {
+            } else {
                 selection.append(" AND ");
                 selection.append(STATUS + " = ").append("?");
                 selectionArgsString.append(",").append(1);
@@ -285,7 +283,7 @@ public class MyDatabase extends SQLiteOpenHelper{
                         if (cursor.getBlob(i) != null) {
                             photoData.add(cursor.getBlob(i));
                         }
-                    }else if (i == AVAILABLE_COLUMN_DATA ){
+                    } else if (i == AVAILABLE_COLUMN_DATA) {
                         int soldStatus = cursor.getInt(i);
                         data[i] = soldStatus == 1 ? RESULT_SOLD : RESULT_FOR_SALE;
                     } else {
@@ -328,18 +326,14 @@ public class MyDatabase extends SQLiteOpenHelper{
             }
             cursor.close();
             mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
-        }else {
+        } else {
             //no data returned
             mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
         }
     }
 
 
-   
-
-
     public void syncWithFirebase(ArrayList<Listing> firebaseListings) {
-        mDbSyncListener.updateProgressBarFirebaseSync(firebaseListings.size(),"Syncing firebase...");
         if (firebaseListings.size() >= 1) {
             final int[] listingCount = new int[1];
             listingCount[0] = firebaseListings.size();
@@ -357,13 +351,11 @@ public class MyDatabase extends SQLiteOpenHelper{
                     .subscribe(new Observer<Listing>() {
                         @Override
                         public void onSubscribe(Disposable d) {
-                            mDbSyncListener.updateProgressBarFirebaseSync(listingCount[0],getApplicationContext().getString(R.string.synching_with_firebase));
                         }
 
                         @Override
                         public void onNext(Listing listing) {
                             listingCount[0]--;
-                            mDbSyncListener.updateProgressBarFirebaseSync(listingCount[0],getApplicationContext().getString(R.string.synching_with_firebase));
 
                             String[] projection = new String[1];
                             projection[0] = ListingsDatabaseContract.UPDATE_TIME;
@@ -423,7 +415,7 @@ public class MyDatabase extends SQLiteOpenHelper{
 
                         }
                     });
-        }else {
+        } else {
             //no data
             mDbSyncListener.syncComplete(false);
         }

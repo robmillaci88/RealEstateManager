@@ -13,7 +13,7 @@ public class FeedbackPendingReceived extends BaseViewingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.pending_and_history));
-        action_message.setText(R.string.no_pending_feedback);
+        mActionMessage.setText(R.string.no_pending_feedback);
     }
 
 }

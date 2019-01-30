@@ -2,14 +2,23 @@
   <dictionary name="Rob">
     <words>
       <w>activites</w>
+      <w>addlistingcallback</w>
+      <w>calls bac</w>
       <w>descr</w>
+      <w>emailaddress</w>
       <w>facebooklogin</w>
+      <w>forgottenpassword</w>
+      <w>hashmap</w>
       <w>iactivity</w>
       <w>llite</w>
       <w>mapview</w>
       <w>realestatemanager</w>
+      <w>receive</w>
+      <w>setparams</w>
+      <w>single</w>
       <w>snackbar</w>
       <w>synching</w>
+      <w>uploaded</w>
     </words>
   </dictionary>
 </component>

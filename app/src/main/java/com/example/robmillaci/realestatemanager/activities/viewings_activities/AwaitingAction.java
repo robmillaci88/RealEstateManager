@@ -10,7 +10,7 @@ public class AwaitingAction extends BaseViewingActivity {
         super.onCreate(savedInstanceState);
 
         setTitle("Awaiting Action");
-        action_message.setText(R.string.no_bookings_requiring_action);
+        mActionMessage.setText(R.string.no_bookings_requiring_action);
     }
 
 }

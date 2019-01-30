@@ -16,7 +16,7 @@ import kotlin.Unit;
  * This class is responsible for the SellLetActivity
  */
 public class SellLetActivity extends AppCompatActivity {
-    private Button continue_btn;
+    private Button mContinueBtn;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -46,7 +46,7 @@ public class SellLetActivity extends AppCompatActivity {
     @SuppressLint("CheckResult")
     private void setOnClicks() {
         //noinspection ResultOfMethodCallIgnored
-        RxView.clicks(continue_btn)
+        RxView.clicks(mContinueBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -59,7 +59,7 @@ public class SellLetActivity extends AppCompatActivity {
     }
 
     private void initializeViews() {
-        continue_btn = findViewById(R.id.continue_btn);
+        mContinueBtn = findViewById(R.id.continue_btn);
     }
 
 

@@ -31,22 +31,22 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     @SuppressWarnings("FieldCanBeLocal")
     private final int REQUEST_LOCATION_PERMISSION = 1; //the request code for location permission request
 
-    private ImageView your_location_img; //the image to call location request
+    private ImageView mYourLocationImg; //the image to call location request
 
-    private EditText location_edit_text; //the edit text for location search input
+    private EditText mLocationEditText; //the edit text for location search input
 
-    private RadioButton buy_radio_btn; //the buy radio button search criteria
-    private RadioButton let_radio_btn; //the let radio button search criteria
-    private RadioButton sold_radio_btn;
+    private RadioButton mBuyRadioBtn; //the buy radio button search criteria
+    private RadioButton mLetRadioBtn; //the let radio button search criteria
+    private RadioButton mSoldRadioBtn;
 
-    private Spinner property_type_spinner; //the type of property search criteria
-    private Spinner min_price_spinner; //the min price search criteria
-    private Spinner max_price_spinner; //the max price search criteria
-    private Spinner min_bedrooms_spinner; //the min bedroom search criteria
-    private Spinner max_bedrooms_spinner; //the max bedroom search criteria
+    private Spinner mPropertyTypeSpinner; //the type of property search criteria
+    private Spinner mMinPriceSpinner; //the min price search criteria
+    private Spinner mMaxPriceSpinner; //the max price search criteria
+    private Spinner mMinBedroomsSpinner; //the min bedroom search criteria
+    private Spinner mMaxBedroomsSpinner; //the max bedroom search criteria
 
-    private Button search_btn; //the search button
-    private Button reset_btn; //the reset search criteria button
+    private Button mSearchBtn; //the search button
+    private Button mResetBtn; //the reset search criteria button
 
     private SearchActivityPresenter mPresenter; //this views presenter
 
@@ -82,23 +82,23 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     }
 
     private void initializeViews() {
-        location_edit_text = findViewById(R.id.location_edit_text);
-        buy_radio_btn = findViewById(R.id.buy_radio_btn);
-        let_radio_btn = findViewById(R.id.let_radio_btn);
-        property_type_spinner = findViewById(R.id.property_type_spinner);
-        min_price_spinner = findViewById(R.id.min_price_spinner);
-        max_price_spinner = findViewById(R.id.max_price_spinner);
-        min_bedrooms_spinner = findViewById(R.id.min_bedrooms_spinner);
-        max_bedrooms_spinner = findViewById(R.id.max_bedrooms_spinner);
-        reset_btn = findViewById(R.id.reset_btn);
-        search_btn = findViewById(R.id.search_btn);
-        your_location_img = findViewById(R.id.loc_icn);
-        sold_radio_btn = findViewById(R.id.sold_radio_button);
+        mLocationEditText = findViewById(R.id.location_edit_text);
+        mBuyRadioBtn = findViewById(R.id.buy_radio_btn);
+        mLetRadioBtn = findViewById(R.id.let_radio_btn);
+        mPropertyTypeSpinner = findViewById(R.id.property_type_spinner);
+        mMinPriceSpinner = findViewById(R.id.min_price_spinner);
+        mMaxPriceSpinner = findViewById(R.id.max_price_spinner);
+        mMinBedroomsSpinner = findViewById(R.id.min_bedrooms_spinner);
+        mMaxBedroomsSpinner = findViewById(R.id.max_bedrooms_spinner);
+        mResetBtn = findViewById(R.id.reset_btn);
+        mSearchBtn = findViewById(R.id.search_btn);
+        mYourLocationImg = findViewById(R.id.loc_icn);
+        mSoldRadioBtn = findViewById(R.id.sold_radio_button);
 
-        search_btn.setClickable(false);
-        buy_radio_btn.setChecked(true);
+        mSearchBtn.setClickable(false);
+        mBuyRadioBtn.setChecked(true);
 
-        location_edit_text.addTextChangedListener(new TextWatcher() {
+        mLocationEditText.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
 
@@ -107,9 +107,9 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
             @Override
             public void onTextChanged(CharSequence s, int start, int before, int count) {
                 if (s.equals("")) {
-                    search_btn.setClickable(false);
+                    mSearchBtn.setClickable(false);
                 } else {
-                    search_btn.setClickable(true);
+                    mSearchBtn.setClickable(true);
                 }
             }
 
@@ -126,39 +126,39 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
     private void setOnClicks() {
-        buy_radio_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mBuyRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    let_radio_btn.setChecked(false);
-                    sold_radio_btn.setChecked(false);
+                    mLetRadioBtn.setChecked(false);
+                    mSoldRadioBtn.setChecked(false);
                 }
             }
         });
 
 
-        let_radio_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mLetRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked) {
-                    buy_radio_btn.setChecked(false);
-                    sold_radio_btn.setChecked(false);
+                    mBuyRadioBtn.setChecked(false);
+                    mSoldRadioBtn.setChecked(false);
                 }
             }
         });
 
-        sold_radio_btn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+        mSoldRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 if (isChecked){
-                    let_radio_btn.setChecked(false);
-                    buy_radio_btn.setChecked(false);
+                    mLetRadioBtn.setChecked(false);
+                    mBuyRadioBtn.setChecked(false);
                 }
             }
         });
 
 
-        RxView.clicks(reset_btn).subscribe(new Consumer<Unit>() {
+        RxView.clicks(mResetBtn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
                 resetFields();
@@ -166,7 +166,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         });
 
 
-        RxView.clicks(your_location_img).subscribe(new Consumer<Unit>() {
+        RxView.clicks(mYourLocationImg).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
                 //request permission for location
@@ -176,18 +176,18 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         });
 
 
-        RxView.clicks(search_btn).subscribe(new Consumer<Unit>() {
+        RxView.clicks(mSearchBtn).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit){
-                String location = location_edit_text.getText().toString();
-                boolean buy = buy_radio_btn.isChecked();
-                boolean let = let_radio_btn.isChecked();
-                String propertyType = property_type_spinner.getSelectedItem().toString();
-                String minPrice = min_price_spinner.getSelectedItem().toString();
-                String maxPrice = max_price_spinner.getSelectedItem().toString();
-                String minBedrooms = min_bedrooms_spinner.getSelectedItem().toString();
-                String maxBedrooms = max_bedrooms_spinner.getSelectedItem().toString();
-                boolean soldSearch = sold_radio_btn.isChecked();
+                String location = mLocationEditText.getText().toString();
+                boolean buy = mBuyRadioBtn.isChecked();
+                boolean let = mLetRadioBtn.isChecked();
+                String propertyType = mPropertyTypeSpinner.getSelectedItem().toString();
+                String minPrice = mMinPriceSpinner.getSelectedItem().toString();
+                String maxPrice = mMaxPriceSpinner.getSelectedItem().toString();
+                String minBedrooms = mMinBedroomsSpinner.getSelectedItem().toString();
+                String maxBedrooms = mMaxBedroomsSpinner.getSelectedItem().toString();
+                boolean soldSearch = mSoldRadioBtn.isChecked();
 
                 if (soldSearch){
                     buy = true; //If we are looking for sold properties, we will only return those that were for sale, not for rent
@@ -239,15 +239,15 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
      * Reset the search criteria fields
      */
     private void resetFields() {
-        location_edit_text.setText("");
-        buy_radio_btn.setChecked(false);
-        let_radio_btn.setChecked(false);
-        sold_radio_btn.setChecked(false);
-        property_type_spinner.setSelection(0);
-        min_price_spinner.setSelection(0);
-        max_price_spinner.setSelection(0);
-        min_bedrooms_spinner.setSelection(0);
-        max_bedrooms_spinner.setSelection(0);
+        mLocationEditText.setText("");
+        mBuyRadioBtn.setChecked(false);
+        mLetRadioBtn.setChecked(false);
+        mSoldRadioBtn.setChecked(false);
+        mPropertyTypeSpinner.setSelection(0);
+        mMinPriceSpinner.setSelection(0);
+        mMaxPriceSpinner.setSelection(0);
+        mMinBedroomsSpinner.setSelection(0);
+        mMaxBedroomsSpinner.setSelection(0);
     }
 
 
@@ -257,6 +257,6 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
      */
     @Override
     public void gotLocation(String postCode) {
-        location_edit_text.setText(postCode);
+        mLocationEditText.setText(postCode);
     }
 }

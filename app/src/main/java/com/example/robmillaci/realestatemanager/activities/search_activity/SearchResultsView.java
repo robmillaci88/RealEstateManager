@@ -46,11 +46,11 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
 
     private SearchResultsPresenter presenter; //this views presenter
 
-    private RecyclerView search_results_recyclerview; //the recyclerview to display the search results
-    private TextView search_results_numb; //the text view to display the number of results found
-    private Spinner filterTypeSpinner; //the spinner to filter out types of listings
-    private ArrayList<View> activityViews; //arraylist to hold this activities views, so we can hide and unhide easily
-    private AlertDialog sortAlertDialog; //the alter dialog displaying the sorting options
+    private RecyclerView mSearchResultsRecyclerview; //the recyclerview to display the search results
+    private TextView mSearchResultsNumb; //the text view to display the number of results found
+    private Spinner mFilterTypeSpinner; //the spinner to filter out types of listings
+    private ArrayList<View> mActivityViews; //arraylist to hold this activities views, so we can hide and unhide easily
+    private AlertDialog mSortAlertDialog; //the alter dialog displaying the sorting options
 
 
     private ArrayList<Listing> originalListings; //arraylist to hold the origional returned listings, so they can be restored after filtering is completed
@@ -112,7 +112,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         sortByDialog.setView(v);
         sortByDialog.setTitle(R.string.sort_dialog_title);
         sortByDialog.setPositiveButton(R.string.close_button, null);
-        sortAlertDialog = sortByDialog.show();
+        mSortAlertDialog = sortByDialog.show();
 
         TextView highest_price = v.findViewById(R.id.highest_price_sort);
         TextView lowest_price = v.findViewById(R.id.lowest_price_sort);
@@ -126,7 +126,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
             public void accept(Unit unit) {
                 sortChoice[0] = SORT_CHOICE_HIGHEST_PRICE;
                 presenter.sortData(originalListings, sortChoice[0]);
-                sortAlertDialog.dismiss();
+                mSortAlertDialog.dismiss();
             }
         });
 
@@ -135,7 +135,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
             public void accept(Unit unit) {
                 sortChoice[0] = SORT_CHOICE_LOWEST_PRICE;
                 presenter.sortData(originalListings, sortChoice[0]);
-                sortAlertDialog.dismiss();
+                mSortAlertDialog.dismiss();
             }
         });
 
@@ -144,7 +144,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
             public void accept(Unit unit) {
                 sortChoice[0] = SORT_CHOICE_NEWEST;
                 presenter.sortData(originalListings, sortChoice[0]);
-                sortAlertDialog.dismiss();
+                mSortAlertDialog.dismiss();
             }
         });
 
@@ -153,7 +153,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
             public void accept(Unit unit) {
                 sortChoice[0] = SORT_CHOICE_OLDEST;
                 presenter.sortData(originalListings, sortChoice[0]);
-                sortAlertDialog.dismiss();
+                mSortAlertDialog.dismiss();
             }
         });
 
@@ -161,20 +161,20 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
 
 
     private void initializeViews() {
-        activityViews = new ArrayList<>();
+        mActivityViews = new ArrayList<>();
 
-        search_results_recyclerview = findViewById(R.id.search_results_recyclerview);
-        search_results_numb = findViewById(R.id.search_results_numb);
-        filterTypeSpinner = findViewById(R.id.type_filter_spinner);
+        mSearchResultsRecyclerview = findViewById(R.id.search_results_recyclerview);
+        mSearchResultsNumb = findViewById(R.id.search_results_numb);
+        mFilterTypeSpinner = findViewById(R.id.type_filter_spinner);
 
         View search_results_divider = findViewById(R.id.search_results_divider);
         TextView property_type_filter_title = findViewById(R.id.property_type_filter_title);
 
-        activityViews.add(search_results_recyclerview);
-        activityViews.add(search_results_numb);
-        activityViews.add(filterTypeSpinner);
-        activityViews.add(search_results_divider);
-        activityViews.add(property_type_filter_title);
+        mActivityViews.add(mSearchResultsRecyclerview);
+        mActivityViews.add(mSearchResultsNumb);
+        mActivityViews.add(mFilterTypeSpinner);
+        mActivityViews.add(search_results_divider);
+        mActivityViews.add(property_type_filter_title);
     }
 
 
@@ -183,10 +183,10 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
      * update the recyclerview {@link SearchResultsPresenter#filterData(String, ArrayList)}
      */
     private void configureSpinnerOnSelect() {
-        filterTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+        mFilterTypeSpinner.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                presenter.filterData(filterTypeSpinner.getSelectedItem().toString(), originalListings);
+                presenter.filterData(mFilterTypeSpinner.getSelectedItem().toString(), originalListings);
             }
 
             @Override
@@ -197,8 +197,8 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
 
 
     private void initializeRecyclerView(ArrayList<Listing> listings) {
-        search_results_recyclerview.setLayoutManager(new LinearLayoutManager(this));
-        search_results_recyclerview.setAdapter(new SearchResultsAdapter(new WeakReference<Context>(this), listings, this));
+        mSearchResultsRecyclerview.setLayoutManager(new LinearLayoutManager(this));
+        mSearchResultsRecyclerview.setAdapter(new SearchResultsAdapter(new WeakReference<Context>(this), listings, this));
     }
 
 
@@ -208,7 +208,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
      * @param show boolean show or not
      */
     private void changeActivityViewsVisibility(boolean show) {
-        for (View v : activityViews) {
+        for (View v : mActivityViews) {
             if (show) {
                 v.setVisibility(View.VISIBLE);
             } else {
@@ -236,7 +236,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
      * @param totalNumber the total number of available results
      */
     private void setResultNumber(int number, int totalNumber) {
-        search_results_numb.setText(String.format("%s of %s %s", number, totalNumber, getApplicationContext().getString(R.string.results)));
+        mSearchResultsNumb.setText(String.format("%s of %s %s", number, totalNumber, getApplicationContext().getString(R.string.results)));
     }
 
 

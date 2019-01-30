@@ -13,7 +13,7 @@ public class AcceptedOffers extends BaseViewingActivity {
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setTitle(getString(R.string.accepted_offers_title));
-        action_message.setText(R.string.no_accepted_offers);
+        mActionMessage.setText(R.string.no_accepted_offers);
     }
 
 }

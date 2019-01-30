@@ -21,54 +21,54 @@ import static com.example.robmillaci.realestatemanager.activities.search_activit
 
 /**
  * The Presenter for {@link SearchResultsView}
- * Handles getting data from the database and returning it to the view. Also filters and sorts data as per the views request and returns this data so the UI can be updated
+ * Handles getting data from the database and returning it to the mView. Also filters and sorts data as per the views request and returns this data so the UI can be updated
  */
 public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.Model {
 
-    private final View view; //this presenters view
-    private final WeakReference<Context> cReference;
+    private final View mView; //this presenters mView
+    private final WeakReference<Context> mContextWeakReference;
 
 
     SearchResultsPresenter(View view, WeakReference<Context> mWeakContext) {
-        this.view = view;
-        this.cReference = mWeakContext;
+        this.mView = view;
+        this.mContextWeakReference = mWeakContext;
     }
 
 
     /**
-     * Called from the view to search and return listings from either Firebase or the local db
+     * Called from the mView to search and return listings from either Firebase or the local db
      * @param extras the search parameters
      */
      void searchDatabase(Bundle extras) {
-        if (Utils.CheckConnectivity(cReference.get())) {
+        if (Utils.CheckConnectivity(mContextWeakReference.get())) {
             FirebaseHelper.getInstance().setPresenter(this).searchForSaleListings(extras);
         } else {
-            MyDatabase.getInstance(cReference.get()).setPresenter(this).searchLocalDB(cReference.get(), extras);
+            MyDatabase.getInstance(mContextWeakReference.get()).setPresenter(this).searchLocalDB(mContextWeakReference.get(), extras);
         }
     }
 
 
     /**
      * Callback from {@link MyDatabase#searchLocalDB(Context, Bundle)}
-     * Sends the listings back to the view
+     * Sends the listings back to the mView
      * @param listings the returned listings
      * @param c the returned context
      */
     @Override
     public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
-        view.gotAllListing(listings);
+        mView.gotAllListing(listings);
     }
 
 
 
     /**
      * Callback from {@link FirebaseHelper#getAllListings()}
-     * * Sends the listings back to the view
+     * * Sends the listings back to the mView
      * @param listings the returned listings
      */
     @Override
     public void gotListingsFromFirebase(ArrayList<Listing> listings) {
-        view.gotAllListing(listings);
+        mView.gotAllListing(listings);
     }
 
 
@@ -81,14 +81,14 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
         ArrayList<Listing> filteredListings = new ArrayList<>();
 
         if (selectedValue.equals("Any")) {
-            view.filteredListings(originalListings);
+            mView.filteredListings(originalListings);
         } else {
             for (Listing l : originalListings) {
                 if (l.getType().equals(selectedValue)) {
                     filteredListings.add(l);
                 }
             }
-            view.filteredListings(filteredListings);
+            mView.filteredListings(filteredListings);
         }
 
     }
@@ -108,7 +108,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                         return Double.compare(o2.getPrice(), o1.getPrice());
                     }
                 });
-                view.sortedListings(originalListings);
+                mView.sortedListings(originalListings);
                 break;
 
 
@@ -119,7 +119,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                         return Double.compare(o1.getPrice(), o2.getPrice());
                     }
                 });
-                view.sortedListings(originalListings);
+                mView.sortedListings(originalListings);
                 break;
 
 
@@ -134,7 +134,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                     }
                 });
 
-                view.sortedListings(originalListings);
+                mView.sortedListings(originalListings);
                 break;
 
 
@@ -149,7 +149,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
                     }
                 });
 
-                view.sortedListings(originalListings);
+                mView.sortedListings(originalListings);
                 break;
         }
     }

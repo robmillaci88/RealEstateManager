@@ -18,16 +18,15 @@ import kotlin.Unit;
  * This class is responsible for handling the View of 'About Activity'
  */
 public class AboutActivity extends BaseActivity {
-    private static final String ACTIVITY_TITLE = "About"; //the title of the activity
-    private Button licenseBtn; //The license button to credit the author of the images in the app
-    private Button backbtn; //the back button for this activity
+    private Button mLicenseBtn; //The license button to credit the author of the images in the app
+    private Button mBackbtn; //the back button for this activity
     private CompositeDisposable mCompositeDisposable; //to hold and dispose of all disposables when the activity is destroyed
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_about); //set the view
-        setTitle(ACTIVITY_TITLE); //set the title
+        setTitle(R.string.about_activity_title); //set the title
 
         initializeViews(); //init the views
         initializeOnClicks(); //init the onClick methods
@@ -35,8 +34,8 @@ public class AboutActivity extends BaseActivity {
 
 
     private void initializeViews() {
-        licenseBtn = findViewById(R.id.license);
-        backbtn = findViewById(R.id.backbtn);
+        mLicenseBtn = findViewById(R.id.license);
+        mBackbtn = findViewById(R.id.backbtn);
     }
 
 
@@ -44,7 +43,7 @@ public class AboutActivity extends BaseActivity {
     private void initializeOnClicks() {
         mCompositeDisposable = new CompositeDisposable();
 
-        Disposable licenseBtnDisposable = RxView.clicks(licenseBtn)
+        Disposable licenseBtnDisposable = RxView.clicks(mLicenseBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
@@ -58,7 +57,7 @@ public class AboutActivity extends BaseActivity {
         mCompositeDisposable.add(licenseBtnDisposable);
 
 
-        Disposable backbtnDisposalbe = RxView.clicks(backbtn)
+        Disposable backbtnDisposalbe = RxView.clicks(mBackbtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {

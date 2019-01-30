@@ -12,7 +12,9 @@ import com.google.firebase.auth.FirebaseUser;
 import com.google.firebase.auth.FirebaseUserMetadata;
 import com.google.firebase.auth.GoogleAuthProvider;
 
-
+/**
+ * This class is responsible for handling the Firebase authentication after the sign in results from Google
+ */
 class FirebaseGoogleAuthManager {
     private final fireBaseGoogleAuthCallback mFireBaseGoogleAuthCallback;
 

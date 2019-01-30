@@ -4,9 +4,7 @@ import android.content.Context;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 
-import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.customer_account.IUserDetailsCallback;
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
@@ -41,6 +39,8 @@ import java.util.TreeMap;
 import io.reactivex.Observer;
 import io.reactivex.disposables.Disposable;
 
+import static com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView.BUY_STRING;
+import static com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView.LET_STRING;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.IMAGE_URI_PATH;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_COUNTY;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_COLLECTION_PATH;
@@ -62,26 +62,27 @@ import static com.example.robmillaci.realestatemanager.databases.local_database.
 import static com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase.NO_MIN_VALUE;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
+
+/*
+ * Helper class responsible for handling requests to Firebase database
+ */
 public class FirebaseHelper implements MyDatabase.Model {
     private static final String LISTINGS_COLLECTION_PATH = "listings"; //the firebase collection path for our listings
-
     private static final FirebaseAuth mAuth = FirebaseAuth.getInstance(); //The entry point of the Firebase Authentication SDK
+
     private static String loggedInUser; //the logged in user
     private static String loggedInEmail; //the logged in users email
     private static String loggedinUserId; //the logged in users picture
+    private static FirebaseHelper instance; //this instance of FirebaseHelper class
+    private static Map<Integer, String> mImagesUriTreeMap = new TreeMap<>(); //Treemap to hold uris of images for firebase storage. Treemap is used to maintain order base on key value
+    private Observer<Integer> mSyncobservable; //observable for emitting listing objects to synch the database with firebase
 
-    private ArrayList<Listing> returnedListings; //all listings returned from Firebase
-    private ArrayList<Listing> dbListings;
-
+    private ArrayList<Listing> mReturnedListings; //all listings returned from Firebase
+    private ArrayList<Listing> mReturnedDbListings; //all listings returned from Local DB
     private Model mPresenter; //the presenter
     private AdminCheckCallback mAdminCheckCallback; //callback after checking if the user is Admin (represented by 1 = true and 0 = false in firebase
-    private AddListingCallback addListingCallback; //callback when we have added listings to firebase
+    private AddListingCallback mAddlistingcallback; //callback when we have added listings to firebase
 
-    private static FirebaseHelper instance; //this instance of FirebaseHelper class
-
-    private static Map<Integer,String> mImagesUriTreeMap = new TreeMap<>(); //Treemap to hold uris of images for firebase storage. Treemap is used to maintain order base on key value
-
-    private static Observer<Integer> syncObservable;
 
     static {
         FirebaseFirestore.setLoggingEnabled(true);
@@ -94,9 +95,11 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
+    //Private constructor so this class cannot be instantiated externally
     private FirebaseHelper() {
     }
 
+    //Returns an instance of this class and ensures only one instance exists
     public static FirebaseHelper getInstance() {
         if (instance == null) {
             instance = new FirebaseHelper();
@@ -104,6 +107,12 @@ public class FirebaseHelper implements MyDatabase.Model {
         return instance;
     }
 
+
+    /**
+     * Returns all the users details held in the Firebase database
+     *
+     * @param callback the class to receive the call back. The class must implement {@link IUserDetailsCallback}
+     */
     public static void getUsersDetails(final IUserDetailsCallback callback) {
         final FirebaseFirestore mFirebaseDatabase;
         mFirebaseDatabase = FirebaseFirestore.getInstance();
@@ -112,82 +121,121 @@ public class FirebaseHelper implements MyDatabase.Model {
                 .document(loggedinUserId)
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                if (task.isSuccessful()){
-                    DocumentSnapshot d = task.getResult();
-                    HashMap<String, String> data = new HashMap<>();
+                    @Override
+                    public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                        if (task.isSuccessful()) {
+                            DocumentSnapshot d = task.getResult();
+                            HashMap<String, String> data = new HashMap<>();
 
-                    data.put(USER_TITLE, d.get(USER_TITLE) != null ? (String) d.get(USER_TITLE) : "");
-                    data.put(USER_FORENAME, d.get(USER_FORENAME)!= null ? (String)d.get(USER_FORENAME) : "");
-                    data.put(USER_SURNAME, d.get(USER_SURNAME)!= null ? (String)d.get(USER_SURNAME) : "");
-                    data.put(USER_DOB, d.get(USER_DOB)!= null ? (String)d.get(USER_DOB) : "");
-                    data.put(USER_POSTCODE, d.get(USER_POSTCODE)!= null ? (String)d.get(USER_POSTCODE) : "");
-                    data.put(USER_HOUSE_NAME_NUMBER, d.get(USER_HOUSE_NAME_NUMBER)!= null ? (String)d.get(USER_HOUSE_NAME_NUMBER) : "");
-                    data.put(USER_HOUSE_STREET, d.get(USER_HOUSE_STREET)!= null ? (String)d.get(USER_HOUSE_STREET) : "");
-                    data.put(USER_TOWN, d.get(USER_TOWN)!= null ? (String)d.get(USER_TOWN) : "");
-                    data.put(USER_COUNTY, d.get(USER_COUNTY)!= null ? (String)d.get(USER_COUNTY) : "");
-                    data.put(USER_HOME_NUMBER, d.get(USER_HOME_NUMBER)!= null ? (String)d.get(USER_HOME_NUMBER) : "");
-                    data.put(USER_MOBILE, d.get(USER_MOBILE)!= null ? (String)d.get(USER_MOBILE) : "");
-                    data.put(USER_DATABASE_EMAIL_FIELD, d.get(USER_DATABASE_EMAIL_FIELD)!= null ? (String)d.get(USER_DATABASE_EMAIL_FIELD) : "");
+                            data.put(USER_TITLE, d.get(USER_TITLE) != null ? (String) d.get(USER_TITLE) : "");
+                            data.put(USER_FORENAME, d.get(USER_FORENAME) != null ? (String) d.get(USER_FORENAME) : "");
+                            data.put(USER_SURNAME, d.get(USER_SURNAME) != null ? (String) d.get(USER_SURNAME) : "");
+                            data.put(USER_DOB, d.get(USER_DOB) != null ? (String) d.get(USER_DOB) : "");
+                            data.put(USER_POSTCODE, d.get(USER_POSTCODE) != null ? (String) d.get(USER_POSTCODE) : "");
+                            data.put(USER_HOUSE_NAME_NUMBER, d.get(USER_HOUSE_NAME_NUMBER) != null ? (String) d.get(USER_HOUSE_NAME_NUMBER) : "");
+                            data.put(USER_HOUSE_STREET, d.get(USER_HOUSE_STREET) != null ? (String) d.get(USER_HOUSE_STREET) : "");
+                            data.put(USER_TOWN, d.get(USER_TOWN) != null ? (String) d.get(USER_TOWN) : "");
+                            data.put(USER_COUNTY, d.get(USER_COUNTY) != null ? (String) d.get(USER_COUNTY) : "");
+                            data.put(USER_HOME_NUMBER, d.get(USER_HOME_NUMBER) != null ? (String) d.get(USER_HOME_NUMBER) : "");
+                            data.put(USER_MOBILE, d.get(USER_MOBILE) != null ? (String) d.get(USER_MOBILE) : "");
+                            data.put(USER_DATABASE_EMAIL_FIELD, d.get(USER_DATABASE_EMAIL_FIELD) != null ? (String) d.get(USER_DATABASE_EMAIL_FIELD) : "");
 
-                    callback.gotUserDetails(data);
-                }
-            }
-        });
+                            callback.gotUserDetails(data);
+                        }
+                    }
+                });
 
     }
 
 
+    /**
+     * Sets the presenter for this instance of FirebaseHelper such that data retrieved from Firebase can be sent back to this presenter.
+     * The calling class must implement {@link Model}
+     *
+     * @param presenter the presenter, an instance of {@link Model}
+     * @return this instance of Firebase helper class
+     */
     public FirebaseHelper setPresenter(Model presenter) {
         this.mPresenter = presenter;
         return this;
     }
 
-    public FirebaseHelper setAddListingCallback(AddListingCallback addListingCallback) {
-        this.addListingCallback = addListingCallback;
+
+    /**
+     * Set the {@link AddListingCallback} for this instance of FirebaseHelper. This callback returns a boolean depending on wether a listing was added successfully or not
+     *
+     * @param addlistingcallback the callback class that implements {@link AddListingCallback}
+     * @return this instance of Firebase Helper class
+     */
+    public FirebaseHelper setAddlistingcallback(AddListingCallback addlistingcallback) {
+        this.mAddlistingcallback = addlistingcallback;
         return this;
     }
 
+
+    /**
+     * Sets the {@link AdminCheckCallback} for this instance of FirebaseHelper. This callback responds to the calling class that implements {@link AdminCheckCallback}
+     * with a boolean to determine if a user is an administrator or not
+     *
+     * @param callback that class that implements {@link AdminCheckCallback}
+     * @return this instance of Firebase helper class
+     */
     public FirebaseHelper setAdminCallback(AdminCheckCallback callback) {
         this.mAdminCheckCallback = callback;
         return this;
     }
 
 
+    /**
+     * @return the entry point to Firebase SDK
+     */
     public static FirebaseAuth getmAuth() {
         return mAuth;
     }
 
+
+    /**
+     * @return the logged in user
+     */
     public static String getLoggedInUser() {
         return loggedInUser;
     }
 
 
-    private static void getListingLastUpdateTime(final Listing listing, final AddListingCallback callback) {
+    /**
+     * Returns the last update time for a specific listing to the callback class. A class calling this method must implement {@link AddListingCallback}
+     *
+     * @param listing  the listing to check the last update time for
+     * @param callback the class implementing {@link AddListingCallback}
+     */
+    private void getListingLastUpdateTime(final Listing listing, final AddListingCallback callback) {
         final String[] lastUpdateTime = new String[1];
         FirebaseFirestore.getInstance()
                 .collection(LISTINGS_COLLECTION_PATH)
                 .document(listing.getId())
                 .get()
                 .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-            @Override
-            public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
-                DocumentSnapshot d = task.getResult();
-                if (d != null) {
-                    lastUpdateTime[0] = (String) d.get(ListingsDatabaseContract.UPDATE_TIME);
-                } else {
-                    lastUpdateTime[0] = "null";
-                }
-                gotListingUpdateTime(listing, lastUpdateTime[0], callback);
+                    @Override
+                    public void onComplete(@NonNull final Task<DocumentSnapshot> task) {
+                        DocumentSnapshot d = task.getResult();
+                        if (d != null) {
+                            lastUpdateTime[0] = (String) d.get(ListingsDatabaseContract.UPDATE_TIME);
+                        } else {
+                            lastUpdateTime[0] = "null";
+                        }
+                        gotListingUpdateTime(listing, lastUpdateTime[0], callback);
 
-            }
-        });
+                    }
+                });
     }
 
 
+    /**
+     * Gets all the listing from Firebase and passes the document snapshot to {@link #foundAListing(DocumentSnapshot)} in order to create listing objects from the data
+     * Once all listings have been created, an ArrayList<Listing> are sent to the presenter
+     */
     public void getAllListings() {
-        returnedListings = new ArrayList<>();
+        mReturnedListings = new ArrayList<>();
 
         FirebaseFirestore.getInstance().collection(LISTINGS_COLLECTION_PATH).get().addOnCompleteListener(new OnCompleteListener<QuerySnapshot>() {
             @SuppressWarnings("ConstantConditions")
@@ -199,14 +247,20 @@ public class FirebaseHelper implements MyDatabase.Model {
                     for (DocumentSnapshot s : docList) {
                         foundAListing(s);
                     }
-
-                    mPresenter.gotListingsFromFirebase(returnedListings);
+                    if (mPresenter != null) {
+                        mPresenter.gotListingsFromFirebase(mReturnedListings);
+                    }
                 }
             }
         });
     }
 
 
+    /**
+     * Converts document snapshots from Firebase into {@link Listing} objects
+     *
+     * @param s the document snapshot recieved from Firebase which is to be converted into a {@link Listing} object
+     */
     private void foundAListing(DocumentSnapshot s) {
         ArrayList<String> photoDescrList;
         String[] photoDescr;
@@ -218,13 +272,13 @@ public class FirebaseHelper implements MyDatabase.Model {
         }
 
 
-        returnedListings.add(new Listing(s.getId(),
+        mReturnedListings.add(new Listing(s.getId(),
                 s.get(ListingsDatabaseContract.TYPE).toString(),
                 s.get(ListingsDatabaseContract.PRICE) != null ? (Double) s.get(ListingsDatabaseContract.PRICE) : 0,
                 s.get(ListingsDatabaseContract.SURFACE_AREA) != null ? (Double) s.get(ListingsDatabaseContract.SURFACE_AREA) : 0,
                 s.get(ListingsDatabaseContract.NUM_BED_ROOMS) != null ? ((Long) s.get(ListingsDatabaseContract.NUM_BED_ROOMS)).intValue() : 0,
                 s.get(ListingsDatabaseContract.DESCRIPTION) != null ? s.get(ListingsDatabaseContract.DESCRIPTION).toString() : "",
-                s.get(FIREBASE_IMAGE_URLS) != null ? (ArrayList<String>) s.get(FIREBASE_IMAGE_URLS) : null, //todo sort this out!
+                s.get(FIREBASE_IMAGE_URLS) != null ? (ArrayList<String>) s.get(FIREBASE_IMAGE_URLS) : null,
                 photoDescr,
                 s.get(ListingsDatabaseContract.ADDRESS_POSTCODE) != null ? s.get(ListingsDatabaseContract.ADDRESS_POSTCODE).toString() : "",
                 s.get(ListingsDatabaseContract.ADDRESS_NUMBER) != null ? s.get(ListingsDatabaseContract.ADDRESS_NUMBER).toString() : "",
@@ -241,7 +295,12 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-
+    /**
+     * Recieves a bundle containing search parameters and uses these to search Firebase for specific listings based on the search criteria.
+     * This method passes any returned firebase snapshots to {@link #foundAListing(DocumentSnapshot)} to create the listing objects
+     *
+     * @param searchParams the search parameters
+     */
     public void searchForSaleListings(Bundle searchParams) {
         //Search parameters*************************************************
         final String location = searchParams.getString(SearchActivityView.LOCATION_VALUE_KEY, "");
@@ -251,7 +310,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         final String maxPrice = searchParams.getString(SearchActivityView.MAX_PRICE_VALUE_KEY, String.valueOf(Integer.MAX_VALUE));
         final String minBedrooms = searchParams.getString(SearchActivityView.MIN_BEDROOMS_VALUE_KEY, String.valueOf(Integer.MIN_VALUE));
         final String maxBedrooms = searchParams.getString(SearchActivityView.MAX_BEDROOMS_VALUE_KEY, String.valueOf(Integer.MAX_VALUE));
-        final String buyOrLet = buy ? "buy" : "let";
+        final String buyOrLet = buy ? BUY_STRING : LET_STRING;
         final String minSearchPrice = minPrice.equals(NO_MIN_VALUE) ? "£0" : minPrice;
         final String maxSearchprice = maxPrice.equals(NO_MAX_VALUE) ? String.valueOf(Integer.MAX_VALUE) : maxPrice;
         final String minSearchBedrooms = minBedrooms.equals(NO_MIN_VALUE) ? "0" : minBedrooms;
@@ -271,7 +330,7 @@ public class FirebaseHelper implements MyDatabase.Model {
 
                 if (taskResults != null) {
                     List<DocumentSnapshot> docList = taskResults.getDocuments();
-                    returnedListings = new ArrayList<>();
+                    mReturnedListings = new ArrayList<>();
 
                     for (DocumentSnapshot s : docList) {
                         String address_postcode = (String) s.get(ListingsDatabaseContract.ADDRESS_POSTCODE);
@@ -305,15 +364,17 @@ public class FirebaseHelper implements MyDatabase.Model {
                         }
                     }
                 }
-                mPresenter.gotListingsFromFirebase(returnedListings);
+                if (mPresenter != null) {
+                    mPresenter.gotListingsFromFirebase(mReturnedListings);
+                }
             }
         });
     }
 
 
-
-
-
+    /**
+     * Update the static variables of this class with the current logged in users details
+     */
     @SuppressWarnings("ConstantConditions")
     public static void updateUserDetails() {
         loggedInUser = mAuth.getCurrentUser().getDisplayName() != null ? mAuth.getCurrentUser().getDisplayName() : "";
@@ -323,6 +384,11 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
+    /**
+     * Updates firebase with the users details from their profile
+     *
+     * @param userDetails the hashmap passed to this metho containing the users details to update in Firebase
+     */
     public static void updateUserProfileDetails(HashMap<String, String> userDetails) {
         final FirebaseFirestore mFirebaseDatabase;
         mFirebaseDatabase = FirebaseFirestore.getInstance();
@@ -347,6 +413,12 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
+    /**
+     * Called when a new user first users this app. This creates the user entry in Firebase
+     * When this update is complete, this metho also get the Token of the user and updates this in the database
+     *
+     * @param fbUser the firebase user created when authenticated.
+     */
     public static void addUserToDB(final FirebaseUser fbUser) {
         final FirebaseFirestore mFirebaseDatabase;
         mFirebaseDatabase = FirebaseFirestore.getInstance();
@@ -356,7 +428,7 @@ public class FirebaseHelper implements MyDatabase.Model {
         data.put(FirebaseContract.USER_DATABASE_NAME_FIELD, fbUser.getDisplayName());
         data.put(USER_DATABASE_EMAIL_FIELD, fbUser.getEmail());
         //noinspection ConstantConditions
-        data.put(FirebaseContract.USER_DATABASE_PICTURE_FIELD, (fbUser.getPhotoUrl().toString()));
+        data.put(FirebaseContract.USER_DATABASE_PICTURE_FIELD, fbUser.getPhotoUrl() != null ? fbUser.getPhotoUrl().toString() : "");
         data.put(FirebaseContract.USER_DATABASE_UNIQUE_ID_FIELD, fbUser.getUid());
         data.put(USER_DATABASE_ISADMIN_FIELD, 1); //0 = not admin, 1 = admin. Default is no admin access. Change this value in firebase to allow admin access
 
@@ -378,33 +450,45 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-    public static void addListing(final Listing listingToAdd, final AddListingCallback addListingCallback) {
+    /**
+     * The entry method when adding a listing to firebase, first we process the listings image files by calling {@link #uploadImageFiles(Listing, AddListingCallback)}
+     *
+     * @param listingToAdd       the listing being added to firebase
+     * @param addListingCallback the callback for when the listing has been added
+     */
+    public void addListing(final Listing listingToAdd, final AddListingCallback addListingCallback) {
         if (listingToAdd != null) {
             uploadImageFiles(listingToAdd, addListingCallback);
         }
     }
 
 
-    private static void uploadImageFiles(final Listing listingToAdd, final AddListingCallback addListingCallback) {
+    /**
+     * This method uploads the images from the listing to firebase storage and then puts the URIs for the uploaded image into a Treemap.
+     * Treemap is used because we need to maintain order of the images and some uploads complete before others
+     *
+     * @param listingToAdd       the listing of which the photos are being uploaded
+     * @param addListingCallback the callback for when the listing has been added
+     */
+    private void uploadImageFiles(final Listing listingToAdd, final AddListingCallback addListingCallback) {
         final int[] count = {listingToAdd.getLocalDbPhotos().size()};
 
         for (int i = 0; i < listingToAdd.getLocalDbPhotos().size(); i++) {
-            final StorageReference listingRef = FirebaseStorage.getInstance().getReference().child(listingToAdd.getId());
-            final StorageReference pictureRef = listingRef.child(String.valueOf(i));
-            byte[] thisPhoto = listingToAdd.getLocalDbPhotos().get(i);
+            final StorageReference listingRef = FirebaseStorage.getInstance().getReference().child(listingToAdd.getId()); //get a reference to the Storage path for this listing
+            final StorageReference pictureRef = listingRef.child(String.valueOf(i)); // get a reference to the child of the listing reference for this particular image
+            byte[] thisPhoto = listingToAdd.getLocalDbPhotos().get(i); //get the byte array for the listing that will be uploaded
 
-            pictureRef.putBytes(thisPhoto).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() {
+            pictureRef.putBytes(thisPhoto).addOnCompleteListener(new OnCompleteListener<UploadTask.TaskSnapshot>() { //upload the image to firebase
                 @Override
                 public void onComplete(@NonNull Task<UploadTask.TaskSnapshot> task) {
-                    pictureRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() {
+                    pictureRef.getDownloadUrl().addOnSuccessListener(new OnSuccessListener<Uri>() { //once the image is uploaded, get the download URL for the image
                         @Override
                         public void onSuccess(Uri uri) {
-                            Log.d("onSuccess", "onSuccess: picture ref is " + pictureRef.getName());
-                            mImagesUriTreeMap.put(Integer.valueOf(pictureRef.getName()),uri.toString()); //use a tree map here to maintain sort order
+                            mImagesUriTreeMap.put(Integer.valueOf(pictureRef.getName()), uri.toString()); //add the images URI to a tree map here to maintain sort order
                             count[0]--;
 
                             if (count[0] == 0) {
-                                saveImageDownloadBytes(listingToAdd, addListingCallback);
+                                saveImageDownloadBytes(listingToAdd, addListingCallback); //once all images have been uploaded and we have the URIS
                             }
                         }
                     }).addOnFailureListener(new OnFailureListener() {
@@ -419,8 +503,15 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
-    private static void saveImageDownloadBytes(final Listing listing,
-                                               final AddListingCallback addListingCallback) {
+    /**
+     * This method is called once all the listings images have been uploaded to firebase, and we have all the image URIs retrieved.
+     * This metho uploads the URI data to Firebase for a listing
+     *
+     * @param listing            the listing being saved
+     * @param addListingCallback the callback for when the listing has been added
+     */
+    private void saveImageDownloadBytes(final Listing listing,
+                                        final AddListingCallback addListingCallback) {
         ArrayList<String> sortedImageUris = new ArrayList<>(mImagesUriTreeMap.values());
 
         Map<String, Object> data = new HashMap<>();
@@ -433,14 +524,22 @@ public class FirebaseHelper implements MyDatabase.Model {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         mImagesUriTreeMap = new TreeMap<>();
-                        finishAddingListing(listing, addListingCallback);
+                        finishAddingListing(listing, addListingCallback); //on complete we call finish adding listing to do the final processing steps
                     }
                 });
     }
 
 
-    private static void finishAddingListing(Listing listingToAdd,
-                                            final AddListingCallback addListingCallback) {
+    /**
+     * This is the last step in the chain of methods above to add a listing. This method puts all the other relevant data for a listing into Firebase.
+     * If we are adding more than one listing, once this method completed it notifies our synchObservable to process the next listing. If we are adding just a single listing
+     * this method calls back straight away to the {@link AddListingCallback} class
+     *
+     * @param listingToAdd       the listing being added
+     * @param addListingCallback the callback for when the listing has been added
+     */
+    private void finishAddingListing(Listing listingToAdd,
+                                     final AddListingCallback addListingCallback) {
         Map<String, Object> data = new HashMap<>();
 
         ArrayList<String> photoDescr;
@@ -480,9 +579,9 @@ public class FirebaseHelper implements MyDatabase.Model {
                 }).addOnCompleteListener(new OnCompleteListener<Void>() {
             @Override
             public void onComplete(@NonNull Task<Void> task) {
-                if (syncObservable !=null) {
-                    syncObservable.onNext(1);
-                }else {
+                if (mSyncobservable != null) {
+                    mSyncobservable.onNext(1);
+                } else {
                     addListingCallback.dBListingsAddedToFirebase(false);
                 }
             }
@@ -490,34 +589,48 @@ public class FirebaseHelper implements MyDatabase.Model {
     }
 
 
+    /**
+     * First method in the change for synching with the local database.
+     * This metho calls {@link MyDatabase#searchLocalDB(Context, Bundle)} and returns the results to this class to the method {@link FirebaseHelper#gotDataFromLocalDb(ArrayList, Context)}
+     *
+     * @param c the context of the calling class
+     */
     public void synchWithLocalDb(Context c) {
         MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null);
     }
 
 
+    /**
+     * Called after we have retrieved all listings from the local database from {@link FirebaseHelper#synchWithLocalDb(Context)}
+     * This method also creates and mSyncObservable that is notified each time a listing has been added successfully
+     *
+     * @param listings Arraylist of {@link Listing} retrieved from the local DB
+     * @param c        the context
+     */
     public void gotDataFromLocalDb(final ArrayList<Listing> listings, final Context c) {
         final int[] iterationCount = {-1};
 
         if (listings != null && listings.size() >= 1) {
             final int[] progressBarCount = new int[]{listings.size()};
-            dbListings = listings;
+            mReturnedDbListings = listings;
 
-
-            syncObservable = new Observer<Integer>() {
+            mSyncobservable = new Observer<Integer>() {
                 @Override
                 public void onSubscribe(Disposable d) {
-
                 }
 
                 @Override
                 public void onNext(Integer i) {
                     int listingIndex = ++iterationCount[0];
 
-                    addListingCallback.updateProgressBarDbSync(progressBarCount[0], c.getString(R.string.local_db_sync_message));
                     progressBarCount[0]--;
 
-                    if (!(listingIndex == dbListings.size()-1)) {
-                        FirebaseHelper.getListingLastUpdateTime(dbListings.get(listingIndex), addListingCallback);
+                    if (!(listingIndex == (mReturnedDbListings.size() - 1))) {
+                        try {
+                            FirebaseHelper.getInstance().getListingLastUpdateTime(mReturnedDbListings.get(listingIndex), mAddlistingcallback);
+                        } catch (IndexOutOfBoundsException e) {
+                            onComplete();
+                        }
                     } else {
                         onComplete();
                     }
@@ -525,63 +638,81 @@ public class FirebaseHelper implements MyDatabase.Model {
 
                 @Override
                 public void onError(Throwable e) {
-                    addListingCallback.dBListingsAddedToFirebase(true);
+                    mAddlistingcallback.dBListingsAddedToFirebase(true);
+                    mSyncobservable = null;
                 }
 
                 @Override
                 public void onComplete() {
-                    addListingCallback.dBListingsAddedToFirebase(false);
+                    mAddlistingcallback.dBListingsAddedToFirebase(false);
+                    mSyncobservable = null;
                 }
             };
 
-            syncObservable.onNext(1);
+            mSyncobservable.onNext(1);
 
         } else {
-            addListingCallback.dBListingsAddedToFirebase(false);
+            mAddlistingcallback.dBListingsAddedToFirebase(false);
 
         }
     }
 
-    private static void gotListingUpdateTime(Listing listing, String lastUpdatetime, AddListingCallback callback) {
+
+    /**
+     * This method is called from {@link FirebaseHelper#getListingLastUpdateTime(Listing, AddListingCallback)}. It checks wether we need to add this listing to Firebase or not
+     * by looking at the last update time of the listing we are adding (from the local db) and the last update time in Firebase. If the last update time in Firebase is before the last
+     * update time in the local DB, we will add this listing to Firebase, replacing the older one
+     *
+     * @param listing        the listing being added
+     * @param lastUpdatetime the last update time from Firebase for this listing
+     * @param callback       the callback
+     */
+    private void gotListingUpdateTime(Listing listing, String lastUpdatetime, AddListingCallback callback) {
 
         if (lastUpdatetime == null || lastUpdatetime.equals("null")) {
-            FirebaseHelper.addListing(listing, callback);
+            FirebaseHelper.getInstance().addListing(listing, callback);
         } else {
             Date lastUpdateDateFromFirebase = Utils.stringToDate(lastUpdatetime);
             Date thisListingDateFromLocal = Utils.stringToDate(listing.getLastUpdateTime());
 
             if (lastUpdateDateFromFirebase != null && lastUpdateDateFromFirebase.before(thisListingDateFromLocal)) {
-                FirebaseHelper.addListing(listing, callback);
-            }else {
-                syncObservable.onNext(1);
+                FirebaseHelper.getInstance().addListing(listing, callback);
+            } else {
+                mSyncobservable.onNext(1);
             }
         }
     }
 
+
+    /**
+     * Checks firebase for whether the logged in user is an administrator or not, returning true for admin or false for a regular user
+     */
     public void checkAdminAccess() {
         if (loggedInUser != null) {
             FirebaseFirestore.getInstance().collection(USER_DATABASE_COLLECTION_PATH)
                     .document(loggedinUserId)
                     .get()
                     .addOnCompleteListener(new OnCompleteListener<DocumentSnapshot>() {
-                @Override
-                public void onComplete(@NonNull Task<DocumentSnapshot> task) {
-                    DocumentSnapshot results = task.getResult();
-                    if (results != null) {
-                        long isAdmin = (long) results.get(USER_DATABASE_ISADMIN_FIELD);
-                        if (isAdmin == 1) {
-                            mAdminCheckCallback.isAdmin(true);
-                        } else {
-                            mAdminCheckCallback.isAdmin(false);
+                        @Override
+                        public void onComplete(@NonNull Task<DocumentSnapshot> task) {
+                            DocumentSnapshot results = task.getResult();
+                            if (results != null) {
+                                long isAdmin = (long) results.get(USER_DATABASE_ISADMIN_FIELD);
+                                if (isAdmin == 1) {
+                                    mAdminCheckCallback.isAdmin(true);
+                                } else {
+                                    mAdminCheckCallback.isAdmin(false);
+                                }
+                            }
                         }
-                    }
-                }
-            });
+                    });
         }
     }
 
 
-
+    /**
+     * Interface that must be implemented to retrieve a callback from {@link FirebaseHelper#getAllListings()}
+     */
     public interface Model {
         void gotListingsFromFirebase(ArrayList<Listing> listings);
     }
@@ -592,7 +723,5 @@ public class FirebaseHelper implements MyDatabase.Model {
 
     public interface AddListingCallback {
         void dBListingsAddedToFirebase(boolean error);
-
-        void updateProgressBarDbSync(int count, String message);
     }
 }

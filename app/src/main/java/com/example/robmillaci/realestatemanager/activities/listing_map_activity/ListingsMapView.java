@@ -34,7 +34,7 @@ import pub.devrel.easypermissions.EasyPermissions;
 import static com.example.robmillaci.realestatemanager.activities.search_activity.SearchResultsView.FRAGMENT_TAG;
 
 /**
- * This class is responsible for displaying a map view with all listings added
+ * This class is responsible for displaying a map view with all mListings added
  */
 public class ListingsMapView extends AppCompatActivity implements ListingsMapPresenter.View, GoogleMap.OnMarkerClickListener {
     private static final int REQUEST_LOCATION_PERMISSION = 2;
@@ -42,9 +42,9 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     private ListingsMapPresenter mPresenter; //this activities presenter
     private MapView mMapView; //the map view
     private GoogleMap mGoogleMap; //the google maps object being displayed in the map view
-    private LatLng userLocation; //the users current location
-    private ProgressDialog pd; //the progress dialog when generating the map
-    private ArrayList<Listing> listings; //the arraylist of listing to be displayed on the map
+    private LatLng mUserLocation; //the users current location
+    private ProgressDialog mProgressDialog; //the progress dialog when generating the map
+    private ArrayList<Listing> mListings; //the arraylist of listing to be displayed on the map
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,7 +55,7 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
         setTitle(getString(R.string.map_view_title));
 
         this.mPresenter = new ListingsMapPresenter(this);
-        listings = new ArrayList<>();
+        mListings = new ArrayList<>();
 
         getUsersLocation();
     }
@@ -86,15 +86,15 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
                 }
 
                 //animate the camera to the users location
-                CameraPosition cameraPosition = new CameraPosition.Builder().target(userLocation).zoom(12).build();
+                CameraPosition cameraPosition = new CameraPosition.Builder().target(mUserLocation).zoom(12).build();
                 mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
                 if (EasyPermissions.hasPermissions(ListingsMapView.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                     mGoogleMap.setMyLocationEnabled(true);
                 }
 
-                if (pd.isShowing()) {
-                    pd.dismiss();
+                if (mProgressDialog.isShowing()) {
+                    mProgressDialog.dismiss();
                 }
             }
         });
@@ -110,9 +110,9 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
         if (EasyPermissions.hasPermissions(this, perms)) {
             //permission is granted - get the users location postcode
 //
-            pd = new ProgressDialog(ListingsMapView.this);
-            pd.setMessage(getString(R.string.generating_map_message));
-            pd.show();
+            mProgressDialog = new ProgressDialog(ListingsMapView.this);
+            mProgressDialog.setMessage(getString(R.string.generating_map_message));
+            mProgressDialog.show();
 
             mPresenter.getLastKnownLocation();
         } else {
@@ -131,13 +131,13 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
 
     /**
      * Called from the presenter when the users location has been established.
-     * Get all listings is then called from the presenter
+     * Get all mListings is then called from the presenter
      * @param latitude the users latitude
      * @param longitude the users longitude
      */
     @Override
     public void gotUsersLocation(double latitude, double longitude) {
-        this.userLocation = new LatLng(latitude, longitude);
+        this.mUserLocation = new LatLng(latitude, longitude);
         mPresenter.getAllListings(new WeakReference<Context>(this));
     }
 
@@ -149,14 +149,14 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
      */
     @Override
     public void gotAllListings(ArrayList<Listing> listings) {
-        this.listings = listings;
+        this.mListings = listings;
         createMap(listings);
     }
 
 
     /**
      * Call back from {@link ListingsMapPresenter#geoLocationListing(String, int)}
-     * Creates a new marker with the listings lat long and adds this to the map
+     * Creates a new marker with the mListings lat long and adds this to the map
      * @param latitude the latitude of the place
      * @param longitude the longitude of the lace
      * @param markerIndex the index of the marker representing the place
@@ -179,10 +179,10 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     @Override
     public boolean onMarkerClick(Marker marker) {
         int markerTag = (int) marker.getTag();
-        Listing clickedListing = listings.get(markerTag);
+        Listing clickedListing = mListings.get(markerTag);
 
         findViewById(R.id.fragment_container).setBackgroundColor(Color.WHITE);
-        setTitle(clickedListing.getAddress_number() + " " + clickedListing.getAddress_street()); //set the activity title to the listings address
+        setTitle(clickedListing.getAddress_number() + " " + clickedListing.getAddress_street()); //set the activity title to the mListings address
 
         mMapView.setVisibility(View.GONE); //hide the map view
 

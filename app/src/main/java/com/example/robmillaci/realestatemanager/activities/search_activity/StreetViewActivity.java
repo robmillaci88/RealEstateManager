@@ -22,7 +22,7 @@ import java.util.List;
  * This class is responsible for displaying the street view of a specific listing to the user
  */
 public class StreetViewActivity extends BaseActivity implements OnStreetViewPanoramaReadyCallback {
-    private LatLng thisListingLoc; //the locations latLng
+    private LatLng mThisListingLoc; //the locations latLng
 
 
     @Override
@@ -68,7 +68,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
             address = coder.getFromLocationName(strAddress, 5);
             if (address != null) {
                 Address location = address.get(0);
-                thisListingLoc = new LatLng(location.getLatitude(), location.getLongitude());
+                mThisListingLoc = new LatLng(location.getLatitude(), location.getLongitude());
             }
         } catch (Exception e) {
             ToastModifications.createToast(getApplicationContext(), getString(R.string.could_not_find_address_on_map), Toast.LENGTH_LONG);
@@ -94,7 +94,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
      */
     @Override
     public void onStreetViewPanoramaReady(StreetViewPanorama streetViewPanorama) {
-        streetViewPanorama.setPosition(thisListingLoc);
+        streetViewPanorama.setPosition(mThisListingLoc);
     }
 
     @Override

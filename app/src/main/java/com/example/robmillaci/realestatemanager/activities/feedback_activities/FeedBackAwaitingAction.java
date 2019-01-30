@@ -15,7 +15,7 @@ public class FeedBackAwaitingAction extends BaseViewingActivity {
         super.onCreate(savedInstanceState);
 
         setTitle(getString(R.string.awaiting_action));
-        action_message.setText(R.string.no_feedback);
+        mActionMessage.setText(R.string.no_feedback);
     }
 
 }

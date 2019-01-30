@@ -1,5 +1,406 @@
 <resources>
     <string name="app_name">Real Estate Manager</string>
+    <string-array name="poi_types">
+        <item>Agricultural Checkpoint</item>
+        <item>Airport</item>
+        <item>Airport Cargo</item>
+        <item>Airport Terminal</item>
+        <item>Ambulance Services</item>
+        <item>Amusement or Holiday Park</item>
+        <item>Amusement Park</item>
+        <item>Animal Park</item>
+        <item>Apartment Rental-Flat Rental</item>
+        <item>Aquarium</item>
+        <item>Art Museum</item>
+        <item>Arts and Crafts Supplies</item>
+        <item>Ashram</item>
+        <item>ATM</item>
+        <item>Attorney</item>
+        <item>Auto Parts</item>
+        <item>Automobile Club</item>
+        <item>Automobile Dealership-New Cars</item>
+        <item>Automobile Dealership-Used Cars</item>
+        <item>Aviation</item>
+        <item>B2B Restaurant Services</item>
+        <item>B2B Sales and Services</item>
+        <item>Badminton</item>
+        <item>Bakery and Baked Goods Store</item>
+        <item>Bank</item>
+        <item>Banquet Hall</item>
+        <item>Bar-Pub-Stube-Biergarten</item>
+        <item>Basketball</item>
+        <item>Bay-Harbor</item>
+        <item>Beach</item>
+        <item>Bed and Breakfast</item>
+        <item>Bicycle and Bicycle Accessories Shop</item>
+        <item>Bicycle Parking</item>
+        <item>Bicycle Service and Maintenance</item>
+        <item>Bicycle Sharing Location</item>
+        <item>Bicycle Trailhead</item>
+        <item>Bill Payment Service</item>
+        <item>Billiards-Pool Hall</item>
+        <item>Bistro</item>
+        <item>Blood Bank</item>
+        <item>Boat Ferry</item>
+        <item>Boating</item>
+        <item>Body of water</item>
+        <item>Body Piercing and Tattoos</item>
+        <item>Book Store</item>
+        <item>Border Crossing</item>
+        <item>Bowling Center</item>
+        <item>Brewery</item>
+        <item>Bus Station</item>
+        <item>Business Are</item>
+        <item>Business Facility</item>
+        <item>Business Service</item>
+        <item>Butcher</item>
+        <item>Cafeteria</item>
+        <item>Campground</item>
+        <item>Canal</item>
+        <item>Car Repair</item>
+        <item>Car Repair-Service</item>
+        <item>Car Wash-Detailing</item>
+        <item>Cargo Center</item>
+        <item>Cargo Transportation</item>
+        <item>Casino</item>
+        <item>Casual Dining</item>
+        <item>Catering and Other Food Services</item>
+        <item>Cellphone Parking Lot</item>
+        <item>Cemetery</item>
+        <item>Check Cashing Service-Currency Exchange</item>
+        <item>Childrens Apparel</item>
+        <item>Childrens Museum</item>
+        <item>Chiropractor</item>
+        <item>Church</item>
+        <item>Cinema</item>
+        <item>City Hall</item>
+        <item>Civic-Community Center</item>
+        <item>Clothing and Accessories</item>
+        <item>Clubhouse</item>
+        <item>Coaching Institute</item>
+        <item>Cocktail Lounge</item>
+        <item>Coffee Shop</item>
+        <item>Coffee-Tea</item>
+        <item>Collective Community</item>
+        <item>Commercial Services</item>
+        <item>Communication-Media</item>
+        <item>Commuter Rail Station</item>
+        <item>Commuter Train</item>
+        <item>Complete Rest Area</item>
+        <item>Computer and Software</item>
+        <item>Construction</item>
+        <item>Consumer Electronics Store</item>
+        <item>Consumer Goods</item>
+        <item>Consumer Services</item>
+        <item>Convenience Store</item>
+        <item>Convention-Exhibition Center</item>
+        <item>Country</item>
+        <item>County Council</item>
+        <item>Couriers</item>
+        <item>Court House</item>
+        <item>Crematorium</item>
+        <item>Customer Care-Service Center</item>
+        <item>Dairy Goods</item>
+        <item>Dancing</item>
+        <item>Deli</item>
+        <item>Delivery Entrance</item>
+        <item>Dentist-Dental Office</item>
+        <item>Department Store</item>
+        <item>Discount Store</item>
+        <item>Distillery</item>
+        <item>Diving Center</item>
+        <item>Drug Store</item>
+        <item>Drug-Pharmacy</item>
+        <item>Dry Cleaning and Laundry</item>
+        <item>Education Facility</item>
+        <item>Electrical</item>
+        <item>Electronics</item>
+        <item>Embassy</item>
+        <item>Emission Testing</item>
+        <item>Engineering and Scientific Services</item>
+        <item>Entertainment and Recreation</item>
+        <item>Entertainment Electronics</item>
+        <item>EV Charging Station</item>
+        <item>Facilities</item>
+        <item>Fair and Convention Facility</item>
+        <item>Family-General Practice Physicians</item>
+        <item>Farming</item>
+        <item>Fast Food</item>
+        <item>Ferry Terminal</item>
+        <item>Finance and Insurance</item>
+        <item>Financial Investment Firm</item>
+        <item>Fine Arts</item>
+        <item>Fine Dining</item>
+        <item>Fire Department</item>
+        <item>Fitness-Health Club</item>
+        <item>Floor and Carpet</item>
+        <item>Florist</item>
+        <item>Flowers and Jewelry</item>
+        <item>Flyover</item>
+        <item>Food Market-Stall</item>
+        <item>Food Production</item>
+        <item>Food-Beverage Specialty Store</item>
+        <item>Forest, Heath or Other Vegetation</item>
+        <item>Fueling Station</item>
+        <item>Funeral Director</item>
+        <item>Furniture Store</item>
+        <item>Gallery</item>
+        <item>Gambling-Lottery-Betting</item>
+        <item>Garden</item>
+        <item>Garden Center</item>
+        <item>General Merchandise</item>
+        <item>Gift, Antique and Art</item>
+        <item>Glass and Window</item>
+        <item>Golf Course</item>
+        <item>Golf Practice Range</item>
+        <item>Good views</item>
+        <item>Government Office</item>
+        <item>Government or Community Facility</item>
+        <item>Grocery</item>
+        <item>Guest House</item>
+        <item>Hair and Beauty</item>
+        <item>Hamlet</item>
+        <item>Hardware, House and Garden</item>
+        <item>Hawker Centre</item>
+        <item>Healthcare and Healthcare Support Services</item>
+        <item>Higher Education</item>
+        <item>Highway Exit</item>
+        <item>Hiking Trailhead</item>
+        <item>Historical Monument</item>
+        <item>History Museum</item>
+        <item>Hockey</item>
+        <item>Holiday Park</item>
+        <item>Home Improvement-Hardware Store</item>
+        <item>Home Specialty Store</item>
+        <item>Hospital</item>
+        <item>Hospital Emergency Room</item>
+        <item>Hospital or Health Care Facility</item>
+        <item>Hostel</item>
+        <item>Hotel</item>
+        <item>Hotel or Motel</item>
+        <item>Human Resources and Recruiting Services</item>
+        <item>Ice Skating Rink</item>
+        <item>Indoor Ski</item>
+        <item>Indoor Sports</item>
+        <item>Industrial Zone</item>
+        <item>Interior and Exterior Design</item>
+        <item>Internet Cafe</item>
+        <item>Investigation Services</item>
+        <item>Island</item>
+        <item>IT and Office Equipment Services</item>
+        <item>Jazz Club</item>
+        <item>Jeweler</item>
+        <item>Karaoke</item>
+        <item>Kindergarten and Childcare</item>
+        <item>Lake</item>
+        <item>Landmark-Attraction</item>
+        <item>Landscaping Services</item>
+        <item>Language Studies</item>
+        <item>Legal Services</item>
+        <item>Library</item>
+        <item>Live Entertainment-Music</item>
+        <item>Loading Dock</item>
+        <item>Loading Zone</item>
+        <item>Local Transit</item>
+        <item>Locksmiths and Security Systems Services</item>
+        <item>Lodging</item>
+        <item>Lottery Booth</item>
+        <item>Lumber</item>
+        <item>Maid Services</item>
+        <item>Major Appliance</item>
+        <item>Management and Consulting Services</item>
+        <item>Manufacturing</item>
+        <item>Marina</item>
+        <item>Market</item>
+        <item>Marriage and Match Making Services</item>
+        <item>Medical Services-Clinics</item>
+        <item>Mens Apparel</item>
+        <item>Military Base</item>
+        <item>Military Checkpoint</item>
+        <item>Mining</item>
+        <item>Misc. Consumer Services</item>
+        <item>Mobile Retailer</item>
+        <item>Mobile Service Center</item>
+        <item>Modeling Agencies</item>
+        <item>Money Transferring Service</item>
+        <item>Mosque</item>
+        <item>Motel</item>
+        <item>Motorcycle Accessories</item>
+        <item>Motorcycle Dealership</item>
+        <item>Motorcycle Service and Maintenance</item>
+        <item>Motorway Service Area</item>
+        <item>Mountain or Hill</item>
+        <item>Mountain Passes</item>
+        <item>Mountain Peaks</item>
+        <item>Mover</item>
+        <item>Museum</item>
+        <item>Named Intersection-Chowk</item>
+        <item>Named Place</item>
+        <item>Natural and Geographical</item>
+        <item>Neighborhood</item>
+        <item>Night Club</item>
+        <item>Nightlife-Entertainment</item>
+        <item>Non-Store Retailers</item>
+        <item>Nursing Home</item>
+        <item>Off Road Trailhead</item>
+        <item>Office Supply and Services Store</item>
+        <item>Offices</item>
+        <item>Off-Road Vehicle Area</item>
+        <item>Optical</item>
+        <item>Organizations and Societies</item>
+        <item>Other Bookshop</item>
+        <item>Other Convenience Store</item>
+        <item>Other Library</item>
+        <item>Other Place of Worship</item>
+        <item>Outdoor Area-Complex</item>
+        <item>Paint Store</item>
+        <item>Park and Ride</item>
+        <item>Parking and Rest Room Only</item>
+        <item>Parking Facility</item>
+        <item>Parking Garage-Parking House</item>
+        <item>Parking Lot</item>
+        <item>Parking Only</item>
+        <item>Park-Recreation</item>
+        <item>Park-Recreation Area</item>
+        <item>Parks</item>
+        <item>Pawnshop</item>
+        <item>Performing Arts</item>
+        <item>Pet Care</item>
+        <item>Pet Supply</item>
+        <item>Petrol-Gasoline Station</item>
+        <item>Pharmacy</item>
+        <item>Photography</item>
+        <item>Plumbing</item>
+        <item>Police Services-Security</item>
+        <item>Police Station</item>
+        <item>Post Box</item>
+        <item>Post Office</item>
+        <item>Pubs</item>
+        <item>Bars</item>
+        <item>Power Equipment Dealer</item>
+        <item>Printing and Publishing</item>
+        <item>Property Management</item>
+        <item>Psychiatric Institute</item>
+        <item>Public Administration</item>
+        <item>Public Restroom-Toilets</item>
+        <item>Public Sports Airport</item>
+        <item>Public Transit Access</item>
+        <item>Public Transit Stop</item>
+        <item>Race Track</item>
+        <item>Racquetball Court</item>
+        <item>Rail Ferry</item>
+        <item>Rail Yard</item>
+        <item>Real Estate and Brokers</item>
+        <item>Realtor</item>
+        <item>Record, CD and Video</item>
+        <item>Recreation Center</item>
+        <item>Recycling Center</item>
+        <item>Registration Office</item>
+        <item>Religious Place</item>
+        <item>Rental and Leasing</item>
+        <item>Rental Car Agency</item>
+        <item>Repair and Maintenance Services</item>
+        <item>Repair Service</item>
+        <item>Reservoir</item>
+        <item>Residential Area-Building</item>
+        <item>Rest Area</item>
+        <item>Restaurants</item>
+        <item>River</item>
+        <item>Road Assistance</item>
+        <item>Rugby</item>
+        <item>Scenic Overlook</item>
+        <item>Scenic Point</item>
+        <item>School</item>
+        <item>Schools</item>
+        <item>Science Museum</item>
+        <item>Seaport-Harbour</item>
+        <item>Self Service Kiosk</item>
+        <item>Shoes-Footwear</item>
+        <item>Shooting Range</item>
+        <item>Shopping Mall</item>
+        <item>Shops</item>
+        <item>Short-Time Motel</item>
+        <item>Ski Lift</item>
+        <item>Ski Resort</item>
+        <item>Soccer Club</item>
+        <item>Social Service</item>
+        <item>Specialty Clothing Store</item>
+        <item>Specialty Food Store</item>
+        <item>Specialty Store</item>
+        <item>Specialty Trade Contractors</item>
+        <item>Sporting Goods Store</item>
+        <item>Sporting Instruction and Camps</item>
+        <item>Sports Activities</item>
+        <item>Sports Complex-Stadium</item>
+        <item>Sports Facility-Venue</item>
+        <item>Sports Field</item>
+        <item>Squash Court</item>
+        <item>Storage</item>
+        <item>Surf Life Savings Clubs</item>
+        <item>Sweet Shop</item>
+        <item>Swimming Pool</item>
+        <item>Synagogue</item>
+        <item>Tailor and Alteration</item>
+        <item>Take Out and Delivery Only</item>
+        <item>Tanning Salon</item>
+        <item>Tax Service</item>
+        <item>Taxi Stand</item>
+        <item>Tea House</item>
+        <item>Telephone Service</item>
+        <item>Quiet</item>
+        <item>Rural</item>
+        <item>Close to center</item>
+        <item>Temple</item>
+        <item>Tennis Court</item>
+        <item>Theatre, Music and Culture</item>
+        <item>Therapist</item>
+        <item>Tire Repair</item>
+        <item>Tollbooth</item>
+        <item>Tourist Attraction</item>
+        <item>Tourist Information</item>
+        <item>Towing Service</item>
+        <item>Toy Store</item>
+        <item>Trailhead</item>
+        <item>Train Station</item>
+        <item>Training and Development</item>
+        <item>Translation and Interpretation Services</item>
+        <item>Transportation Service</item>
+        <item>Travel Agent-Ticketing</item>
+        <item>Trekking Hut</item>
+        <item>Truck Dealership</item>
+        <item>Truck Parking</item>
+        <item>Truck Repair</item>
+        <item>Truck Stop-Plaza</item>
+        <item>Truck Wash</item>
+        <item>Truck-Semi Dealer-Services</item>
+        <item>Underground Train-Subway</item>
+        <item>Undersea Feature</item>
+        <item>Used-Second Hand Merchandise Stores</item>
+        <item>Utilities</item>
+        <item>Van Repair</item>
+        <item>Variety Store</item>
+        <item>Veterinarian</item>
+        <item>Video and Game Rental</item>
+        <item>Video Arcade-Game Room</item>
+        <item>Warehouse-Wholesale Store</item>
+        <item>Waste and Sanitary</item>
+        <item>Water Park</item>
+        <item>Waterfall</item>
+        <item>Primary School</item>
+        <item>Secondary School</item>
+        <item>Nursery</item>
+        <item>College</item>
+        <item>University</item>
+        <item>Wedding Services and Bridal Studio</item>
+        <item>Weigh Station</item>
+        <item>Wellness Center and Services</item>
+        <item>Wild Animal Park</item>
+        <item>Wildlife Refuge</item>
+        <item>Wine and Liquor</item>
+        <item>Winery</item>
+        <item>Womens Apparel</item>
+        <item>Zoo</item>
+    </string-array>
     <string-array name="spinner_types">
         <item>Flat</item>
         <item>Apartment</item>
@@ -903,7 +1304,7 @@
     <string name="update_action">UPDATE</string>
     <string name="main_textview_text">The first registered real estate is worth</string>
     <string name="press_again_to_exit">Press once again to exit</string>
-    <string name="database_sync_message">Synching with database</string>
+    <string name="database_sync_message">Synching with database…please wait</string>
     <string name="accepted_offers_title">Accepted Offers</string>
     <string name="no_accepted_offers">You do not have any accepted offers</string>
     <string name="offers_title">Offers</string>
@@ -934,7 +1335,7 @@
     <string name="now_online">You are now online</string>
     <string name="now_offline">You are now offline</string>
     <string name="buying_amp_selling"><![CDATA[BUYING & SELLING]]></string>
-    <string name="valuations">Valuations</string>
+    <string name="valuations">VALUATIONS</string>
     <string name="book_a_free_valuation">Book a free valuation</string>
     <string name="upcoming_valuations">Upcoming valuations</string>
     <string name="viewings">VIEWINGS</string>
@@ -966,8 +1367,8 @@
     <string name="error_saving">Error saving listing. Try again</string>
     <string name="sync_errors">Sync completed with errors - check network speed</string>
     <string name="sync_completed">Sync completed</string>
-    <string name="local_db_sync_message">Synching with local database…</string>
-    <string name="synching_with_firebase">Synching Firebase</string>
+    <string name="local_db_sync_message">Synching…</string>
+    <string name="synching_with_firebase">Synching…</string>
     <string name="listings_remaining">listings remaining</string>
     <string name="editing_title">Editing</string>
     <string name="no_confirmed_viewings">You do not have any confirmed viewings</string>
@@ -1019,7 +1420,7 @@
     <string name="buy">Buy</string>
     <string name="let">Let</string>
     <string name="add_image">Add image</string>
-    <string name="street">street</string>
+    <string name="street">Street</string>
     <string name="realestate_manager">RealEstate manager</string>
     <string name="sold_radio_txt">Sold</string>
     <string name="location_i_e_postcode">Location (i.e postcode)</string>
@@ -1070,5 +1471,22 @@
     <string name="no_bookings_requiring_action">You do not have any viewings booked requiring actions</string>
     <string name="privacy_settings">Privacy Settings</string>
     <string name="your_details_btn_text">Your details</string>
+    <string name="about_activity_title">About</string>
+    <string name="by_text">by</string>
+    <string name="poi_selection_error">POI\'s must be selected from the list</string>
+    <string name="welcome_to_realestate">to RealEstate manager</string>
+    <string name="choose_display_name">Choose a display name</string>
+    <string name="enter_a_display_name">Enter a display name</string>
+    <string name="cancel_btn_txt">Cancel</string>
+    <string name="invalid_password_chosen">The password chosen is invalid</string>
+    <string name="invalid_email_entered">The email address provided is invalid</string>
+    <string name="reset_text">RESET</string>
+    <string name="enter_valid_email">Please enter a valid email</string>
+    <string name="forgotten_password">Forgotten Password</string>
+    <string name="sign_in_text">Sign in</string>
+    <string name="new_or_existing_user">New or Existing user</string>
+    <string name="reset_email_sent">Reset email send to\u0020\</string>
+    <string name="password_reset_failed">Password reset failed :</string>
+    <string name="sign_up_string">Sign up</string>
 
 </resources>
