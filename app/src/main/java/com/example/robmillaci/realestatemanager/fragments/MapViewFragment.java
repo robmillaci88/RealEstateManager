@@ -17,10 +17,13 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -32,6 +35,7 @@ public class MapViewFragment extends BaseFragment {
     private Listing mThisListing; //the listing to display the mapview
     private GoogleMap mGoogleMap; //the google map to display the listings marker on
     private LatLng mThisListingLoc; //this listings location
+    private ArrayList<Marker> mapMarker; //arraylist to hold markers on the map
 
     @Nullable
     @Override
@@ -42,6 +46,7 @@ public class MapViewFragment extends BaseFragment {
     @Override
     public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
         super.onViewCreated(view, savedInstanceState);
+        mapMarker = new ArrayList<>();
 
         getListing(); //get the listing passed into the arguments when creating this fragment
 
@@ -56,7 +61,6 @@ public class MapViewFragment extends BaseFragment {
     }
 
 
-
     private void getListing() {
         Bundle bundle = this.getArguments();
         if (bundle != null) {
@@ -67,6 +71,7 @@ public class MapViewFragment extends BaseFragment {
 
     /**
      * Uses {@link Geocoder} to return the latlng of a listing based on the address
+     *
      * @param strAddress the address of the listing in order to retrieve the lat lng
      */
     private void getListingLatLng(String strAddress) {
@@ -80,7 +85,7 @@ public class MapViewFragment extends BaseFragment {
                 mThisListingLoc = new LatLng(location.getLatitude(), location.getLongitude());
             }
         } catch (Exception e) {
-            ToastModifications.createToast(getActivity().getApplicationContext(), getString(R.string.could_not_find_address_on_map), Toast.LENGTH_LONG);
+            ToastModifications.createToast(getContext(), getString(R.string.could_not_find_address_on_map), Toast.LENGTH_LONG);
         }
     }
 
@@ -90,7 +95,6 @@ public class MapViewFragment extends BaseFragment {
      */
     private void createMap(View view, @Nullable Bundle savedInstanceState) {
         final MapView mapView = view.findViewById(R.id.mapView);
-
         mapView.onCreate(savedInstanceState);
         mapView.getMapAsync(new OnMapReadyCallback() {
             @Override
@@ -103,16 +107,25 @@ public class MapViewFragment extends BaseFragment {
                 if (mThisListingLoc != null) {
                     markerOptions.position(mThisListingLoc);
 
-                    mGoogleMap.addMarker(markerOptions);
+                    Marker addedMarker = mGoogleMap.addMarker(markerOptions);
+                    mapMarker.add(addedMarker);
 
                     CameraPosition cameraPosition = new CameraPosition.Builder().target(mThisListingLoc).zoom(DEFAULT_ZOOM).build();
                     mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
-                }else{
-                    ToastModifications.createToast(getContext(),getString(R.string.no_location),Toast.LENGTH_LONG);
+
+                    UiSettings mapUiSettings = mGoogleMap.getUiSettings();
+                    mapUiSettings.setZoomControlsEnabled(true);
+                    mapUiSettings.setCompassEnabled(true);
+
+                } else {
+                    ToastModifications.createToast(getContext(), getString(R.string.no_location), Toast.LENGTH_LONG);
                 }
             }
+
         });
     }
 
-
+    public ArrayList<Marker> getMapMarker() {
+        return mapMarker;
+    }
 }

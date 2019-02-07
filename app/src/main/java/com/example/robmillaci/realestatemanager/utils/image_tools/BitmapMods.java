@@ -2,9 +2,10 @@ package com.example.robmillaci.realestatemanager.utils.image_tools;
 
 import android.graphics.Bitmap;
 import android.graphics.Matrix;
-import androidx.exifinterface.media.ExifInterface;
 
 import java.io.IOException;
+
+import androidx.exifinterface.media.ExifInterface;
 
 /**
  * This class is responsible for modifying bitmaps
@@ -13,7 +14,8 @@ public class BitmapMods {
 
     /**
      * Determine the orientation of a bitmap using {@link ExifInterface} and performs operations based on this result
-     * @param bitmap the bitmap to modify
+     *
+     * @param bitmap              the bitmap to modify
      * @param image_absolute_path the path of the image
      * @return the modified bitmap
      */
@@ -45,7 +47,8 @@ public class BitmapMods {
 
     /**
      * Rotates a bitmap
-     * @param bitmap the bitmap to rotate
+     *
+     * @param bitmap  the bitmap to rotate
      * @param degrees the degrees of rotation
      * @return the rotated bitmap
      */
@@ -58,9 +61,10 @@ public class BitmapMods {
 
     /**
      * Flips a bitmap
-     * @param bitmap the bitmap to flip
+     *
+     * @param bitmap     the bitmap to flip
      * @param horizontal flip vertically ?
-     * @param vertical flip horizontally ?
+     * @param vertical   flip horizontally ?
      * @return the flipped bitmap
      */
     private static Bitmap flip(Bitmap bitmap, boolean horizontal, boolean vertical) {
@@ -72,7 +76,8 @@ public class BitmapMods {
 
     /**
      * Resizes a bitmap
-     * @param image the bitmap to be resized
+     *
+     * @param image   the bitmap to be resized
      * @param maxSize the maximum size of the bitmap
      * @return the scaled bitmap
      */

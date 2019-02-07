@@ -24,6 +24,7 @@ import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
+
 /**
  * The adapter for the {@link com.example.robmillaci.realestatemanager.activities.search_activity.SearchResultsView}<br/>
  * Displays the results of searching the database for listings
@@ -80,7 +81,7 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
         holder.address.setText(String.format("%s,%s, %s.", thisListing.getAddress_street(), thisListing.getAddress_town(), //update the address for the listing
                 thisListing.getAddress_postcode().toUpperCase()));
 
-        holder.desc.setText(String.format("%d %s %s.", thisListing.getNumbOfBedRooms(),mContext.get().getString(R.string.bedrooms), thisListing.getType())); //get the type of listing
+        holder.desc.setText(String.format("%d %s %s.", thisListing.getNumbOfBedRooms(), mContext.get().getString(R.string.bedrooms), thisListing.getType())); //get the type of listing
 
         setOnClickEvent(holder.itemView, holder.getAdapterPosition()); //set the viewholders on click event
     }
@@ -94,7 +95,8 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
     /**
      * The on click event for the viewholders. Creates a fragment displaying the full details of a specific listing when clicked.
      * If the users device is a tablet,we will update the selected view holders background colour.
-     * @param holder the view to be updated
+     *
+     * @param holder   the view to be updated
      * @param position the position of the view
      */
     @SuppressWarnings("ResultOfMethodCallIgnored")
@@ -107,10 +109,10 @@ public class SearchResultsAdapter extends RecyclerView.Adapter<SearchResultsAdap
                 new SharedPreferenceHelper(mContext.get()).addListingToSharedPref(thisListing);
                 mCallback.setFragment(thisListing.getAddress_number() + " " + thisListing.getAddress_street());
 
-                if (Utils.isTablet(mContext.get())){
+                if (Utils.isTablet(mContext.get())) {
                     holder.setBackgroundColor(mContext.get().getResources().getColor(R.color.colorPrimaryDark));
 
-                    if (mPreviouslySelectedHolder != null){
+                    if (mPreviouslySelectedHolder != null) {
                         mPreviouslySelectedHolder.setBackgroundColor(Color.WHITE);
                     }
                     mPreviouslySelectedHolder = holder;

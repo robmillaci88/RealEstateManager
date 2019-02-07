@@ -9,7 +9,7 @@ import com.example.robmillaci.realestatemanager.activities.customer_account.IUse
 import com.example.robmillaci.realestatemanager.activities.search_activity.SearchActivityView;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.local_database.ListingsDatabaseContract;
-import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
+import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.OnFailureListener;
@@ -47,6 +47,7 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_EMAIL_FIELD;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DATABASE_ISADMIN_FIELD;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DOB;
+import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_EMAIL;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_FORENAME;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_HOME_NUMBER;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_HOUSE_NAME_NUMBER;
@@ -58,15 +59,15 @@ import static com.example.robmillaci.realestatemanager.databases.firebase.Fireba
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_TITLE;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_TOWN;
 import static com.example.robmillaci.realestatemanager.databases.local_database.ListingsDatabaseContract.FIREBASE_IMAGE_URLS;
-import static com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase.NO_MAX_VALUE;
-import static com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase.NO_MIN_VALUE;
+import static com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper.NO_MAX_VALUE;
+import static com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper.NO_MIN_VALUE;
 
 @SuppressWarnings({"unchecked", "ConstantConditions"})
 
 /*
  * Helper class responsible for handling requests to Firebase database
  */
-public class FirebaseHelper implements MyDatabase.Model {
+public class FirebaseHelper implements MyDatabaseHelper.Model {
     private static final String LISTINGS_COLLECTION_PATH = "listings"; //the firebase collection path for our listings
     private static final FirebaseAuth mAuth = FirebaseAuth.getInstance(); //The entry point of the Firebase Authentication SDK
 
@@ -138,7 +139,7 @@ public class FirebaseHelper implements MyDatabase.Model {
                             data.put(USER_COUNTY, d.get(USER_COUNTY) != null ? (String) d.get(USER_COUNTY) : "");
                             data.put(USER_HOME_NUMBER, d.get(USER_HOME_NUMBER) != null ? (String) d.get(USER_HOME_NUMBER) : "");
                             data.put(USER_MOBILE, d.get(USER_MOBILE) != null ? (String) d.get(USER_MOBILE) : "");
-                            data.put(USER_DATABASE_EMAIL_FIELD, d.get(USER_DATABASE_EMAIL_FIELD) != null ? (String) d.get(USER_DATABASE_EMAIL_FIELD) : "");
+                            data.put(USER_EMAIL, d.get(USER_DATABASE_EMAIL_FIELD) != null ? (String) d.get(USER_DATABASE_EMAIL_FIELD) : "");
 
                             callback.gotUserDetails(data);
                         }
@@ -591,23 +592,22 @@ public class FirebaseHelper implements MyDatabase.Model {
 
     /**
      * First method in the change for synching with the local database.
-     * This metho calls {@link MyDatabase#searchLocalDB(Context, Bundle)} and returns the results to this class to the method {@link FirebaseHelper#gotDataFromLocalDb(ArrayList, Context)}
+     * This metho calls {@link MyDatabaseHelper#searchLocalDB(Context, Bundle)} and returns the results to this class to the method {@link MyDatabaseHelper.Model#gotDataFromLocalDb(ArrayList)}
      *
      * @param c the context of the calling class
      */
     public void synchWithLocalDb(Context c) {
-        MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null);
+        MyDatabaseHelper.getInstance(c).setPresenter(this).searchLocalDB(c, null);
     }
 
 
     /**
      * Called after we have retrieved all listings from the local database from {@link FirebaseHelper#synchWithLocalDb(Context)}
      * This method also creates and mSyncObservable that is notified each time a listing has been added successfully
+     *  @param listings Arraylist of {@link Listing} retrieved from the local DB
      *
-     * @param listings Arraylist of {@link Listing} retrieved from the local DB
-     * @param c        the context
      */
-    public void gotDataFromLocalDb(final ArrayList<Listing> listings, final Context c) {
+    public void gotDataFromLocalDb(final ArrayList<Listing> listings) {
         final int[] iterationCount = {-1};
 
         if (listings != null && listings.size() >= 1) {

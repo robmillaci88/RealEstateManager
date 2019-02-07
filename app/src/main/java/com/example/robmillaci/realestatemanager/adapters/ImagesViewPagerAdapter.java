@@ -81,7 +81,7 @@ public class ImagesViewPagerAdapter extends PagerAdapter {
         if (imageDescription != null) {
             try {
                 imageDesc.setText(imageDescription[position]);
-            }catch (Exception e){
+            } catch (Exception e) {
                 e.printStackTrace();
             }
         }

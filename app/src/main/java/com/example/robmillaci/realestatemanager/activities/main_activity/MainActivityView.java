@@ -87,6 +87,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
 
+
         initializeNavDrawer();
         initializeNavViewClicks();
 
@@ -281,7 +282,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         mCompositeDisposable.add(awaiting_feedbackDisposable);
 
 
-        TextView feedback_pending_received = navigationView.findViewById(R.id.pending_recieved_feedback);
+            TextView feedback_pending_received = navigationView.findViewById(R.id.pending_recieved_feedback);
         Disposable pending_recieved_feedbackDisposable = RxView.clicks(feedback_pending_received)
                 .subscribe(new Consumer<Unit>() {
                     @Override
@@ -361,9 +362,13 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         RxView.clicks(geolocate_fab).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) {
-                Intent i = new Intent(getApplicationContext(), ListingsMapView.class);
-                startActivity(i);
-                overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                if (Utils.CheckConnectivity(MainActivityView.this)) {
+                    Intent i = new Intent(getApplicationContext(), ListingsMapView.class);
+                    startActivity(i);
+                    overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+                }else {
+                    ToastModifications.createToast(MainActivityView.this,getString(R.string.internet_required), Toast.LENGTH_LONG);
+                }
             }
         });
 
@@ -435,7 +440,6 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     //  }
 
 
-
     /**
      * Handles wether the user exits the application when the back button is pressed
      */
@@ -451,14 +455,12 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
-
     //Set the network listener for connectivity changes
     private void setNetworkListener() {
         intentFilter = new IntentFilter();
         intentFilter.addAction(CONNECTIVITY_ACTION);
         mNetworkListener = new NetworkListener(this);
     }
-
 
 
     @Override
@@ -505,9 +507,9 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     }
 
 
-
     /**
      * Once the sync is completed with an error or not, this method dismisses the progress dialog and displays a toast to the user
+     *
      * @param error did we get an error synching or not ?
      */
     @Override
@@ -532,6 +534,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
     /**
      * This method keeps the screen on or turns it off. When synching the users mobile screen is kept on. This flag is removed when synching completes.
+     *
      * @param screenOn screen on or off?
      */
     private void keepScreenOn(boolean screenOn) {
@@ -556,6 +559,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     /**
      * Callback from {@link FirebaseHelper#checkAdminAccess}
      * if the user is an admin , the admin views will be displayed, if not they will be hidden
+     *
      * @param isAdmin is the user an admin or not?
      */
     @SuppressLint("ApplySharedPref")
@@ -588,6 +592,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
     /**
      * Callback from the presenter when synching is completed. Called {@link #dismissProgressDialog(boolean)}
+     *
      * @param error if an error is returned whilst synching
      */
     @Override

@@ -40,7 +40,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
  * Basic database class for the application.<br>
  * Implemented as a singleton.
  */
-public class MyDatabase extends SQLiteOpenHelper {
+public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final String DATABASE_NAME = "listings.db";
     private static final int DATABASE_VERSION = 1;
 
@@ -72,12 +72,12 @@ public class MyDatabase extends SQLiteOpenHelper {
     private static final int PHOTOS_START_INDEX = 6;
     private static final int PHOTOS_END_INDEX = 20;
 
-    private static MyDatabase instance = null;
+    private static MyDatabaseHelper instance = null;
     private Model mPresenter;
 
     private DbSyncListener mDbSyncListener;
 
-    private MyDatabase(Context context) {
+    private MyDatabaseHelper(Context context) {
         super(context, DATABASE_NAME, null, DATABASE_VERSION);
     }
 
@@ -85,17 +85,17 @@ public class MyDatabase extends SQLiteOpenHelper {
     /**
      * Get an instance of the apps singleton database helper object
      *
-     * @param context the content providers context
+     * @param context the context to provide to a new instance of MyDatabaseHelper
      * @return a SQlite database helper object
      */
-    public static MyDatabase getInstance(Context context) {
+    public static MyDatabaseHelper getInstance(Context context) {
         if (instance == null) {
-            instance = new MyDatabase(context.getApplicationContext());
+            instance = new MyDatabaseHelper(context.getApplicationContext());
         }
         return instance;
     }
 
-    public MyDatabase setPresenter(Model presenter) {
+    public MyDatabaseHelper setPresenter(Model presenter) {
         this.mPresenter = presenter;
         return this;
     }
@@ -141,21 +141,21 @@ public class MyDatabase extends SQLiteOpenHelper {
                 ListingsDatabaseContract.SURFACE_AREA + " DOUBLE, " +
                 ListingsDatabaseContract.NUM_BED_ROOMS + " INTEGER, " +
                 ListingsDatabaseContract.DESCRIPTION + " TEXT, " +
-                ListingsDatabaseContract.PHOTO1 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO2 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO3 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO4 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO5 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO6 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO7 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO8 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO9 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO10 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO11 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO12 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO13 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO14 + " TEXT, " +
-                ListingsDatabaseContract.PHOTO15 + " TEXT, " +
+                ListingsDatabaseContract.PHOTO1 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO2 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO3 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO4 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO5 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO6 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO7 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO8 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO9 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO10 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO11 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO12 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO13 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO14 + " BLOB, " +
+                ListingsDatabaseContract.PHOTO15 + " BLOB, " +
                 ListingsDatabaseContract.PHOTO_DESCR + " TEXT, " +
                 ListingsDatabaseContract.ADDRESS_POSTCODE + " TEXT, " +
                 ListingsDatabaseContract.ADDRESS_NUMBER + " TEXT, " +
@@ -163,12 +163,12 @@ public class MyDatabase extends SQLiteOpenHelper {
                 ListingsDatabaseContract.ADDRESS_TOWN + " TEXT, " +
                 ListingsDatabaseContract.ADDRESS_COUNTY + " TEXT, " +
                 ListingsDatabaseContract.POI + " TEXT, " +
-                STATUS + " BOOLEAN, " +
+                ListingsDatabaseContract.STATUS + " BOOLEAN, " +
                 ListingsDatabaseContract.POSTED_DATE + " DATE, " +
                 ListingsDatabaseContract.SALE_DATE + " DATE, " +
                 ListingsDatabaseContract.AGENT + " TEXT, " +
                 ListingsDatabaseContract.UPDATE_TIME + " DATE," +
-                BUY_LET + " TEXT "
+                ListingsDatabaseContract.BUY_LET + " TEXT "
                 + ");";
 
         db.execSQL(createStatement);
@@ -325,10 +325,10 @@ public class MyDatabase extends SQLiteOpenHelper {
 
             }
             cursor.close();
-            mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
+            mPresenter.gotDataFromLocalDb(databaseListings);
         } else {
             //no data returned
-            mPresenter.gotDataFromLocalDb(databaseListings, context.getApplicationContext());
+            mPresenter.gotDataFromLocalDb(databaseListings);
         }
     }
 
@@ -436,7 +436,7 @@ public class MyDatabase extends SQLiteOpenHelper {
             listing.setPhotos(listingImagesByteArray);
         }
 
-        MyDatabase.addListing(listing);
+        MyDatabaseHelper.addListing(listing);
     }
 
 
@@ -503,7 +503,7 @@ public class MyDatabase extends SQLiteOpenHelper {
         }
     }
 
-    public MyDatabase setSynchListener(DbSyncListener dbSyncListener) {
+    public MyDatabaseHelper setSynchListener(DbSyncListener dbSyncListener) {
         this.mDbSyncListener = dbSyncListener;
         return this;
     }
@@ -519,7 +519,7 @@ public class MyDatabase extends SQLiteOpenHelper {
 
 
     public interface Model {
-        void gotDataFromLocalDb(ArrayList<Listing> listings, Context c);
+        void gotDataFromLocalDb(ArrayList<Listing> listings);
     }
 
 }

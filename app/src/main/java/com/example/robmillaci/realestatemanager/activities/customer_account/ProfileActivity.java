@@ -2,12 +2,13 @@ package com.example.robmillaci.realestatemanager.activities.customer_account;
 
 import android.annotation.SuppressLint;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.WindowManager;
 import android.widget.Button;
 
-import com.example.robmillaci.realestatemanager.custom_objects.RoundEditText;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.custom_objects.RoundEditText;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
 import com.example.robmillaci.realestatemanager.utils.Utils;
@@ -20,6 +21,7 @@ import kotlin.Unit;
 
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_COUNTY;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_DOB;
+import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_EMAIL;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_FORENAME;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_HOME_NUMBER;
 import static com.example.robmillaci.realestatemanager.databases.firebase.FirebaseContract.USER_HOUSE_NAME_NUMBER;
@@ -62,6 +64,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
         setTitle("Your Profile");
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();
         setOnClicks();
@@ -73,7 +76,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     private void setOnClicks() {
         RxView.clicks(mSaveBtn).subscribe(new Consumer<Unit>() {
             @Override
-            public void accept(Unit unit){
+            public void accept(Unit unit) {
                 saveValues();
                 onBackPressed();
             }
@@ -84,9 +87,9 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
      * Restore any users values stored in Firebase (if we are online) or shared preferences if we are offline
      */
     private void restoreValues() {
-        if (Utils.CheckConnectivity(ProfileActivity.this)){
+        if (Utils.CheckConnectivity(ProfileActivity.this)) {
             FirebaseHelper.getUsersDetails(this);
-        }else {
+        } else {
             HashMap<String, String> userDetails = new SharedPreferenceHelper(getApplicationContext()).getUsersDetails();
             setUserDetails(userDetails);
         }
@@ -95,6 +98,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
 
     /**
      * Update the profile views with the users details returned from either shared preferences or {@link IUserDetailsCallback#gotUserDetails(HashMap)}
+     *
      * @param userDetails the returned user information
      */
     private void setUserDetails(HashMap<String, String> userDetails) {
@@ -110,38 +114,42 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
         mUserMobileNumb.setText(userDetails.get(USER_MOBILE));
         mUserPrimaryContactNumb.setText(userDetails.get(USER_PRIMARY_CONTACT_NUMBER));
         mUserCounty.setText(userDetails.get(USER_COUNTY));
+        mUserEmail.setText(userDetails.get(USER_EMAIL));
     }
 
 
     /**
      * save the users values to shared preferences and to firebase
      */
+    @SuppressWarnings("ConstantConditions")
     private void saveValues() {
         SharedPreferenceHelper spHelper = new SharedPreferenceHelper(getApplicationContext());
 
-        String title = mUserTitle.getText().toString();
-        String forename = mUserForename.getText().toString();
-        String surname = mUserSurname.getText().toString();
-        String dob = mUserDob.getText().toString();
-        String postCode = mUserPostcode.getText().toString();
-        String houseNameNumb = mUserHouseNameNumb.getText().toString();
-        String street = mUserStreet.getText().toString();
-        String town = mUserTown.getText().toString();
-        String county = mUserCounty.getText().toString();
-        String homeNumber = mUserHomeNumb.getText().toString();
-        String mobile = mUserMobileNumb.getText().toString();
-        String primaryContactNumb = mUserPrimaryContactNumb.getText().toString();
+        String title = mUserTitle.getText() != null ? mUserTitle.getText().toString() : "";
+        String forename = mUserForename.getText() != null ? mUserForename.getText().toString() : "";
+        String surname = mUserSurname.getText() != null ? mUserSurname.getText().toString() : "";
+        String dob = mUserDob.getText() != null ? mUserDob.getText().toString() : "";
+        String postCode = mUserPostcode.getText() != null ? mUserPostcode.getText().toString() : "";
+        String houseNameNumb = mUserHouseNameNumb.getText() != null ? mUserHouseNameNumb.getText().toString() : "";
+        String street = mUserStreet.getText() != null ? mUserStreet.getText().toString() : "";
+        String town = mUserTown.getText() != null ? mUserTown.getText().toString() : "";
+        String county = mUserCounty.getText() != null ? mUserCounty.getText().toString() : "";
+        String homeNumber = mUserHomeNumb.getText() != null ? mUserHomeNumb.getText().toString() : "";
+        String mobile = mUserMobileNumb.getText() != null ? mUserMobileNumb.getText().toString() : "";
+        String primaryContactNumb = mUserPrimaryContactNumb.getText() != null ? mUserPrimaryContactNumb.getText().toString() : "";
+        String userEmail = mUserEmail.getText() != null ? mUserEmail.getText().toString() : "";
 
-        spHelper.saveUserDetailsToSharedPreferences(title,forename,surname,dob,postCode,houseNameNumb,street,town,county,homeNumber,mobile,primaryContactNumb);
+        spHelper.saveUserDetailsToSharedPreferences(title, forename, surname, dob, postCode, houseNameNumb, street, town, county, homeNumber, mobile, primaryContactNumb,userEmail);
 
         FirebaseHelper.updateUserProfileDetails(new SharedPreferenceHelper(getApplicationContext()).getUsersDetails());
+
         onBackPressed();
     }
 
     private void initializeViews() {
         mUserTitle = findViewById(R.id.title_et);
         mUserForename = findViewById(R.id.forename_et);
-        mUserSurname = findViewById(R.id.surname_et);
+        mUserSurname = findViewById(R.id.house_name_et);
         mUserDob = findViewById(R.id.dob_et);
         mUserPostcode = findViewById(R.id.postcode_et);
         mUserHouseNameNumb = findViewById(R.id.housename_numb_et);
@@ -153,16 +161,17 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
         mUserPrimaryContactNumb = findViewById(R.id.primary_contact_num_et);
         mUserCounty = findViewById(R.id.county_et);
 
-        mSaveBtn =findViewById(R.id.savebtn);
+        mSaveBtn = findViewById(R.id.savebtn);
     }
 
 
     /**
      * Callback method from {@link FirebaseHelper#getUsersDetails(IUserDetailsCallback)}
+     *
      * @param userDetails the returned user details. This method then passes the user details to {@link #setUserDetails(HashMap)}
      */
     @Override
-    public void gotUserDetails(HashMap<String,String> userDetails) {
+    public void gotUserDetails(HashMap<String, String> userDetails) {
         setUserDetails(userDetails);
     }
 

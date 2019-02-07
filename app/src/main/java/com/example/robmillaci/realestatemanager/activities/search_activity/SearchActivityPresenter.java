@@ -12,16 +12,18 @@ import com.google.android.gms.location.FusedLocationProviderClient;
 import com.google.android.gms.location.LocationServices;
 import com.google.android.gms.tasks.OnFailureListener;
 import com.google.android.gms.tasks.OnSuccessListener;
+
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Locale;
+
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
  * The presenter for {@link SearchActivityView} responsible for getting the users last known location and returning the postcode
  */
- class SearchActivityPresenter {
+class SearchActivityPresenter {
     private final View mView;
 
 
@@ -48,7 +50,7 @@ import static com.facebook.FacebookSdk.getApplicationContext;
                             }
 
                             mView.gotLocation(addresses.get(0).getPostalCode() != null ? addresses.get(0).getPostalCode() : "");
-                        }else {
+                        } else {
                             Toast.makeText(getApplicationContext(), R.string.error_getting_gps, Toast.LENGTH_LONG).show();
                         }
                     }

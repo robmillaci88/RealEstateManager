@@ -35,14 +35,15 @@ import android.widget.Toast;
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.request.target.SimpleTarget;
 import com.bumptech.glide.request.transition.Transition;
-import com.example.robmillaci.realestatemanager.custom_objects.MyTokenizer;
-import com.example.robmillaci.realestatemanager.custom_objects.SquareEditText;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.example.robmillaci.realestatemanager.adapters.ImagesRecyclerViewAdapter;
+import com.example.robmillaci.realestatemanager.custom_objects.MyTokenizer;
+import com.example.robmillaci.realestatemanager.custom_objects.SquareEditText;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
+import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.example.robmillaci.realestatemanager.utils.image_tools.BitmapMods;
@@ -127,29 +128,49 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         setTitle(getString(R.string.new_listing_activity_title));//set the title of the activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //dont display the keyboard when activity is created
 
-        this.mPresenter = new AddListingPresenter(this); //create the presented
+        this.mPresenter = new AddListingPresenter(this); //create the presenter
         mCompositeDisposable = new CompositeDisposable(); //create a composite disposable to hold all disposables
 
         mImages = new ArrayList<>(); //create a new arraylist to hold the listings mImages
         mImageDescription = new ArrayList<>();//create a new arraylist to hold the listings mImages description
         mEnteredPoisArrayList = new ArrayList<>(); //holds the users entered poi's
 
+
         initializeViews(); //see method comments
         configurePoiAutoComplete();
         initializeClickEvents();  //see method comments
         initializeRecyclerView();  //see method comments
+        restoreEditingListing();
 
+    }
 
-        /*
-         *check to see if we have a listing in the intent that created this activity, if we do then we are mEditing a pre existing listing
-         */
+    private void restoreEditingListing() {
         Bundle intentExtras = getIntent().getExtras();
-        if (intentExtras != null) {
-            Listing editingListing = (Listing) intentExtras.getSerializable(EDIT_LISTING_BUNDLE_KEY);
-            if (editingListing != null) {
-                prepareEdit(editingListing);
-            }
+        if (intentExtras != null && intentExtras.getBoolean(EDIT_LISTING_BUNDLE_KEY)) {
+
+            final ProgressDialog pd = new ProgressDialog(this);
+            pd.setMessage("Restoring listing..");
+            pd.show();
+
+            new Thread(new Runnable() {
+                @Override
+                public void run() {
+                    /*
+                     *Grab the listing saved in shared preferences to edit
+                     */
+                    final Listing editingListing = new SharedPreferenceHelper(AddListingView.this).getListingFromSharedPrefs();
+                    if (editingListing != null) {
+                       runOnUiThread(new Runnable() {
+                           @Override
+                           public void run() {
+                               prepareEdit(editingListing,pd);
+                           }
+                       });
+                    }
+                }
+            }).start();
         }
+
     }
 
     private void configurePoiAutoComplete() {
@@ -172,7 +193,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                     String str = mPoiAutocomplete.getText().toString().trim();
                     String[] enteredPoisArray = str.split(",");
 
-                    for (int i = 0 ; i < enteredPoisArray.length; i++){
+                    for (int i = 0; i < enteredPoisArray.length; i++) {
                         enteredPoisArray[i] = enteredPoisArray[i].trim();
                     }
 
@@ -186,7 +207,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                         for (String s : enteredPoisArray) {
                             if (s.trim().compareTo(temp) == 0) {
                                 Log.d("onFocusChange", "onFocusChange: adding to array list");
-                                mEnteredPoisArrayList.add(s.trim() +",");
+                                mEnteredPoisArrayList.add(s.trim() + ",");
                             }
                         }
                     }
@@ -199,8 +220,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
                     Log.d("onFocusChange", "onFocusChange: string entered length " + str.length() + " and string is " + str);
-                    Log.d("onFocusChange", "onFocusChange: Stringbuilder length is " +  sb.toString().trim().length() + " and string is " + sb.toString());
-                    if (str.length() != sb.toString().trim().length()){
+                    Log.d("onFocusChange", "onFocusChange: Stringbuilder length is " + sb.toString().trim().length() + " and string is " + sb.toString());
+                    if (str.length() != sb.toString().trim().length()) {
                         //text is being removed
                         sendToast = true;
                     }
@@ -222,7 +243,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      *
      * @param editingListing the listing that is being edited.
      */
-    private void prepareEdit(Listing editingListing) {
+    private void prepareEdit(Listing editingListing, ProgressDialog pd) {
         setTitle(String.format("%s %s %s", getString(R.string.editing_title), editingListing.getAddress_number(), editingListing.getAddress_street()));
         int selection = 0;
         mEditing = true;
@@ -277,11 +298,14 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             updateListingSoldStatus(true);
         }
 
-        //todo get an error when trying to edit offline
         if (editingListing.getFirebasePhotos() == null) {
             restoreImages(editingListing.getLocalDbPhotos(), editingListing.getPhotoDescriptions(), LOCAL_DB_ID);
         } else {
             restoreImages(editingListing.getFirebasePhotos(), editingListing.getPhotoDescriptions(), FIREBASE_ID);
+        }
+
+        if (pd.isShowing()){
+            pd.dismiss(); //dismiss the progress dialog shown to the user when restoring the listing
         }
     }
 
@@ -511,6 +535,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
         if (okToSave) {
             new Thread(new Runnable() {
+                @SuppressWarnings("ConstantConditions")
                 @Override
                 public void run() {
                     String[] imageDescrps = mImageDescription.toArray(new String[0]);
@@ -840,6 +865,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         mCompositeDisposable.clear(); //clear any disposables
         mPresenter.unregisterReciever(); //unregister the reciever
     }
+
+
 
 }
 

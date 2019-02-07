@@ -8,7 +8,7 @@ import android.widget.Toast;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
+import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 
@@ -56,6 +56,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
 
     /**
      * Checks to see if the last time we synced the databases is at least an hour sinsce now
+     *
      * @param c context
      * @return true - we can sync, false - we don't sync
      */
@@ -69,12 +70,13 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
 
     /**
      * callback from {@link FirebaseHelper#getAllListings()}
+     *
      * @param listings the listings returned from Firebase
      */
     @Override
     public void gotListingsFromFirebase(ArrayList<Listing> listings) {
         //Update the local DB with the listings from firebase if required
-        MyDatabase.getInstance(mContextWeakReference.get()).setSynchListener(this).syncWithFirebase(listings);
+        MyDatabaseHelper.getInstance(mContextWeakReference.get()).setSynchListener(this).syncWithFirebase(listings);
     }
 
 
@@ -88,6 +90,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
 
     /**
      * Callback when a listings are added from the local DB to firebase
+     *
      * @param error wether an error occurred or not whilst performing the upload to Firebase
      */
     @Override

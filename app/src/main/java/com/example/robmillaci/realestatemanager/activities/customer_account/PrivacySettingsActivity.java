@@ -8,6 +8,7 @@ import android.widget.Button;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.contact_activity.ContactActivity;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -30,6 +31,7 @@ public class PrivacySettingsActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //remove the full screen flag set in BaseActivity
+        Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();
         setOnClicks();

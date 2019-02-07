@@ -3,22 +3,34 @@
     <words>
       <w>activites</w>
       <w>addlistingcallback</w>
+      <w>allower</w>
       <w>calls bac</w>
       <w>descr</w>
       <w>emailaddress</w>
+      <w>enteres</w>
+      <w>evals</w>
       <w>facebooklogin</w>
+      <w>forgottenpassinfo</w>
       <w>forgottenpassword</w>
       <w>hashmap</w>
+      <w>healthcare</w>
       <w>iactivity</w>
       <w>llite</w>
       <w>mapview</w>
+      <w>pois</w>
       <w>realestatemanager</w>
       <w>receive</w>
       <w>setparams</w>
+      <w>signup</w>
       <w>single</w>
       <w>snackbar</w>
+      <w>stringbuilder</w>
       <w>synching</w>
+      <w>syncobservable</w>
+      <w>todays</w>
+      <w>trailhead</w>
       <w>uploaded</w>
+      <w>valid</w>
     </words>
   </dictionary>
 </component>

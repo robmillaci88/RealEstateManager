@@ -71,9 +71,10 @@
             android:id="@+id/postcode_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/postcode_icon"
+            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title8"
             tools:ignore="Autofill,LabelFor,RtlSymmetry" />
@@ -119,7 +120,7 @@
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
-            android:id="@+id/surname_et"
+            android:id="@+id/house_name_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
@@ -292,7 +293,7 @@
             android:text="@string/dob_text"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/surname_et" />
+            app:layout_constraintTop_toBottomOf="@+id/house_name_et" />
 
         <TextView
             android:id="@+id/title6"

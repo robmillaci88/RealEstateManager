@@ -2,9 +2,9 @@ package com.example.robmillaci.realestatemanager.activities.valuations_activitie
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
+import android.os.Bundle;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
@@ -19,8 +19,8 @@ import kotlin.Unit;
  * This class is responsible for the upcoming valuations activity
  */
 public class UpcomingValuations extends AppCompatActivity {
-private Button mRefresh;
-private TextView mEvaluationsMessage;
+    private Button mRefresh;
+    private TextView mEvaluationsMessage;
 
     @SuppressLint("CheckResult")
     @Override
@@ -59,14 +59,14 @@ private TextView mEvaluationsMessage;
                 pd.dismiss();
                 setViewVisibility(true);
             }
-        },3000);
+        }, 3000);
     }
 
     private void setViewVisibility(boolean viewVisibility) {
-        if (viewVisibility){
+        if (viewVisibility) {
             mEvaluationsMessage.setVisibility(View.VISIBLE);
             mRefresh.setVisibility(View.VISIBLE);
-        }else {
+        } else {
             mEvaluationsMessage.setVisibility(View.GONE);
             mRefresh.setVisibility(View.GONE);
         }

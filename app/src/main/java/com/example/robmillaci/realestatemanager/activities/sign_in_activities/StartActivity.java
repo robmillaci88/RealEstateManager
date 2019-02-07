@@ -185,7 +185,7 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
                         boolean isEmailValid = android.util.Patterns.EMAIL_ADDRESS.matcher(userEmail.getText()).matches(); //check the email looks like a real email
                         boolean isPasswordValid = Utils.isPasswordValid(userPassword.getText()); //check that  the password meets the password criteria (see the method comments)
 
-                        if (isEmailValid && isPasswordValid) { //if the email and the password are both valie then call Firebase createUserWithEmailAndPassword
+                        if (isEmailValid && isPasswordValid) { //if the email and the password are both valid then call Firebase createUserWithEmailAndPassword
                             new UsernameAndPasswordLoginManager(StartActivity.this).createUserWithEmailAndPassword(userEmail.getText().toString()
                                     , userPassword.getText().toString());
 
@@ -279,6 +279,7 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
 
 
     @SuppressWarnings("ConstantConditions")
+    private
         /*
          * Once the user has been authenticated and loged in, launch the SplashScreenActivity
          */
@@ -370,7 +371,6 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
     @Override
     public void facebookSignInSuccessNewUser(FirebaseUser user) {
         addNewUser(user);
-
     }
 
 

@@ -20,6 +20,7 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapView;
 import com.google.android.gms.maps.OnMapReadyCallback;
+import com.google.android.gms.maps.UiSettings;
 import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
@@ -89,6 +90,12 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
                 CameraPosition cameraPosition = new CameraPosition.Builder().target(mUserLocation).zoom(12).build();
                 mGoogleMap.animateCamera(CameraUpdateFactory.newCameraPosition(cameraPosition));
 
+
+                //set the zoom controls
+                UiSettings mapUiSettings = mGoogleMap.getUiSettings();
+                mapUiSettings.setZoomControlsEnabled(true);
+                mapUiSettings.setCompassEnabled(true);
+
                 if (EasyPermissions.hasPermissions(ListingsMapView.this, Manifest.permission.ACCESS_FINE_LOCATION)) {
                     mGoogleMap.setMyLocationEnabled(true);
                 }
@@ -121,7 +128,6 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     }
 
 
-
     @Override
     public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions, @NonNull int[] grantResults) {
         super.onRequestPermissionsResult(requestCode, permissions, grantResults);
@@ -132,7 +138,8 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Called from the presenter when the users location has been established.
      * Get all mListings is then called from the presenter
-     * @param latitude the users latitude
+     *
+     * @param latitude  the users latitude
      * @param longitude the users longitude
      */
     @Override
@@ -145,6 +152,7 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Callback from the presenter after {@link ListingsMapPresenter#getAllListings(WeakReference)}
      * The map is then created after this
+     *
      * @param listings the listing returned
      */
     @Override
@@ -157,8 +165,9 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
     /**
      * Call back from {@link ListingsMapPresenter#geoLocationListing(String, int)}
      * Creates a new marker with the mListings lat long and adds this to the map
-     * @param latitude the latitude of the place
-     * @param longitude the longitude of the lace
+     *
+     * @param latitude    the latitude of the place
+     * @param longitude   the longitude of the lace
      * @param markerIndex the index of the marker representing the place
      */
     @Override
@@ -174,6 +183,7 @@ public class ListingsMapView extends AppCompatActivity implements ListingsMapPre
 
     /**
      * The on click method for the markers
+     *
      * @param marker the marker clicked
      */
     @Override

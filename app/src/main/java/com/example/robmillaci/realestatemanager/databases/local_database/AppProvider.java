@@ -11,13 +11,13 @@ import android.support.annotation.Nullable;
 
 /**
  * Create by Roberto Millaci 07/12/2018
- * Provider for this app.
+ * Provider for this apps listing data.
  */
 public class AppProvider extends android.content.ContentProvider {
     static final String CONTENT_AUTHORITY = "com.example.robmillaci.realestatemanager.provider";
     public static final Uri CONTENT_AUTHORITY_URI = Uri.parse("content://" + CONTENT_AUTHORITY);
 
-    private MyDatabase mMyDatabaseHelper;
+    private MyDatabaseHelper mMyDatabaseHelper;
     private static final UriMatcher sUriMatcher = buildURIMatcher();
 
     //static final ints for URI matcher return codes
@@ -29,6 +29,7 @@ public class AppProvider extends android.content.ContentProvider {
 
     /**
      * Create a URI matcher that is used to determine how to process queries, inserts, deletes and updates
+     *
      * @return a UriMatcher object containing our Uri's
      */
     private static UriMatcher buildURIMatcher() {
@@ -49,18 +50,19 @@ public class AppProvider extends android.content.ContentProvider {
     //get an instance of our app's database. See .getInstance() method comments
     @Override
     public boolean onCreate() {
-        mMyDatabaseHelper = MyDatabase.getInstance(getContext());
+        mMyDatabaseHelper = MyDatabaseHelper.getInstance(getContext());
         return true;
     }
 
 
     /**
      * Query the database based on the recieved uri
-     * @param uri the uri recieved to determine which table to query
-     * @param projection the database columns to return
-     * @param selection selection arguments formatted as a WHERE clause
+     *
+     * @param uri           the uri recieved to determine which table to query
+     * @param projection    the database columns to return
+     * @param selection     selection arguments formatted as a WHERE clause
      * @param selectionArgs the WHERE arguments
-     * @param sortOrder the sort order of the returned data
+     * @param sortOrder     the sort order of the returned data
      * @return a cursor containing the database records
      */
     @Nullable
@@ -120,10 +122,10 @@ public class AppProvider extends android.content.ContentProvider {
     }
 
 
-
     /**
      * Insert into the database
-     * @param uri the uri recieved used against our matcher to determine which table to insert into
+     *
+     * @param uri    the uri recieved used against our matcher to determine which table to insert into
      * @param values the values to insert
      */
     @Nullable
@@ -167,8 +169,9 @@ public class AppProvider extends android.content.ContentProvider {
 
     /**
      * Delete from the database
-     * @param uri the uri recieved used against our matcher to determine which table to insert into
-     * @param selection selection arguments formatted as a WHERE clause
+     *
+     * @param uri           the uri recieved used against our matcher to determine which table to insert into
+     * @param selection     selection arguments formatted as a WHERE clause
      * @param selectionArgs the WHERE arguments
      * @return the number of rows affected
      */
@@ -192,7 +195,7 @@ public class AppProvider extends android.content.ContentProvider {
                 long taskId = ListingsDatabaseContract.getListingsId(uri);
                 selectionCriteria = ListingsDatabaseContract._ID + " = " + taskId;
 
-                if (selection != null && (selection.length() > 0)){
+                if (selection != null && (selection.length() > 0)) {
                     selectionCriteria += " AND (" + selection + ")";
                 }
 
@@ -209,7 +212,7 @@ public class AppProvider extends android.content.ContentProvider {
                 long userTaskId = UserDatabaseContract.getListingsId(uri);
                 selectionCriteria = UserDatabaseContract._ID + " = " + userTaskId;
 
-                if (selection != null && (selection.length() > 0)){
+                if (selection != null && (selection.length() > 0)) {
                     selectionCriteria += " AND (" + selection + ")";
                 }
 
@@ -226,9 +229,10 @@ public class AppProvider extends android.content.ContentProvider {
 
     /**
      * Updates the database
-     * @param uri the uri recieved used against our matcher to determine which table to update
-     * @param values the update values
-     * @param selection the SQL WHERE statement for which rows to update
+     *
+     * @param uri           the uri recieved used against our matcher to determine which table to update
+     * @param values        the update values
+     * @param selection     the SQL WHERE statement for which rows to update
      * @param selectionArgs the arguments for the WHERE statements
      * @return count of the rows affected
      */
@@ -252,7 +256,7 @@ public class AppProvider extends android.content.ContentProvider {
                 long taskId = ListingsDatabaseContract.getListingsId(uri);
                 selectionCriteria = ListingsDatabaseContract._ID + " = " + taskId;
 
-                if (selection != null && (selection.length() > 0)){
+                if (selection != null && (selection.length() > 0)) {
                     selectionCriteria += " AND (" + selection + ")";
                 }
 
@@ -269,7 +273,7 @@ public class AppProvider extends android.content.ContentProvider {
                 long userTaskId = UserDatabaseContract.getListingsId(uri);
                 selectionCriteria = UserDatabaseContract._ID + " = " + userTaskId;
 
-                if (selection != null && (selection.length() > 0)){
+                if (selection != null && (selection.length() > 0)) {
                     selectionCriteria += " AND (" + selection + ")";
                 }
 

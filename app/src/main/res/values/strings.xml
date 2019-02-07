@@ -27,7 +27,7 @@
         <item>Bakery and Baked Goods Store</item>
         <item>Bank</item>
         <item>Banquet Hall</item>
-        <item>Bar-Pub-Stube-Biergarten</item>
+        <item>Bar-Pub</item>
         <item>Basketball</item>
         <item>Bay-Harbor</item>
         <item>Beach</item>
@@ -68,8 +68,8 @@
         <item>Cellphone Parking Lot</item>
         <item>Cemetery</item>
         <item>Check Cashing Service-Currency Exchange</item>
-        <item>Childrens Apparel</item>
-        <item>Childrens Museum</item>
+        <item>Children\'s Apparel</item>
+        <item>Children\'s Museum</item>
         <item>Chiropractor</item>
         <item>Church</item>
         <item>Cinema</item>
@@ -214,7 +214,7 @@
         <item>Market</item>
         <item>Marriage and Match Making Services</item>
         <item>Medical Services-Clinics</item>
-        <item>Mens Apparel</item>
+        <item>Men\'s Apparel</item>
         <item>Military Base</item>
         <item>Military Checkpoint</item>
         <item>Mining</item>
@@ -234,7 +234,6 @@
         <item>Mountain Peaks</item>
         <item>Mover</item>
         <item>Museum</item>
-        <item>Named Intersection-Chowk</item>
         <item>Named Place</item>
         <item>Natural and Geographical</item>
         <item>Neighborhood</item>
@@ -398,7 +397,7 @@
         <item>Wildlife Refuge</item>
         <item>Wine and Liquor</item>
         <item>Winery</item>
-        <item>Womens Apparel</item>
+        <item>Women\'s Apparel</item>
         <item>Zoo</item>
     </string-array>
     <string-array name="spinner_types">
@@ -1319,8 +1318,8 @@
     <string name="signing_in_message">Signing in…</string>
     <string name="sign_in_cancelled">Sign in cancelled</string>
     <string name="sign_in_error">Sign in error</string>
-    <string name="welcome">Welcome \u0020</string>
-    <string name="welcome_back">Welcome back \u0020</string>
+    <string name="welcome">Welcome\u0020</string>
+    <string name="welcome_back">Welcome back\u0020</string>
     <string name="auth_failed">Authentication failed</string>
     <string name="book_valuation_activity_title">Book Valuation</string>
     <string name="let_property_title">Let a property</string>
@@ -1351,7 +1350,6 @@
     <string name="buysell_nav">buysell nav</string>
     <string name="settings_btn">settings btn</string>
     <string name="posted_on">Posted on</string>
-    <string name="description">Description</string>
     <string name="listing_image">listing image</string>
     <string name="remove_image_btn">remove image</string>
     <string name="last_edit">Last edit</string>
@@ -1482,11 +1480,21 @@
     <string name="invalid_email_entered">The email address provided is invalid</string>
     <string name="reset_text">RESET</string>
     <string name="enter_valid_email">Please enter a valid email</string>
-    <string name="forgotten_password">Forgotten Password</string>
     <string name="sign_in_text">Sign in</string>
     <string name="new_or_existing_user">New or Existing user</string>
     <string name="reset_email_sent">Reset email send to\u0020\</string>
     <string name="password_reset_failed">Password reset failed :</string>
     <string name="sign_up_string">Sign up</string>
+    <string name="sell_let_missing_vals">You must enter a value for each field</string>
+    <string name="internet_required">An internet connection is required to use this feature</string>
+    <string name="enter_email_reset_pass">Enter your email address to reset your password</string>
+    <string name="email_address">Email address…</string>
+    <string name="existing_user">Existing User</string>
+    <string name="new_user">New User</string>
+    <string name="password_text">Password</string>
+    <string name="password_criteria">Passwords must be at least 8 characters long and contain one uppercase letter and one number.</string>
+    <string name="forgotten_password">Forgotten Password</string>
+    <string name="image_descr">+Description</string>
+    <string name="descr">Description</string>
 
 </resources>

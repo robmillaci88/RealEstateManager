@@ -150,7 +150,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
         mSoldRadioBtn.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                if (isChecked){
+                if (isChecked) {
                     mLetRadioBtn.setChecked(false);
                     mBuyRadioBtn.setChecked(false);
                 }
@@ -178,7 +178,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
 
         RxView.clicks(mSearchBtn).subscribe(new Consumer<Unit>() {
             @Override
-            public void accept(Unit unit){
+            public void accept(Unit unit) {
                 String location = mLocationEditText.getText().toString();
                 boolean buy = mBuyRadioBtn.isChecked();
                 boolean let = mLetRadioBtn.isChecked();
@@ -189,7 +189,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
                 String maxBedrooms = mMaxBedroomsSpinner.getSelectedItem().toString();
                 boolean soldSearch = mSoldRadioBtn.isChecked();
 
-                if (soldSearch){
+                if (soldSearch) {
                     buy = true; //If we are looking for sold properties, we will only return those that were for sale, not for rent
                 }
 
@@ -203,7 +203,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
                 searchResultsIntent.putExtra(MAX_PRICE_VALUE_KEY, maxPrice);
                 searchResultsIntent.putExtra(MIN_BEDROOMS_VALUE_KEY, minBedrooms);
                 searchResultsIntent.putExtra(MAX_BEDROOMS_VALUE_KEY, maxBedrooms);
-                searchResultsIntent.putExtra(SOLD_SEARCH,soldSearch);
+                searchResultsIntent.putExtra(SOLD_SEARCH, soldSearch);
 
                 startActivity(searchResultsIntent);
             }
@@ -225,7 +225,6 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
             EasyPermissions.requestPermissions(this, getString(R.string.grant_permission), REQUEST_LOCATION_PERMISSION, perms);
         }
     }
-
 
 
     @Override
@@ -253,6 +252,7 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
 
     /**
      * Callback from {@link SearchActivityPresenter#getLastKnownLocation()}
+     *
      * @param postCode the returned post code of the user to populate the location search criteria
      */
     @Override

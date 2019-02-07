@@ -62,6 +62,7 @@ public class BookingTimesAdapter extends RecyclerView.Adapter<BookingTimesAdapte
 
     /**
      * Selects a specific time which updates the viewholders background and text color. Also sets the reference of the current selected viewholder
+     *
      * @param myViewholder the viewholder clicked on
      */
     private void selectItem(MyViewholder myViewholder) {
@@ -74,6 +75,7 @@ public class BookingTimesAdapter extends RecyclerView.Adapter<BookingTimesAdapte
 
     /**
      * DeSelects the viewholder stores in our mSelectedViewholderRef, removing the background colour and setting the text back to black
+     *
      * @param selectedViewHolderRef the viewholder to be de selected
      */
     private void deSelectViewholder(MyViewholder selectedViewHolderRef) {
@@ -83,12 +85,10 @@ public class BookingTimesAdapter extends RecyclerView.Adapter<BookingTimesAdapte
     }
 
 
-
     @Override
     public int getItemCount() {
         return mTimes.size();
     }
-
 
 
     public void setCallbackListener(BookingAdapterCallback l) {

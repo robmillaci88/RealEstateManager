@@ -37,7 +37,7 @@
         android:ems="10"
         android:focusableInTouchMode="true"
         android:gravity="center_horizontal"
-        android:hint="@string/description"
+        android:hint="@string/image_descr"
         android:inputType="textPersonName"
         android:selectAllOnFocus="false"
         android:textColor="@android:color/white"

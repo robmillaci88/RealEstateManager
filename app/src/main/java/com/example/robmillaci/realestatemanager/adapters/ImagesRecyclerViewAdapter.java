@@ -26,6 +26,7 @@ import java.util.ArrayList;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
+
 /**
  * The adapter for the {@link com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView}<br/>
  * Displays the mImages associated with a property when adding or editing a listing

@@ -5,7 +5,7 @@ import android.os.Bundle;
 
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
+import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 
 import java.lang.ref.WeakReference;
@@ -23,7 +23,7 @@ import static com.example.robmillaci.realestatemanager.activities.search_activit
  * The Presenter for {@link SearchResultsView}
  * Handles getting data from the database and returning it to the mView. Also filters and sorts data as per the views request and returns this data so the UI can be updated
  */
-public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.Model {
+public class SearchResultsPresenter implements MyDatabaseHelper.Model, FirebaseHelper.Model {
 
     private final View mView; //this presenters mView
     private final WeakReference<Context> mContextWeakReference;
@@ -37,33 +37,34 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
 
     /**
      * Called from the mView to search and return listings from either Firebase or the local db
+     *
      * @param extras the search parameters
      */
-     void searchDatabase(Bundle extras) {
+    void searchDatabase(Bundle extras) {
         if (Utils.CheckConnectivity(mContextWeakReference.get())) {
             FirebaseHelper.getInstance().setPresenter(this).searchForSaleListings(extras);
         } else {
-            MyDatabase.getInstance(mContextWeakReference.get()).setPresenter(this).searchLocalDB(mContextWeakReference.get(), extras);
+            MyDatabaseHelper.getInstance(mContextWeakReference.get()).setPresenter(this).searchLocalDB(mContextWeakReference.get(), extras);
         }
     }
 
 
     /**
-     * Callback from {@link MyDatabase#searchLocalDB(Context, Bundle)}
+     * Callback from {@link MyDatabaseHelper#searchLocalDB(Context, Bundle)}
      * Sends the listings back to the mView
-     * @param listings the returned listings
-     * @param c the returned context
+     *  @param listings the returned listings
+     *
      */
     @Override
-    public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings) {
         mView.gotAllListing(listings);
     }
-
 
 
     /**
      * Callback from {@link FirebaseHelper#getAllListings()}
      * * Sends the listings back to the mView
+     *
      * @param listings the returned listings
      */
     @Override
@@ -74,7 +75,8 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
 
     /**
      * Called from {@link SearchResultsView} to filter and return the listings
-     * @param selectedValue the chosen filter option
+     *
+     * @param selectedValue    the chosen filter option
      * @param originalListings the origional listings to be filtered
      */
     void filterData(String selectedValue, ArrayList<Listing> originalListings) {
@@ -96,7 +98,8 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
 
     /**
      * Called from {@link SearchResultsView} to sort and return the listings
-     * @param sortCondition the chosen sort criteria
+     *
+     * @param sortCondition    the chosen sort criteria
      * @param originalListings the origional listings to be filtered
      */
     void sortData(ArrayList<Listing> originalListings, int sortCondition) {
@@ -155,8 +158,7 @@ public class SearchResultsPresenter implements MyDatabase.Model, FirebaseHelper.
     }
 
 
-
-//The views interface methods
+    //The views interface methods
     public interface View {
         void gotAllListing(ArrayList<Listing> listings);
 

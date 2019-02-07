@@ -13,79 +13,60 @@
         android:focusable="true"
         android:focusableInTouchMode="true">
 
-    <EditText
+    <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
         android:id="@+id/town_et"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/round_edit_text"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/town_icon"
-        android:ems="10"
         android:hint="@string/town"
-        android:inputType="textMultiLine|textPersonName"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/street_et"
         tools:ignore="Autofill,RtlSymmetry" />
 
-    <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
         android:id="@+id/county_et"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/round_edit_text"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/country_icon"
-        android:ems="10"
         android:hint="@string/county"
-        android:inputType="textMultiLine|textPersonName"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/town_et"
         tools:ignore="Autofill,RtlSymmetry"/>
 
-    <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
         android:id="@+id/street_et"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="16dp"
-        android:background="@drawable/round_edit_text"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/street_icon"
-        android:ems="10"
         android:hint="@string/street"
-        android:inputType="textMultiLine|textPersonName"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/surname_et"
+        app:layout_constraintTop_toBottomOf="@+id/house_name_et"
         tools:ignore="Autofill,RtlSymmetry"/>
 
-        <EditText
-            android:id="@+id/surname_et"
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
+            android:id="@+id/house_name_et"
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
-            android:background="@drawable/round_edit_text"
-            android:drawablePadding="10dp"
             android:drawableStart="@drawable/house_number"
-            android:ems="10"
             android:hint="@string/name_number"
-            android:inputType="textMultiLine|textPersonName"
             android:paddingStart="10dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -164,20 +145,15 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView35" />
 
-    <EditText
+        <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
         android:id="@+id/postcode_et"
         android:layout_width="0dp"
         android:layout_height="36dp"
         android:layout_marginEnd="8dp"
         android:layout_marginStart="8dp"
         android:layout_marginTop="8dp"
-        android:background="@drawable/round_edit_text"
-        android:drawablePadding="10dp"
         android:drawableStart="@drawable/postcode_icon"
-        android:ems="10"
         android:hint="@string/post_code"
-        android:inputType="textMultiLine|textPersonName"
-        android:paddingStart="10dp"
         app:layout_constraintEnd_toStartOf="@+id/guideline3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/textView36"

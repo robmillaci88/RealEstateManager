@@ -21,7 +21,6 @@ public class SquareEditText extends AppCompatEditText {
     }
 
 
-
     private void setProperties() {
         this.setCompoundDrawablePadding(10);
         this.setEms(10);

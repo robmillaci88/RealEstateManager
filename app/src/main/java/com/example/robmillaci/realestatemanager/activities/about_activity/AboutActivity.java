@@ -7,6 +7,7 @@ import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;

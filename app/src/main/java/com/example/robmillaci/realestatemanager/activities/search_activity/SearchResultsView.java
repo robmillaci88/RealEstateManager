@@ -6,6 +6,8 @@ import android.content.pm.ActivityInfo;
 import android.graphics.Color;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v4.app.FragmentManager;
+import android.support.v4.app.FragmentTransaction;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -288,6 +290,7 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
      * Called from {@link SearchResultsAdapter}. The recycler views on click methods for the listing.
      * The listing details are displayed in a fragment to the user.<br/>
      * If we are using a tablet, this activities views are not hidden, otherwise they are hidden
+     *
      * @param listingAddress the address of the listing
      */
     @Override
@@ -298,7 +301,16 @@ public class SearchResultsView extends AppCompatActivity implements SearchResult
         if (!Utils.isTablet(getApplicationContext())) {
             changeActivityViewsVisibility(false);
         }
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container, new ListingItemFragment(), FRAGMENT_TAG).addToBackStack(null).commit();
+
+        FragmentManager manager = getSupportFragmentManager();
+        FragmentTransaction ft = manager.beginTransaction();
+
+        ft.setCustomAnimations(R.anim.fade_in,
+                R.anim.fade_out);
+
+        ft.replace(R.id.fragment_container, new ListingItemFragment(), FRAGMENT_TAG)
+                .addToBackStack(null)
+                .commit();
     }
 
 

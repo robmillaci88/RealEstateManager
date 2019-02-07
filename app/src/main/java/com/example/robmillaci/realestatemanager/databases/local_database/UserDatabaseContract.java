@@ -11,22 +11,22 @@ import static com.example.robmillaci.realestatemanager.databases.local_database.
  * for the local database users table.
  */
 class UserDatabaseContract {
-     static final String _ID = BaseColumns._ID;
-     static final String TABLE_NAME = "user";
-     static final String TITLE = "title";
-     static final String FORENAME = "forename";
-     static final String SURNAME = "surname";
-     static final String DOB = "dob";
-     static final String POSTCODE = "postcode";
-     static final String HOUSENUMBER = "houseNumber";
-     static final String STREET = "street";
-     static final String TOWN = "town";
-     static final String COUNTY = "county";
-     static final String EMAIL = "email";
-     static final String HOME_PHONE = "homePhone";
-     static final String MOBILE = "mobileNo";
-     static final String PRIMARY_CONTACT = "primaryContact";
-     static final String AUTHENTICATED = "authenticated";
+    static final String _ID = BaseColumns._ID;
+    static final String TABLE_NAME = "user";
+    static final String TITLE = "title";
+    static final String FORENAME = "forename";
+    static final String SURNAME = "surname";
+    static final String DOB = "dob";
+    static final String POSTCODE = "postcode";
+    static final String HOUSENUMBER = "houseNumber";
+    static final String STREET = "street";
+    static final String TOWN = "town";
+    static final String COUNTY = "county";
+    static final String EMAIL = "email";
+    static final String HOME_PHONE = "homePhone";
+    static final String MOBILE = "mobileNo";
+    static final String PRIMARY_CONTACT = "primaryContact";
+    static final String AUTHENTICATED = "authenticated";
 
     /**
      * The URI to access the users table
@@ -37,7 +37,7 @@ class UserDatabaseContract {
     static final String CONTENT_TYPE = "vnd.android.cursor.dir/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
     static final String CONTENT_ITEM_TYPE = "vnd.android.cursor.item/vnd." + CONTENT_AUTHORITY + "." + TABLE_NAME;
 
-     static Uri buildTaskUri(long recordId) {
+    static Uri buildTaskUri(long recordId) {
         return ContentUris.withAppendedId(CONTENT_URI, recordId);
     }
 

@@ -1,12 +1,13 @@
 package com.example.robmillaci.realestatemanager.activities.splash_screen;
 
 import android.content.Intent;
-import android.os.Handler;
 import android.os.Bundle;
+import android.os.Handler;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 
 /**
  * A simple splash screen that is displayed to the user when the app starts.
@@ -29,6 +30,6 @@ public class SplashScreenActivity extends BaseActivity {
                 startActivity(new Intent(SplashScreenActivity.this, MainActivityView.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
-        },3000);
+        }, 3000);
     }
 }

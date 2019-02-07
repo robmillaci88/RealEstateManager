@@ -5,11 +5,10 @@ import android.location.Geocoder;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.widget.Toast;
-
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
-import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;
+import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
 import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.google.android.gms.maps.OnStreetViewPanoramaReadyCallback;
 import com.google.android.gms.maps.StreetViewPanorama;
@@ -34,30 +33,27 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
         setTitle(getString(R.string.street_view_activity_title));
 
 
-        //Restore the listing passed into the intent when creating this activity
-        Listing thisListing;
-        Bundle intentBundle = getIntent().getExtras();
-        if (intentBundle != null) {
-            thisListing = (Listing) intentBundle.getSerializable(ListingItemFragment.LISTING_BUNDLE_KEY);
+        //Restore the listing passed into shared preferences before starting this activity
+        Listing thisListing = new SharedPreferenceHelper(StreetViewActivity.this).getListingFromSharedPrefs();
 
-            String addressString;
-            if (thisListing != null) {
-                addressString = String.format("%s %s %s %s", thisListing.getAddress_number(), //Created an address string from the listing
-                        thisListing.getAddress_street(),
-                        thisListing.getAddress_town(),
-                        thisListing.getAddress_postcode());
+        String addressString;
+        if (thisListing != null) {
+            addressString = String.format("%s %s %s %s", thisListing.getAddress_number(), //Created an address string from the listing
+                    thisListing.getAddress_street(),
+                    thisListing.getAddress_town(),
+                    thisListing.getAddress_postcode());
 
-                getListingLatLng(addressString); //pass the address string into getListingLatLng method
-                getStreetView();  //creates the street view using the listings location
+            getListingLatLng(addressString); //pass the address string into getListingLatLng method
+            getStreetView();  //creates the street view using the listings location
 
-                setTitle(getString(R.string.street_view_title) + addressString);
-            }
+            setTitle(String.format("%s %s", getString(R.string.street_view_title), addressString));
         }
     }
 
 
     /**
      * Using the passed in address string, this method sets the listings latitude and longitude so we can create the street view
+     *
      * @param strAddress the address of the listing to be Geo coded
      */
     private void getListingLatLng(String strAddress) {
@@ -90,6 +86,7 @@ public class StreetViewActivity extends BaseActivity implements OnStreetViewPano
 
     /**
      * Once the street view fragment is ready, set the position to be the listings location
+     *
      * @param streetViewPanorama the created street view fragment
      */
     @Override

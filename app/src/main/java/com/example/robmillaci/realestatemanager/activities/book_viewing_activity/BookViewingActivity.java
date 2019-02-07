@@ -3,6 +3,7 @@ package com.example.robmillaci.realestatemanager.activities.book_viewing_activit
 import android.annotation.SuppressLint;
 import android.content.Context;
 import android.content.Intent;
+import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
@@ -14,9 +15,9 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
+import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.valuations_activities.ConfirmationActivity;
 import com.example.robmillaci.realestatemanager.adapters.BookingTimesAdapter;
-import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.fragments.ListingItemFragment;
 import com.jakewharton.rxbinding3.view.RxView;
@@ -27,6 +28,7 @@ import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
+
 import devs.mulham.horizontalcalendar.HorizontalCalendar;
 import devs.mulham.horizontalcalendar.HorizontalCalendarView;
 import devs.mulham.horizontalcalendar.utils.HorizontalCalendarListener;
@@ -78,7 +80,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
 
         Calendar cal = Calendar.getInstance();
         cal.set(Calendar.HOUR_OF_DAY, 9);
-        cal.set(Calendar.MINUTE,0);
+        cal.set(Calendar.MINUTE, 0);
         @SuppressLint("SimpleDateFormat") SimpleDateFormat dateFormat = new SimpleDateFormat("HH:mm");
 
         for (int i = 0; i < MAX_BOOKINGS_PER_DAY; i++) {
@@ -90,7 +92,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
         BookingTimesAdapter timesAdapter = new BookingTimesAdapter(dateTimes, new WeakReference<Context>(this));
         timesAdapter.setCallbackListener(this);
 
-        mTimesRecyclerView.setLayoutManager(new GridLayoutManager(this,4,GridLayoutManager.VERTICAL,false));
+        mTimesRecyclerView.setLayoutManager(new GridLayoutManager(this, 4, GridLayoutManager.VERTICAL, false));
         mTimesRecyclerView.setAdapter(timesAdapter);
     }
 
@@ -112,6 +114,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
 
         mContinueBtn = findViewById(R.id.continue_btn);
         mContinueBtn.setClickable(false);
+        mContinueBtn.setEnabled(false);
         mContinueBtn.setBackgroundColor(getResources().getColor(R.color.lightGrey));
 
         address_text.setText(String.format("%s %s, %s, %s", mThisListing.getAddress_number(),
@@ -121,14 +124,14 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
     }
 
     @SuppressLint("CheckResult")
-    private void setOnClickListeners(){
+    private void setOnClickListeners() {
         //noinspection ResultOfMethodCallIgnored
         RxView.clicks(mContinueBtn)
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
                         Intent bookingConfirmation = new Intent(BookViewingActivity.this, ConfirmationActivity.class);
-                        bookingConfirmation.putExtra(ConfirmationActivity.BUNDLE_KEY,ConfirmationActivity.CALLED_FROM_BOOK_VIEWING);
+                        bookingConfirmation.putExtra(ConfirmationActivity.BUNDLE_KEY, ConfirmationActivity.CALLED_FROM_BOOK_VIEWING);
                         startActivity(bookingConfirmation);
                     }
                 });
@@ -161,10 +164,10 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
 
         final HorizontalCalendar horizontalCalendar = new HorizontalCalendar.Builder(this, R.id.calendarView) //create a Horizontal calendar
                 .range(Calendar.getInstance(), endDate) //set the range from now to 3 months in the future
-                .datesNumberOnScreen(5) //the number of dates on screen at once
+                .datesNumberOnScreen(5) //the number of dates on screen at onc
                 .build();
 
-        horizontalCalendar.getSelectedItemStyle().setBackground(new ColorDrawable(getResources().getColor(R.color.colorAccent))); //set the color when a date is selected
+        horizontalCalendar.getSelectedItemStyle().setBackground(new ColorDrawable(Color.WHITE)); //set the color when a date is selected
 
         horizontalCalendar.setCalendarListener(new HorizontalCalendarListener() {
             @Override
@@ -188,6 +191,7 @@ public class BookViewingActivity extends AppCompatActivity implements BookingTim
     @Override
     public void timeSelected() {
         mContinueBtn.setClickable(true);
+        mContinueBtn.setEnabled(true);
         mContinueBtn.setBackgroundResource(R.drawable.green_button_round_edges);
     }
 }

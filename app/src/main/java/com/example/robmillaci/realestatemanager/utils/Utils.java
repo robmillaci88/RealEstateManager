@@ -5,6 +5,7 @@ import android.content.Context;
 import android.net.ConnectivityManager;
 import android.text.Editable;
 import android.util.Log;
+import android.view.View;
 
 import com.example.robmillaci.realestatemanager.R;
 
@@ -23,13 +24,13 @@ public class Utils {
 
 
     //Converts dollars to Euro
-    public static int convertDollarToEuro(int dollars) {
-        return (int) Math.round(dollars * 0.87);
+    public static int convertDollarToEuro(double dollars) {
+        return (int) Math.round(dollars * 0.88);
     }
 
     //Converts Euros to dollars
-    public static int convertEuroToDollar(int euro) {
-        return (int) Math.round(euro * 1.15);
+    public static int convertEuroToDollar(double euro) {
+        return (int) Math.round(euro * 1.14);
     }
 
 
@@ -72,6 +73,7 @@ public class Utils {
 
     /**
      * Formats a given number returning the correct decimal formatting with comma separators
+     *
      * @param number the number to be formatted
      */
     public static String formatNumber(int number) {
@@ -100,7 +102,22 @@ public class Utils {
                 numOfUpperLetters++;
             }
         }
-        Log.d("isPasswordValid", "isPasswordValid: length is " + passwordLength + " number of digits is " + numOfDigits + " number of upper case is " + numOfUpperLetters);
         return passwordLength && numOfDigits >= 1 && numOfUpperLetters >= 1;
+    }
+
+
+    //Create an immersive user experience by hiding the nav bar, setting a full screen layout as well as removing the bottom system navigation bar
+    public static void immersiveMode(View decorView) {
+        decorView.setSystemUiVisibility(
+                View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                        | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                        | View.SYSTEM_UI_FLAG_FULLSCREEN
+                        | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+    }
+
+    public static void removeImmersiveMode(View decorView){
+        decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 }

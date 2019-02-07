@@ -2,12 +2,15 @@ package com.example.robmillaci.realestatemanager.activities.customer_account;
 
 import android.content.Intent;
 import android.os.Bundle;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -37,6 +40,7 @@ public class AccountActivity extends BaseActivity {
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //clears the full screen flag set in the base activity
+        Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();
         setOnClicks();
@@ -76,8 +80,8 @@ public class AccountActivity extends BaseActivity {
                 .subscribe(new Consumer<Unit>() {
                     @Override
                     public void accept(Unit unit) {
-                        Intent signOutIntent = new Intent(AccountActivity.this,StartActivity.class);
-                        signOutIntent.putExtra(LOGOUT_INTENT_KEY,LOGOUT_INTENT_VALUE);
+                        Intent signOutIntent = new Intent(AccountActivity.this, StartActivity.class);
+                        signOutIntent.putExtra(LOGOUT_INTENT_KEY, LOGOUT_INTENT_VALUE);
                         startActivity(signOutIntent);
                     }
                 });
@@ -85,6 +89,21 @@ public class AccountActivity extends BaseActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                break;
+        }
+        return true;
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(AccountActivity.this,MainActivityView.class));
+    }
 
     @Override
     protected void onDestroy() {

@@ -100,7 +100,7 @@
             android:drawablePadding="10dp"
             android:drawableStart="@drawable/desc_icon"
             android:gravity="center_vertical"
-            android:text="@string/description"
+            android:text="@string/descr"
             android:textColor="@color/com_facebook_button_background_color_focused_disabled"
             android:textStyle="bold"
             app:layout_constraintEnd_toStartOf="@+id/imageView6"

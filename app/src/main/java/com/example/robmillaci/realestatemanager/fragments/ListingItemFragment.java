@@ -2,7 +2,6 @@ package com.example.robmillaci.realestatemanager.fragments;
 
 import android.annotation.SuppressLint;
 import android.app.AlertDialog;
-import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.os.Bundle;
@@ -15,22 +14,24 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.robmillaci.realestatemanager.R;
-import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView;
 import com.example.robmillaci.realestatemanager.activities.book_viewing_activity.BookViewingActivity;
 import com.example.robmillaci.realestatemanager.activities.offers_activities.MakeAnOffer;
 import com.example.robmillaci.realestatemanager.activities.search_activity.StreetViewActivity;
+import com.example.robmillaci.realestatemanager.adapters.ImagesViewPagerAdapter;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
+import com.example.robmillaci.realestatemanager.utils.ToastModifications;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import java.lang.ref.WeakReference;
 import java.util.Locale;
+import java.util.Objects;
 
 import io.reactivex.functions.Consumer;
 import kotlin.Unit;
@@ -123,12 +124,10 @@ public class ListingItemFragment extends BaseFragment {
     @SuppressWarnings("ResultOfMethodCallIgnored")
     @SuppressLint("CheckResult")
     private void setOnClicks() {
-        final Context c = ListingItemFragment.this.getContext();
-
         RxView.clicks(mDescr).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) { //display the description of the listing
-                @SuppressLint("InflateParams") View alertDialogView = getLayoutInflater().inflate(R.layout.listing_description_dialog_layout,null);
+                @SuppressLint("InflateParams") View alertDialogView = getLayoutInflater().inflate(R.layout.listing_description_dialog_layout, null);
 
                 AlertDialog.Builder dialogBuilder = new AlertDialog.Builder(getContext());
                 dialogBuilder.setView(alertDialogView);
@@ -147,10 +146,10 @@ public class ListingItemFragment extends BaseFragment {
 
                 StringBuilder sb = new StringBuilder();
 
-                for (int a = 0; a < poiArray.length; a++){
-                    if (a == 0){
-                       sb.append("-").append(" ").append(poiArray[a]);
-                    }else {
+                for (int a = 0; a < poiArray.length; a++) {
+                    if (a == 0) {
+                        sb.append("-").append(" ").append(poiArray[a]);
+                    } else {
                         sb.append("\n").append("-").append(poiArray[a]);
                     }
                 }
@@ -162,7 +161,7 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(mMapviewTv).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) { //create the map view fragment
-                    createMapFragment(NON_TABLET_REQUEST_CODE);
+                createMapFragment(NON_TABLET_REQUEST_CODE);
             }
         });
 
@@ -170,10 +169,13 @@ public class ListingItemFragment extends BaseFragment {
         RxView.clicks(mStreetView).subscribe(new Consumer<Unit>() {
             @Override
             public void accept(Unit unit) { //Start the street view for the listing
+                if (Utils.CheckConnectivity(Objects.requireNonNull(Objects.requireNonNull(getContext())))) {
                     Intent streetViewIntent = new Intent(getActivity(), StreetViewActivity.class);
-                    streetViewIntent.putExtra(LISTING_BUNDLE_KEY, mThisListing);
-
+                    new SharedPreferenceHelper(getContext()).addListingToSharedPref(mThisListing);
                     startActivity(streetViewIntent);
+                } else {
+                    ToastModifications.createToast(getContext(), getString(R.string.internet_required), Toast.LENGTH_LONG);
+                }
             }
         });
 
@@ -188,22 +190,31 @@ public class ListingItemFragment extends BaseFragment {
         });
 
 
-        RxView.clicks(mEditListingFab).subscribe(new Consumer<Unit>() {
-            @Override
-            public void accept(Unit unit) { //edit this listing
-                Intent editListingIntent = new Intent(getActivity(), AddListingView.class);
-                editListingIntent.putExtra(EDIT_LISTING_BUNDLE_KEY, mThisListing);
-                startActivity(editListingIntent);
-            }
-        });
+        RxView.clicks(mEditListingFab)
+                .subscribe(new Consumer<Unit>() {
+                    @Override
+                    public void accept(Unit unit) { //edit this listing
+                        final Intent editListingIntent = new Intent(getActivity(), AddListingView.class);
+                        editListingIntent.putExtra(EDIT_LISTING_BUNDLE_KEY, true);
+
+                        new Thread(new Runnable() {
+                            @Override
+                            public void run() {
+                                new SharedPreferenceHelper(Objects.requireNonNull(getActivity())).addListingToSharedPref(mThisListing);
+                                startActivity(editListingIntent);
+                                getActivity().overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out); //fade the activity out when transitioning
+                            }
+                        }).start();
+                    }
+                });
 
 
         RxView.clicks(mMakeAnOfferButton).subscribe(new Consumer<Unit>() {
             @Override
-            public void accept(Unit unit){ //make an offer on this listing
-              Intent makeAnOfferIntent = new Intent(getActivity(),MakeAnOffer.class);
-              makeAnOfferIntent.putExtra(LISTING_BUNDLE_KEY, mThisListing);
-              startActivity(makeAnOfferIntent);
+            public void accept(Unit unit) { //make an offer on this listing
+                Intent makeAnOfferIntent = new Intent(getActivity(), MakeAnOffer.class);
+                makeAnOfferIntent.putExtra(LISTING_BUNDLE_KEY, mThisListing);
+                startActivity(makeAnOfferIntent);
             }
         });
     }
@@ -211,6 +222,7 @@ public class ListingItemFragment extends BaseFragment {
 
     /**
      * Creates the map view fragment for this listing.
+     *
      * @param requestCode either Tablet or non-tablet
      */
     @SuppressWarnings("ConstantConditions")
@@ -261,7 +273,7 @@ public class ListingItemFragment extends BaseFragment {
                 mThisListing.getAddress_town(),
                 mThisListing.getAddress_postcode().toUpperCase()));
 
-        mPostedDateTv.setText(String.format("%s %s %s %s" ,
+        mPostedDateTv.setText(String.format("%s %s %s %s",
                 getString(R.string.posted_on),
                 mThisListing.getFormattedPostedDate(),
                 getString(R.string.by_text),
@@ -275,5 +287,4 @@ public class ListingItemFragment extends BaseFragment {
 
         mCircleIndicator.setViewPager(mViewPager);
     }
-
 }

@@ -3,9 +3,9 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="match_parent"
+    android:layout_height="wrap_content"
     android:background="@drawable/homescreenimg"
-    android:gravity="center"
+    android:gravity="center|fill_vertical"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView"
     tools:showIn="@layout/app_bar_main">
@@ -15,55 +15,55 @@
         android:id="@+id/geolocate_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@android:color/white"
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/add_listing_fab"
-        app:srcCompat="@drawable/geolocate_icon"
-        android:focusable="true" />
+        app:srcCompat="@drawable/geolocate_icon" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/sync_db_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@android:color/white"
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/geolocate_fab"
-        app:srcCompat="@drawable/synch_db"
-        android:focusable="true" />
+        app:srcCompat="@drawable/synch_db" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/add_listing_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="24dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:backgroundTint="@android:color/white"
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/search_fab"
-        app:srcCompat="@drawable/add_property"
-        android:focusable="true" />
+        app:srcCompat="@drawable/add_property" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/search_fab"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginEnd="16dp"
         android:layout_marginTop="50dp"
+        android:layout_marginEnd="16dp"
         android:clickable="true"
+        android:focusable="true"
         app:elevation="15dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:srcCompat="@drawable/search_icon"
-        android:focusable="true" />
+        app:srcCompat="@drawable/search_icon" />
 
 </android.support.constraint.ConstraintLayout>

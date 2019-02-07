@@ -78,7 +78,7 @@ public class ImageFilePath {
                 }
 
                 final String selection = "_id=?";
-                final String[] selectionArgs = new String[] { split[1] };
+                final String[] selectionArgs = new String[]{split[1]};
 
                 return getDataColumn(context, contentUri, selection,
                         selectionArgs);
@@ -106,21 +106,17 @@ public class ImageFilePath {
      * class="IL_AD">useful</span> for MediaStore Uris, and other file-based
      * ContentProviders.
      *
-     * @param context
-     *            The context.
-     * @param uri
-     *            The Uri to query.
-     * @param selection
-     *            (Optional) Filter used in the query.
-     * @param selectionArgs
-     *            (Optional) Selection arguments used in the query.
+     * @param context       The context.
+     * @param uri           The Uri to query.
+     * @param selection     (Optional) Filter used in the query.
+     * @param selectionArgs (Optional) Selection arguments used in the query.
      * @return The value of the _data column, which is typically a file path.
      */
     private static String getDataColumn(Context context, Uri uri,
-                                       String selection, String[] selectionArgs) {
+                                        String selection, String[] selectionArgs) {
 
         final String column = "_data";
-        final String[] projection = { column };
+        final String[] projection = {column};
         try (Cursor cursor = context.getContentResolver().query(uri, projection,
                 selection, selectionArgs, null)) {
             if (cursor != null && cursor.moveToFirst()) {
@@ -132,8 +128,7 @@ public class ImageFilePath {
     }
 
     /**
-     * @param uri
-     *            The Uri to check.
+     * @param uri The Uri to check.
      * @return Whether the Uri authority is ExternalStorageProvider.
      */
     private static boolean isExternalStorageDocument(Uri uri) {
@@ -142,8 +137,7 @@ public class ImageFilePath {
     }
 
     /**
-     * @param uri
-     *            The Uri to check.
+     * @param uri The Uri to check.
      * @return Whether the Uri authority is DownloadsProvider.
      */
     private static boolean isDownloadsDocument(Uri uri) {
@@ -152,8 +146,7 @@ public class ImageFilePath {
     }
 
     /**
-     * @param uri
-     *            The Uri to check.
+     * @param uri The Uri to check.
      * @return Whether the Uri authority is MediaProvider.
      */
     private static boolean isMediaDocument(Uri uri) {
@@ -162,8 +155,7 @@ public class ImageFilePath {
     }
 
     /**
-     * @param uri
-     *            The Uri to check.
+     * @param uri The Uri to check.
      * @return Whether the Uri authority is Google Photos.
      */
     private static boolean isGooglePhotosUri(Uri uri) {

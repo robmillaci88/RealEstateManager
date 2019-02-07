@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:fitsSystemWindows="true"
+    android:visibility="visible"
     tools:openDrawer="start">
 
     <include
@@ -18,8 +18,7 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        android:background="@android:color/transparent"
-        android:fitsSystemWindows="true">
+        >
 
         <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -32,9 +31,9 @@
                 android:id="@+id/scrollView2"
                 android:layout_width="0dp"
                 android:layout_height="match_parent"
-                android:layout_marginBottom="40dp"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="45dp"
+                android:layout_marginBottom="40dp"
                 android:background="@color/colorAccent"
                 app:layout_constraintBottom_toTopOf="@+id/settings_btn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -45,8 +44,8 @@
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_marginBottom="50dp"
                     android:layout_marginTop="16dp"
+                    android:layout_marginBottom="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
                     app:layout_constraintEnd_toEndOf="parent"
                     app:layout_constraintStart_toEndOf="@+id/search_nav"
@@ -212,9 +211,9 @@
                         android:id="@+id/accepted_offers"
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
-                        android:layout_marginBottom="32dp"
                         android:layout_marginStart="16dp"
                         android:layout_marginTop="16dp"
+                        android:layout_marginBottom="32dp"
                         android:text="@string/accepted_offers"
                         android:textColor="@android:color/white"
                         android:textStyle="bold"
@@ -230,60 +229,60 @@
                 android:layout_width="60dp"
                 android:layout_height="60dp"
                 android:layout_marginTop="42dp"
+                android:contentDescription="@string/search_nav"
                 android:padding="19dp"
                 android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toTopOf="parent"
-                app:srcCompat="@drawable/search_icon"
-                android:contentDescription="@string/search_nav" />
+                app:srcCompat="@drawable/search_icon" />
 
             <ImageView
                 android:id="@+id/about_nav"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:contentDescription="@string/about_nav"
                 android:padding="19dp"
                 android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/buysell_nav"
-                app:srcCompat="@drawable/info"
-                android:contentDescription="@string/about_nav" />
+                app:srcCompat="@drawable/info" />
 
             <ImageView
                 android:id="@+id/contact_nav"
                 android:layout_width="60dp"
                 android:layout_height="60dp"
+                android:contentDescription="@string/contact_nav"
                 android:padding="19dp"
                 android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/about_nav"
-                app:srcCompat="@drawable/contact"
-                android:contentDescription="@string/contact_nav" />
+                app:srcCompat="@drawable/contact" />
 
             <ImageView
                 android:id="@+id/buysell_nav"
                 android:layout_width="0dp"
                 android:layout_height="60dp"
                 android:background="@color/colorAccent"
+                android:contentDescription="@string/buysell_nav"
                 android:padding="19dp"
                 android:scaleType="centerInside"
                 app:layout_constraintEnd_toStartOf="@+id/scrollView2"
                 app:layout_constraintStart_toStartOf="parent"
                 app:layout_constraintTop_toBottomOf="@+id/search_nav"
-                app:srcCompat="@drawable/home"
-                android:contentDescription="@string/buysell_nav" />
+                app:srcCompat="@drawable/home" />
 
             <ImageView
                 android:id="@+id/settings_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
                 android:layout_marginBottom="10dp"
+                android:contentDescription="@string/settings_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/scrollView2"
-                app:srcCompat="@drawable/settings"
-                android:contentDescription="@string/settings_btn" />
+                app:srcCompat="@drawable/settings" />
 
             <TextView
                 android:id="@+id/user_name"

@@ -8,7 +8,7 @@ import android.support.annotation.Nullable;
 
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
+import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 
@@ -43,6 +43,7 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
 
     /**
      * Called when saving a listing
+     *
      * @param intent the intent used to start this service
      */
     @Override
@@ -52,15 +53,15 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
         boolean editingListing = intent.getBooleanExtra(EDITING_KEY, false); //get wether we are editing this listing or if it is a new listing
 
         if (editingListing) {
-            MyDatabase.editListing(listingToAdd); //if we are editing, we remove the old listing from the database which in turn will call add for the new listing
+            MyDatabaseHelper.editListing(listingToAdd); //if we are editing, we remove the old listing from the database which in turn will call add for the new listing
         } else {
-            MyDatabase.addListing(listingToAdd); //if we are not editing, we simply add the listing to the database
+            MyDatabaseHelper.addListing(listingToAdd); //if we are not editing, we simply add the listing to the database
         }
 
-        if(Utils.CheckConnectivity(getApplicationContext())) { //if we have internet connection, we will now add the listing to firebase,
-                                                                // if not we send a broadcast after 5 seconds to the presenter to inform the view that the listing has been saved
+        if (Utils.CheckConnectivity(getApplicationContext())) { //if we have internet connection, we will now add the listing to firebase,
+            // if not we send a broadcast after 5 seconds to the presenter to inform the view that the listing has been saved
             FirebaseHelper.getInstance().addListing(listingToAdd, this);
-        }else {
+        } else {
             new Handler(Looper.getMainLooper()).postDelayed(new Runnable() {
                 @Override
                 public void run() {
@@ -73,6 +74,7 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
 
     /**
      * Called when the listing has been added to the database and wether there was an error or not
+     *
      * @param error true if error false if not
      */
     @Override
@@ -84,12 +86,13 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
     /**
      * Send a broadcast to the presented to inform that the listing has been saved. The presenter will inform the view in order to remove the progress dialog
      * and make relevant UI changes
+     *
      * @param error if there was an error saving or not
      */
     private void sendMyBroadCast(boolean error) {
         try {
             Intent broadCastIntent = new Intent();
-            broadCastIntent.putExtra(RESULTS,error);
+            broadCastIntent.putExtra(RESULTS, error);
             broadCastIntent.setAction(BROADCAST_ACTION);
             sendBroadcast(broadCastIntent);
         } catch (Exception ex) {

@@ -1,8 +1,8 @@
 package com.example.robmillaci.realestatemanager.activities.valuations_activities;
 
 import android.content.Intent;
-import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.support.v7.app.AppCompatActivity;
 import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
@@ -48,21 +48,20 @@ public class BookEvaluationActivity extends AppCompatActivity {
         Disposable sellBtnClick = RxView.clicks(mSellPropertyBtn).
                 subscribe(new Consumer<Unit>() {
                     @Override
-                    public void accept(Unit unit){
-                        Intent i = new Intent(BookEvaluationActivity.this,SellLetActivity.class);
-                        i.putExtra(TYPE_KEY,SELLING_TYPE);
+                    public void accept(Unit unit) {
+                        Intent i = new Intent(BookEvaluationActivity.this, SellLetActivity.class);
+                        i.putExtra(TYPE_KEY, SELLING_TYPE);
                         startActivity(i);
                     }
                 });
 
 
-
         Disposable letBtnClick = RxView.clicks(mLetPropertyBtn).
                 subscribe(new Consumer<Unit>() {
                     @Override
-                    public void accept(Unit unit){
-                        Intent i = new Intent(BookEvaluationActivity.this,SellLetActivity.class);
-                        i.putExtra(TYPE_KEY,LETTING_TYPE);
+                    public void accept(Unit unit) {
+                        Intent i = new Intent(BookEvaluationActivity.this, SellLetActivity.class);
+                        i.putExtra(TYPE_KEY, LETTING_TYPE);
                         startActivity(i);
                     }
                 });

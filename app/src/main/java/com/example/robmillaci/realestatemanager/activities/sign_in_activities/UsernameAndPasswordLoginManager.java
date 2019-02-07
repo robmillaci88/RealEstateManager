@@ -1,7 +1,6 @@
 package com.example.robmillaci.realestatemanager.activities.sign_in_activities;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -13,7 +12,7 @@ import com.google.firebase.auth.FirebaseUserMetadata;
 
 class UsernameAndPasswordLoginManager {
 
-    private FirebaseLoginManagerCallback mFirebaseLoginManagerCallback;
+    private final FirebaseLoginManagerCallback mFirebaseLoginManagerCallback;
 
     UsernameAndPasswordLoginManager(FirebaseLoginManagerCallback callback) {
         this.mFirebaseLoginManagerCallback = callback;
@@ -93,14 +92,14 @@ class UsernameAndPasswordLoginManager {
     }
 
 
-    void sendPasswordResetEmail(final String email){
+    void sendPasswordResetEmail(final String email) {
         FirebaseHelper.getmAuth().sendPasswordResetEmail(email)
                 .addOnCompleteListener(new OnCompleteListener<Void>() {
                     @Override
                     public void onComplete(@NonNull Task<Void> task) {
                         if (task.isSuccessful()) {
                             mFirebaseLoginManagerCallback.passwordResetSuccessful(email);
-                        }else {
+                        } else {
                             mFirebaseLoginManagerCallback.passwordResetFail(task.getException());
                         }
                     }

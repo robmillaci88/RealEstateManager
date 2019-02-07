@@ -10,7 +10,7 @@ import android.widget.Toast;
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
-import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabase;
+import com.example.robmillaci.realestatemanager.databases.local_database.MyDatabaseHelper;
 import com.example.robmillaci.realestatemanager.json_location_objects.LocationObject;
 import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.example.robmillaci.realestatemanager.web_services.GetDataService;
@@ -30,10 +30,10 @@ import retrofit2.Response;
 import static com.facebook.FacebookSdk.getApplicationContext;
 
 /**
- * This class is the link between {@link ListingsMapView} and both {@link FirebaseHelper} & {@link MyDatabase}
+ * This class is the link between {@link ListingsMapView} and both {@link FirebaseHelper} & {@link MyDatabaseHelper}
  * The listing are obtained from the databases, the users location is also returned to the mView from this class as well as geo locating the listings
  */
-public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Model {
+public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabaseHelper.Model {
     private final View mView;
 
     ListingsMapPresenter(View v) {
@@ -49,7 +49,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
         if (Utils.CheckConnectivity(c)) {
             FirebaseHelper.getInstance().setPresenter(this).getAllListings();
         } else {
-            MyDatabase.getInstance(c).setPresenter(this).searchLocalDB(c, null);
+            MyDatabaseHelper.getInstance(c).setPresenter(this).searchLocalDB(c, null);
         }
     }
 
@@ -79,6 +79,7 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
 
     /**
      * Interface callback method from {@link FirebaseHelper#getAllListings()}
+     *
      * @param listings the returned listings
      */
     @Override
@@ -88,12 +89,12 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
 
 
     /**
-     * Interface callback method from {@link MyDatabase#searchLocalDB(Context, Bundle)}
-     * @param listings listings returned
-     * @param c the context returned
+     * Interface callback method from {@link MyDatabaseHelper#searchLocalDB(Context, Bundle)}
+     *  @param listings listings returned
+     *
      */
     @Override
-    public void gotDataFromLocalDb(ArrayList<Listing> listings, Context c) {
+    public void gotDataFromLocalDb(ArrayList<Listing> listings) {
         mView.gotAllListings(listings);
     }
 
@@ -101,7 +102,8 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabase.Mo
     /**
      * From an address string obtained from a listing, this method returns the listings latitude and longitude so we can show the listing location
      * on the map.
-     * @param address the address of the listing
+     *
+     * @param address     the address of the listing
      * @param markerIndex the index of the marker representing the listing
      */
     void geoLocationListing(String address, final int markerIndex) {

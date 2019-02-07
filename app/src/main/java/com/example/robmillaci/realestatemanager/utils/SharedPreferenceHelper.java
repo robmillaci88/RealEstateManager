@@ -51,6 +51,7 @@ public class SharedPreferenceHelper {
 
     /**
      * Gets the listing stored in shared preferences
+     *
      * @return the listing
      */
     public Listing getListingFromSharedPrefs() {
@@ -64,6 +65,7 @@ public class SharedPreferenceHelper {
 
     /**
      * Gets the users profile details from shared preferences
+     *
      * @return HashMap containing the users details
      */
     public HashMap<String, String> getUsersDetails() {
@@ -90,22 +92,23 @@ public class SharedPreferenceHelper {
 
     /**
      * Save the users details to shared preferences
-     * @param title the users title
-     * @param forename the users forename
-     * @param surname the users surname
-     * @param dob the users DOB
-     * @param postCode the users postcode
-     * @param houseNameNumb the users house name/number
-     * @param street the users street
-     * @param town the users town
-     * @param county the users county
-     * @param homeNumber the users home number
-     * @param mobile the users mobile number
+     *
+     * @param title              the users title
+     * @param forename           the users forename
+     * @param surname            the users surname
+     * @param dob                the users DOB
+     * @param postCode           the users postcode
+     * @param houseNameNumb      the users house name/number
+     * @param street             the users street
+     * @param town               the users town
+     * @param county             the users county
+     * @param homeNumber         the users home number
+     * @param mobile             the users mobile number
      * @param primaryContactNumb the users primary contact number
      */
     @SuppressLint("ApplySharedPref")
     public void saveUserDetailsToSharedPreferences(String title, String forename, String surname, String dob, String postCode, String houseNameNumb,
-                                                   String street, String town, String county, String homeNumber, String mobile, String primaryContactNumb) {
+                                                   String street, String town, String county, String homeNumber, String mobile, String primaryContactNumb, String userEmail) {
 
         SharedPreferences.Editor spEditor = sharedPreferences.edit();
         spEditor.putString(USER_TITLE, title);
@@ -120,6 +123,7 @@ public class SharedPreferenceHelper {
         spEditor.putString(USER_HOME_NUMBER, homeNumber);
         spEditor.putString(USER_MOBILE, mobile);
         spEditor.putString(USER_PRIMARY_CONTACT_NUMBER, primaryContactNumb);
+        spEditor.putString(USER_EMAIL,userEmail);
 
         spEditor.commit();
     }
@@ -159,4 +163,5 @@ public class SharedPreferenceHelper {
     public void setProfileUpdated() {
         sharedPreferences.edit().putBoolean(PROFILE_UPDATE, false).commit();
     }
+
 }

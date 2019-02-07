@@ -13,7 +13,7 @@ import com.example.robmillaci.realestatemanager.R;
  * Class responsible for creating and displaying a custom toast message
  */
 public class ToastModifications {
-    public static void createToast(Context context,String message, int duration){
+    public static void createToast(Context context, String message, int duration) {
         Toast toast = new Toast(context);
         toast.setDuration(duration);
 
