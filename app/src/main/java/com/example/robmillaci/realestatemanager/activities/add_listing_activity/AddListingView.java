@@ -128,6 +128,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         setTitle(getString(R.string.new_listing_activity_title));//set the title of the activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //dont display the keyboard when activity is created
 
+        Utils.removeImmersiveMode(getWindow().getDecorView());
+
         this.mPresenter = new AddListingPresenter(this); //create the presenter
         mCompositeDisposable = new CompositeDisposable(); //create a composite disposable to hold all disposables
 

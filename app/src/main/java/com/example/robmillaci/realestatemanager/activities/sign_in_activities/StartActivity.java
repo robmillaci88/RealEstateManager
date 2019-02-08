@@ -7,6 +7,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -279,18 +280,20 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
 
 
     @SuppressWarnings("ConstantConditions")
-    private
+
         /*
          * Once the user has been authenticated and loged in, launch the SplashScreenActivity
          */
-    void updateUI() {
+    private  void updateUI() {
         if (FirebaseHelper.getmAuth().getCurrentUser() != null) {
             Intent launchMain = new Intent(this, SplashScreenActivity.class);
+            launchMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);
             FirebaseHelper.updateUserDetails();
             if (mProgressDialog != null && mProgressDialog.isShowing()) {
                 mProgressDialog.dismiss();
             }
             startActivity(launchMain);
+            finish();
         }
     }
 
@@ -413,6 +416,7 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
     }
 
 
+    //Firebase login callbacks
     @Override
     public void firebaseLoginCompleteNewUser(FirebaseUser user) {
         addUserDisplayName(user);
@@ -429,6 +433,8 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
         signInErrorMessage(e);
     }
 
+
+    //password reset callback
     @Override
     public void passwordResetSuccessful(String email) {
         Toast.makeText(this, getString(R.string.reset_email_sent) + email, Toast.LENGTH_LONG).show();
@@ -437,6 +443,12 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
     @Override
     public void passwordResetFail(Exception e) {
         Toast.makeText(this, getString(R.string.password_reset_failed) + e.getMessage(), Toast.LENGTH_LONG).show();
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        Utils.immersiveMode(getWindow().getDecorView());
     }
 }
 

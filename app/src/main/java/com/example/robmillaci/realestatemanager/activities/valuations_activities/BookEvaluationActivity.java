@@ -3,9 +3,11 @@ package com.example.robmillaci.realestatemanager.activities.valuations_activitie
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
+import android.view.MenuItem;
 import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
+import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.disposables.CompositeDisposable;
@@ -71,6 +73,22 @@ public class BookEvaluationActivity extends AppCompatActivity {
 
     }
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(BookEvaluationActivity.this, MainActivityView.class));
+    }
 
     @Override
     protected void onDestroy() {

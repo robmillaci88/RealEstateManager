@@ -30,7 +30,7 @@ public class PrivacySettingsActivity extends BaseActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //remove the full screen flag set in BaseActivity
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); //remove the full screen flag set in BaseActivity
         Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();

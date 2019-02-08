@@ -9,6 +9,7 @@ import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 
 /**
  * This class is responsible for the contact activity
@@ -28,6 +29,8 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
         setTitle(getString(R.string.contact_activity_title));
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeButtons();
         initializeButtonClicks();

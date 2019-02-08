@@ -5,6 +5,7 @@ import android.app.ProgressDialog;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.SharedPreferences;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.preference.PreferenceManager;
 import android.support.design.widget.FloatingActionButton;
@@ -86,6 +87,10 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
+        //Main activity will maintain its portrait orientation even if we are on tablet mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
 
 
         initializeNavDrawer();
@@ -282,7 +287,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         mCompositeDisposable.add(awaiting_feedbackDisposable);
 
 
-            TextView feedback_pending_received = navigationView.findViewById(R.id.pending_recieved_feedback);
+        TextView feedback_pending_received = navigationView.findViewById(R.id.pending_recieved_feedback);
         Disposable pending_recieved_feedbackDisposable = RxView.clicks(feedback_pending_received)
                 .subscribe(new Consumer<Unit>() {
                     @Override
@@ -366,8 +371,8 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
                     Intent i = new Intent(getApplicationContext(), ListingsMapView.class);
                     startActivity(i);
                     overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
-                }else {
-                    ToastModifications.createToast(MainActivityView.this,getString(R.string.internet_required), Toast.LENGTH_LONG);
+                } else {
+                    ToastModifications.createToast(MainActivityView.this, getString(R.string.internet_required), Toast.LENGTH_LONG);
                 }
             }
         });
@@ -603,8 +608,8 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
                 dismissProgressDialog(error);
             }
         });
-
     }
+
 
 }
 

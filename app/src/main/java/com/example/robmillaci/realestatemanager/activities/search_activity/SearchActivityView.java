@@ -5,8 +5,12 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
+import android.support.v4.app.NavUtils;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.CompoundButton;
@@ -17,6 +21,8 @@ import android.widget.Spinner;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
+import com.example.robmillaci.realestatemanager.utils.Utils;
 import com.jakewharton.rxbinding3.view.RxView;
 
 import io.reactivex.functions.Consumer;
@@ -70,10 +76,12 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_search);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //clear the full screen flag set in base activity
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); //clear the full screen flag set in base activity
+        Utils.removeImmersiveMode(getWindow().getDecorView());
+
+        setContentView(R.layout.activity_search);
 
         this.mPresenter = new SearchActivityPresenter(this); //initialize the presenter
 
@@ -259,4 +267,23 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     public void gotLocation(String postCode) {
         mLocationEditText.setText(postCode);
     }
+
+
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(SearchActivityView.this,MainActivityView.class));
+    }
+
+
 }

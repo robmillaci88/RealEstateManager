@@ -5,7 +5,7 @@
     android:id="@+id/drawer_layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:visibility="visible"
+    android:fitsSystemWindows="false"
     tools:openDrawer="start">
 
     <include
@@ -15,10 +15,11 @@
 
     <android.support.design.widget.NavigationView
         android:id="@+id/nav_view"
-        android:layout_width="match_parent"
+        android:layout_width="wrap_content"
         android:layout_height="match_parent"
         android:layout_gravity="start"
-        >
+        android:background="@android:color/transparent"
+        android:fitsSystemWindows="false">
 
         <android.support.constraint.ConstraintLayout xmlns:app="http://schemas.android.com/apk/res-auto"
             xmlns:tools="http://schemas.android.com/tools"
@@ -33,7 +34,7 @@
                 android:layout_height="match_parent"
                 android:layout_marginStart="80dp"
                 android:layout_marginTop="45dp"
-                android:layout_marginBottom="40dp"
+                android:layout_marginBottom="50dp"
                 android:background="@color/colorAccent"
                 app:layout_constraintBottom_toTopOf="@+id/settings_btn"
                 app:layout_constraintEnd_toEndOf="parent"
@@ -43,7 +44,7 @@
                 <android.support.constraint.ConstraintLayout
                     android:id="@+id/constraintLayout"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
+                    android:layout_height="match_parent"
                     android:layout_marginTop="16dp"
                     android:layout_marginBottom="50dp"
                     app:layout_constraintBottom_toBottomOf="parent"
@@ -278,7 +279,8 @@
                 android:id="@+id/settings_btn"
                 android:layout_width="20dp"
                 android:layout_height="20dp"
-                android:layout_marginBottom="10dp"
+                android:layout_marginStart="16dp"
+                android:layout_marginBottom="60dp"
                 android:contentDescription="@string/settings_btn"
                 app:layout_constraintBottom_toBottomOf="parent"
                 app:layout_constraintStart_toStartOf="@+id/scrollView2"

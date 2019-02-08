@@ -1,6 +1,7 @@
 package com.example.robmillaci.realestatemanager.activities.sign_in_activities;
 
 import android.support.annotation.NonNull;
+import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.facebook.AccessToken;
@@ -66,7 +67,7 @@ class FaceBookLoginManager {
                             if (thisUser != null) {
                                 FirebaseUserMetadata metadata = thisUser.getMetadata();
                                 assert metadata != null;
-                                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                                if (metadata.getLastSignInTimestamp() - metadata.getCreationTimestamp() < 5000) { //can be a delay for new users between creation of their user account and last sign in so 5 seconds difference is valid
                                     // The user is new
                                     mFacebookloginManagerCallback.facebookSignInSuccessNewUser(thisUser);
 

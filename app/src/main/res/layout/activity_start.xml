@@ -74,7 +74,7 @@
         android:id="@+id/email_password_signup"
         android:layout_width="260dp"
         android:layout_height="55dp"
-        android:layout_marginBottom="32dp"
+        android:layout_marginBottom="70dp"
         android:background="@drawable/sign_in_with_email"
         app:layout_constraintBottom_toBottomOf="@+id/imageView4"
         app:layout_constraintEnd_toEndOf="@+id/google_login"

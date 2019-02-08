@@ -39,7 +39,7 @@ public class AccountActivity extends BaseActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN); //clears the full screen flag set in the base activity
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); //clears the full screen flag set in the base activity
         Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();

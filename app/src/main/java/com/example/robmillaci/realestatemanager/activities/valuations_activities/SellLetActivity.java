@@ -72,7 +72,7 @@ public class SellLetActivity extends AppCompatActivity {
         mContinueBtn = findViewById(R.id.continue_btn);
 
         mPostcodeEt = findViewById(R.id.postcode_et);
-        mHouseNameEt = findViewById(R.id.house_name_et);
+        mHouseNameEt = findViewById(R.id.surname_et);
         mStreetEt = findViewById(R.id.street_et);
         mTownEt = findViewById(R.id.town_et);
         mCountyEt = findViewById(R.id.county_et);

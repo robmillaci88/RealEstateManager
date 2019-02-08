@@ -21,6 +21,7 @@
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
+            android:nextFocusDown="@+id/mobile_num_et"
             android:layout_marginStart="16dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -48,6 +49,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/mobile_icon"
+            android:nextFocusDown="@+id/primary_contact_num_et"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -61,6 +63,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/email_icon"
+            android:nextFocusDown="@+id/home_phone_et"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -73,6 +76,7 @@
             android:layout_height="36dp"
             android:layout_marginStart="16dp"
             android:layout_marginEnd="16dp"
+            android:nextFocusDown="@+id/housename_numb_et"
             android:drawableStart="@drawable/postcode_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -87,6 +91,7 @@
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/town_icon"
+            android:nextFocusDown="@+id/county_et"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
@@ -98,6 +103,7 @@
             android:layout_width="0dp"
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
+            android:nextFocusDown="@+id/email_et"
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/country_icon"
             app:layout_constraintEnd_toEndOf="parent"
@@ -112,6 +118,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:nextFocusDown="@+id/town_et"
             android:drawableStart="@drawable/street_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -120,17 +127,18 @@
             tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
 
         <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
-            android:id="@+id/house_name_et"
+            android:id="@+id/surname_et"
             android:layout_width="0dp"
-            android:layout_height="36dp"
-            android:layout_marginEnd="16dp"
+            android:layout_height="33dp"
             android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:drawableStart="@drawable/forename_icon"
+            android:nextFocusDown="@+id/dob_et"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title11"
-            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields"/>
+            tools:ignore="Autofill,LabelFor,RtlSymmetry,TextFields" />
 
         <com.example.robmillaci.realestatemanager.custom_objects.RoundEditText
             android:id="@+id/dob_et"
@@ -138,6 +146,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:nextFocusDown="@+id/postcode_et"
             android:drawableStart="@drawable/dateofbirth_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -151,6 +160,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:nextFocusDown="@+id/street_et"
             android:drawableStart="@drawable/house_number"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -166,6 +176,7 @@
             android:layout_marginStart="16dp"
             android:drawableStart="@drawable/forename_icon"
             app:layout_constraintEnd_toEndOf="parent"
+            android:nextFocusDown="@+id/surname_et"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/title4"
@@ -177,6 +188,7 @@
             android:layout_height="36dp"
             android:layout_marginEnd="16dp"
             android:layout_marginStart="16dp"
+            android:nextFocusDown="@+id/forename_et"
             android:drawableStart="@drawable/title_icon"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
@@ -293,7 +305,7 @@
             android:text="@string/dob_text"
             android:textColor="@android:color/white"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/house_name_et" />
+            app:layout_constraintTop_toBottomOf="@+id/surname_et" />
 
         <TextView
             android:id="@+id/title6"

@@ -1,13 +1,15 @@
 package com.example.robmillaci.realestatemanager.activities.customer_account;
 
 import android.annotation.SuppressLint;
+import android.content.Intent;
 import android.os.Bundle;
-import android.util.Log;
+import android.view.MenuItem;
 import android.view.WindowManager;
 import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
+import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
 import com.example.robmillaci.realestatemanager.custom_objects.RoundEditText;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
@@ -63,7 +65,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         setTitle("Your Profile");
 
-        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN);
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         Utils.removeImmersiveMode(getWindow().getDecorView());
 
         initializeViews();
@@ -149,7 +151,7 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     private void initializeViews() {
         mUserTitle = findViewById(R.id.title_et);
         mUserForename = findViewById(R.id.forename_et);
-        mUserSurname = findViewById(R.id.house_name_et);
+        mUserSurname = findViewById(R.id.surname_et);
         mUserDob = findViewById(R.id.dob_et);
         mUserPostcode = findViewById(R.id.postcode_et);
         mUserHouseNameNumb = findViewById(R.id.housename_numb_et);
@@ -176,6 +178,22 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     }
 
 
+    @Override
+    public boolean onOptionsItemSelected(MenuItem item) {
+        switch (item.getItemId()) {
+            case android.R.id.home:
+                onBackPressed();
+                return true;
+            default:
+                return super.onOptionsItemSelected(item);
+        }
+    }
+
+
+    @Override
+    public void onBackPressed() {
+        startActivity(new Intent(ProfileActivity.this, AccountActivity.class));
+    }
 }
 
 

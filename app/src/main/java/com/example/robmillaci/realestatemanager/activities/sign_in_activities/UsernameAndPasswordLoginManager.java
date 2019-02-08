@@ -30,7 +30,8 @@ class UsernameAndPasswordLoginManager {
                             if (user != null) {
                                 FirebaseUserMetadata metadata = user.getMetadata();
                                 //noinspection ConstantConditions
-                                if (metadata.getCreationTimestamp() == metadata.getLastSignInTimestamp()) {
+                                if (metadata.getLastSignInTimestamp() - metadata.getCreationTimestamp() < 5000) { //can be a delay for new users between creation of their user account and last sign in so 5 seconds difference is valid
+
                                     // The user is new
                                     mFirebaseLoginManagerCallback.firebaseLoginCompleteNewUser(user);
 

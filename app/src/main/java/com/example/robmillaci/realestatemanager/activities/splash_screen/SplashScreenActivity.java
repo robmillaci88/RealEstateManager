@@ -1,8 +1,10 @@
 package com.example.robmillaci.realestatemanager.activities.splash_screen;
 
 import android.content.Intent;
+import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
+import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
@@ -20,6 +22,11 @@ public class SplashScreenActivity extends BaseActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_splash_screen);
 
+
+        //the splash screen will maintain its portrait orientation even if we are on tablet mode
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+        setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+
         startTimer();
     }
 
@@ -27,9 +34,11 @@ public class SplashScreenActivity extends BaseActivity {
         new Handler().postDelayed(new Runnable() {
             @Override
             public void run() {
+                SplashScreenActivity.this.finish();
                 startActivity(new Intent(SplashScreenActivity.this, MainActivityView.class));
                 overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
             }
         }, 3000);
     }
+
 }

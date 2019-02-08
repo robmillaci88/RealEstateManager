@@ -8,7 +8,6 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.ACCESS_NETWORK_STATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
-
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.autofocus" />
 
@@ -49,7 +48,6 @@
             android:theme="@style/AppTheme_no_action_bar_no_status_bar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
-
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
@@ -59,7 +57,7 @@
             android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
         <activity
             android:name=".activities.add_listing_activity.AddListingView"
-            android:parentActivityName=".activities.add_listing_activity.AddListingView" />
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
 
         <provider
             android:name=".databases.local_database.AppProvider"
@@ -69,8 +67,10 @@
         <activity android:name=".activities.full_screen_photo_activity.FullScreenPhotoActivity" />
         <activity
             android:name=".activities.splash_screen.SplashScreenActivity"
-            android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
-        <activity android:name=".activities.contact_activity.ContactActivity" />
+            android:theme="@style/AppTheme_no_action_bar_no_status_bar"
+            android:noHistory="true"/>
+        <activity android:name=".activities.contact_activity.ContactActivity"
+            android:parentActivityName=".activities.main_activity.MainActivityView" />
         <activity
             android:name=".activities.about_activity.AboutActivity"
             android:theme="@style/AppTheme_no_action_bar_no_status_bar" />
