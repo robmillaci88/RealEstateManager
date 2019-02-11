@@ -9,7 +9,6 @@ import android.widget.Button;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
-import com.example.robmillaci.realestatemanager.activities.sign_in_activities.StartActivity;
 import com.example.robmillaci.realestatemanager.custom_objects.RoundEditText;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
@@ -193,6 +192,12 @@ public class ProfileActivity extends BaseActivity implements IUserDetailsCallbac
     @Override
     public void onBackPressed() {
         startActivity(new Intent(ProfileActivity.this, AccountActivity.class));
+    }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        //prevents the super method being called as this activity has immersive mode disabled
     }
 }
 

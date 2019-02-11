@@ -4,12 +4,10 @@ import android.content.Intent;
 import android.content.pm.ActivityInfo;
 import android.os.Bundle;
 import android.os.Handler;
-import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.R;
 import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
-import com.example.robmillaci.realestatemanager.utils.Utils;
 
 /**
  * A simple splash screen that is displayed to the user when the app starts.

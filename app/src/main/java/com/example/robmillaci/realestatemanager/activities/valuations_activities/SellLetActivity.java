@@ -46,7 +46,7 @@ public class SellLetActivity extends AppCompatActivity {
         //noinspection ConstantConditions
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        Bundle b = getIntent().getExtras(); //get the bundle passed to this intent to establish wether we are booking a letting evaluation or a selling evaluation
+        Bundle b = getIntent().getExtras(); //get the bundle passed to this intent to establish whether we are booking a letting evaluation or a selling evaluation
         if (b != null) {
             String evaluationType = b.getString(BookEvaluationActivity.TYPE_KEY, "");
             switch (evaluationType) {

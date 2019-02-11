@@ -89,4 +89,8 @@ public class ContactActivity extends BaseActivity implements View.OnClickListene
         startActivity(Intent.createChooser(emailIntent, getString(R.string.send_email)));
     }
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        //prevents the super method being called as this activity has immersive mode disabled
+    }
 }

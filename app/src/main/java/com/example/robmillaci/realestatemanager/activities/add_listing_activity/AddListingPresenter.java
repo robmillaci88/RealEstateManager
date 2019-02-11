@@ -46,6 +46,7 @@ public class AddListingPresenter extends BroadcastReceiver {
         registerMyReceiver(); //register this class as a broadcast receiver
 
         Intent addListingServiceIntent = new Intent(context, AddListingService.class);
+
         addListingServiceIntent.putExtra(EDITING_KEY, editing);
         new SharedPreferenceHelper(context).addListingToSharedPref(listing);
         context.startService(addListingServiceIntent);

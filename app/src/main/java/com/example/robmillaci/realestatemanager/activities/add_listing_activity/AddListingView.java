@@ -19,7 +19,6 @@ import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.SwitchCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -128,6 +127,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         setTitle(getString(R.string.new_listing_activity_title));//set the title of the activity
         getWindow().setSoftInputMode(WindowManager.LayoutParams.SOFT_INPUT_STATE_HIDDEN); //dont display the keyboard when activity is created
 
+        getWindow().clearFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS); //remove immersive mode for this activity
         Utils.removeImmersiveMode(getWindow().getDecorView());
 
         this.mPresenter = new AddListingPresenter(this); //create the presenter
@@ -142,7 +142,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         configurePoiAutoComplete();
         initializeClickEvents();  //see method comments
         initializeRecyclerView();  //see method comments
-        restoreEditingListing();
+        restoreEditingListing(); //if we are editing, we restore the listing to be edited
 
     }
 
@@ -162,12 +162,12 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                      */
                     final Listing editingListing = new SharedPreferenceHelper(AddListingView.this).getListingFromSharedPrefs();
                     if (editingListing != null) {
-                       runOnUiThread(new Runnable() {
-                           @Override
-                           public void run() {
-                               prepareEdit(editingListing,pd);
-                           }
-                       });
+                        runOnUiThread(new Runnable() {
+                            @Override
+                            public void run() {
+                                prepareEdit(editingListing, pd);
+                            }
+                        });
                     }
                 }
             }).start();
@@ -180,7 +180,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
         ArrayAdapter<String> adapter = new ArrayAdapter<>(this,
                 android.R.layout.simple_dropdown_item_1line, getResources().getStringArray(R.array.poi_types));
-
+        mPoiAutocomplete.setDropDownVerticalOffset(100);
         mPoiAutocomplete.setAdapter(adapter);
         mPoiAutocomplete.setTokenizer(new MyTokenizer());
 
@@ -199,7 +199,6 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                         enteredPoisArray[i] = enteredPoisArray[i].trim();
                     }
 
-                    Log.d("onFocusChange", "onFocusChange: enteres pois are " + Arrays.toString(enteredPoisArray));
                     if (str.equals("")) {
                         sendToast = true;
                     }
@@ -208,27 +207,22 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                     for (String temp : allowed_values) {
                         for (String s : enteredPoisArray) {
                             if (s.trim().compareTo(temp) == 0) {
-                                Log.d("onFocusChange", "onFocusChange: adding to array list");
                                 mEnteredPoisArrayList.add(s.trim() + ",");
                             }
                         }
                     }
-
 
                     StringBuilder sb = new StringBuilder();
                     for (String s : mEnteredPoisArrayList) {
                         sb.append(s);
                     }
 
-
-                    Log.d("onFocusChange", "onFocusChange: string entered length " + str.length() + " and string is " + str);
-                    Log.d("onFocusChange", "onFocusChange: Stringbuilder length is " + sb.toString().trim().length() + " and string is " + sb.toString());
                     if (str.length() != sb.toString().trim().length()) {
                         //text is being removed
                         sendToast = true;
                     }
 
-                    mPoiAutocomplete.setText(sb.toString());
+                    mPoiAutocomplete.setText(sb.toString().substring(0, sb.length() - 1));
                     mEnteredPoisArrayList.clear();
 
                     if (sendToast)
@@ -251,6 +245,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         mEditing = true;
         mEditingId = editingListing.getId();
         mListingBeingEdited = editingListing;
+
 
         switch (editingListing.getType()) {
             case "Flat":
@@ -306,7 +301,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
             restoreImages(editingListing.getFirebasePhotos(), editingListing.getPhotoDescriptions(), FIREBASE_ID);
         }
 
-        if (pd.isShowing()){
+        if (pd.isShowing()) {
             pd.dismiss(); //dismiss the progress dialog shown to the user when restoring the listing
         }
     }
@@ -463,7 +458,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
 
     /**
-     * update the sold status of a listing, changes the sales status image and tag depending on wether the listing is sold or not
+     * update the sold status of a listing, changes the sales status image and tag depending on whether the listing is sold or not
      *
      * @param sold true if sold, false if available
      */
@@ -555,7 +550,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                         saleDate = determineSaveDate(false);
                     }
 
-                    mPresenter.addListing(getApplicationContext(), new Listing(
+                    Listing listingToAdd = new Listing(
                             mEditingId == null ? DEFAULT_LISTING_ID : mEditingId,
                             mTypeSpinner.getSelectedItem().toString(),
                             Double.valueOf(mPriceEditText.getText().toString()),
@@ -572,13 +567,21 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             mPoiAutocomplete.getText().toString(),
                             mEditing ? mListingBeingEdited.getPostedDate() : Utils.getTodayDate(),
                             saleDate,
-                            FirebaseHelper.getLoggedInUser() != null ? FirebaseHelper.getLoggedInUser() : getString(R.string.unknown_agent),
+                            mListingBeingEdited != null ? mListingBeingEdited.getAgent() :
+                                    (FirebaseHelper.getLoggedInUser() != null ? FirebaseHelper.getLoggedInUser() : getString(R.string.unknown_agent)),
                             Utils.getTodayDate(),
                             !mBuyOrLetSwitch.isChecked() ? BUY_STRING : LET_STRING,
-                            mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG)), mEditing
-                    );
+                            mSaleStatusImage.getTag().toString().equals(FOR_SALE_TAG));
+
+                    if (mEditing) {
+                        listingToAdd.setEditingAgent(FirebaseHelper.getLoggedInUser() != null ? FirebaseHelper.getLoggedInUser() : getString(R.string.unknown_agent));
+                    }
+
+                    mPresenter.addListing(getApplicationContext(), listingToAdd, mEditing);
                 }
+
             }).start();
+
 
             createSaveListingProgressBar(); //create the progress bar to display to the user that saving is taking place
         }
@@ -733,7 +736,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     /**
      * Callback from the presenter when a listing has been added in order to update the UI
      *
-     * @param error wether an error occurred saving the listing
+     * @param error whether an error occurred saving the listing
      */
     @Override
     public void addingListingCompleted(boolean error) {
@@ -869,6 +872,10 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     }
 
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        //prevents the super method being called as this activity has immersive mode disabled
+    }
 
 }
 

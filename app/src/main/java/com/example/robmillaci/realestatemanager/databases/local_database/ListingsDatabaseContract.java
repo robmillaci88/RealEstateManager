@@ -48,6 +48,8 @@ public class ListingsDatabaseContract {
     public static final String UPDATE_TIME = "updateDateTime";
     public static final String BUY_LET = "buyLet";
     public static final String FIREBASE_IMAGE_URLS = "imageUrls";
+    public static final String EDITING_AGENT = "editingAgent";
+
 
     //sort order for the returned database data
     static final String SORT_ORDER_DESCENDING = " DESC";

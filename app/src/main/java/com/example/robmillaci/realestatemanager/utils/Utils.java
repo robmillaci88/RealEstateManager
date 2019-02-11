@@ -4,7 +4,6 @@ import android.annotation.SuppressLint;
 import android.content.Context;
 import android.net.ConnectivityManager;
 import android.text.Editable;
-import android.util.Log;
 import android.view.View;
 
 import com.example.robmillaci.realestatemanager.R;
@@ -117,7 +116,7 @@ public class Utils {
                         | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
     }
 
-    public static void removeImmersiveMode(View decorView){
+    public static void removeImmersiveMode(View decorView) {
         decorView.setSystemUiVisibility(View.SYSTEM_UI_FLAG_VISIBLE);
     }
 }

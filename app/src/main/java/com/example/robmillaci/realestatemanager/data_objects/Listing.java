@@ -35,10 +35,11 @@ public class Listing implements Serializable {
     private final String lastUpdateTime; //the last update time of the listing
     private final boolean forSaleStatus; //whether the listing is for sale or sold
     private final String buyOrLet; //whether the listing is buy or let
+    private String editingAgent; //the agent editing this listings
 
 
     /**
-     * 2 constructors for this class. One for local db listings  and one for firebase, depending wether the photos are a list of byte[] or an arraylist of strings
+     * 2 constructors for this class. One for local db listings  and one for firebase, depending whether the photos are a list of byte[] or an arraylist of strings
      */
     public Listing(String id, String type, double price, double surfaceArea, int numbOfBedRooms, String descr, List<byte[]> photo, String[] photoDescriptions,
                    String address_postcode, String address_number, String address_street, String address_town, String address_county, String poi, String postedDate, String saleDate,
@@ -208,5 +209,13 @@ public class Listing implements Serializable {
 
     public String getAddress_street() {
         return address_street;
+    }
+
+    public void setEditingAgent(String editingAgent) {
+        this.editingAgent = editingAgent;
+    }
+
+    public String getEditingAgent() {
+        return editingAgent;
     }
 }

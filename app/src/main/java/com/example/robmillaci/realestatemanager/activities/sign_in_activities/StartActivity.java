@@ -7,7 +7,6 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.util.Log;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -281,10 +280,10 @@ public class StartActivity extends BaseActivity implements FaceBookLoginManager.
 
     @SuppressWarnings("ConstantConditions")
 
-        /*
-         * Once the user has been authenticated and loged in, launch the SplashScreenActivity
-         */
-    private  void updateUI() {
+    /*
+     * Once the user has been authenticated and loged in, launch the SplashScreenActivity
+     */
+    private void updateUI() {
         if (FirebaseHelper.getmAuth().getCurrentUser() != null) {
             Intent launchMain = new Intent(this, SplashScreenActivity.class);
             launchMain.setFlags(Intent.FLAG_ACTIVITY_CLEAR_TOP);

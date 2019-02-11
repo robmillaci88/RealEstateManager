@@ -5,9 +5,6 @@ import android.annotation.SuppressLint;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
-import android.support.v4.app.NavUtils;
-import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
 import android.text.Editable;
 import android.text.TextWatcher;
 import android.view.MenuItem;
@@ -283,6 +280,11 @@ public class SearchActivityView extends BaseActivity implements SearchActivityPr
     @Override
     public void onBackPressed() {
         startActivity(new Intent(SearchActivityView.this,MainActivityView.class));
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+       //prevents the super method being called as this activity has immersive mode disabled
     }
 
 

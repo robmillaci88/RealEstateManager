@@ -446,7 +446,7 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
 
     /**
-     * Handles wether the user exits the application when the back button is pressed
+     * Handles whether the user exits the application when the back button is pressed
      */
     @Override
     public void onBackPressed() {

@@ -20,8 +20,8 @@ import kotlin.Unit;
  */
 public class ConfirmationActivity extends AppCompatActivity {
     private Button mReturnBtn;
-    public static final int CALLED_FROM_OFFER = 1; //int to determine wether this activity was created from the Offer activity
-    public static final int CALLED_FROM_VALUATION = 2; //int to determine wether this activity was created from the valuation activity
+    public static final int CALLED_FROM_OFFER = 1; //int to determine whether this activity was created from the Offer activity
+    public static final int CALLED_FROM_VALUATION = 2; //int to determine whether this activity was created from the valuation activity
     public static final int CALLED_FROM_BOOK_VIEWING = 3;//int to determiner whether this activity was created from book a viewing activity
     public static final String BUNDLE_KEY = "confirmationActivity"; //the bundle key when passing data into the intent to start this activity
 

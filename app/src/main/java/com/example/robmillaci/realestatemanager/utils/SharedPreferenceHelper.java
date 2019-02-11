@@ -123,7 +123,7 @@ public class SharedPreferenceHelper {
         spEditor.putString(USER_HOME_NUMBER, homeNumber);
         spEditor.putString(USER_MOBILE, mobile);
         spEditor.putString(USER_PRIMARY_CONTACT_NUMBER, primaryContactNumb);
-        spEditor.putString(USER_EMAIL,userEmail);
+        spEditor.putString(USER_EMAIL, userEmail);
 
         spEditor.commit();
     }

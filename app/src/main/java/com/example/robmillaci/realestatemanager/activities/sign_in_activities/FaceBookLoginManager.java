@@ -1,7 +1,6 @@
 package com.example.robmillaci.realestatemanager.activities.sign_in_activities;
 
 import android.support.annotation.NonNull;
-import android.util.Log;
 
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.facebook.AccessToken;

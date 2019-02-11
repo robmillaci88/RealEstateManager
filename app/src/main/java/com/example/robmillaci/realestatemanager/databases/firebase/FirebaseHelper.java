@@ -163,7 +163,7 @@ public class FirebaseHelper implements MyDatabaseHelper.Model {
 
 
     /**
-     * Set the {@link AddListingCallback} for this instance of FirebaseHelper. This callback returns a boolean depending on wether a listing was added successfully or not
+     * Set the {@link AddListingCallback} for this instance of FirebaseHelper. This callback returns a boolean depending on whether a listing was added successfully or not
      *
      * @param addlistingcallback the callback class that implements {@link AddListingCallback}
      * @return this instance of Firebase Helper class
@@ -272,8 +272,7 @@ public class FirebaseHelper implements MyDatabaseHelper.Model {
             photoDescr = null;
         }
 
-
-        mReturnedListings.add(new Listing(s.getId(),
+        Listing listingToAdd = new Listing(s.getId(),
                 s.get(ListingsDatabaseContract.TYPE).toString(),
                 s.get(ListingsDatabaseContract.PRICE) != null ? (Double) s.get(ListingsDatabaseContract.PRICE) : 0,
                 s.get(ListingsDatabaseContract.SURFACE_AREA) != null ? (Double) s.get(ListingsDatabaseContract.SURFACE_AREA) : 0,
@@ -292,7 +291,11 @@ public class FirebaseHelper implements MyDatabaseHelper.Model {
                 s.get(ListingsDatabaseContract.AGENT) != null ? s.get(ListingsDatabaseContract.AGENT).toString() : "",
                 s.get(ListingsDatabaseContract.UPDATE_TIME) != null ? s.get(ListingsDatabaseContract.UPDATE_TIME).toString() : "",
                 s.get(ListingsDatabaseContract.BUY_LET) != null ? s.get(ListingsDatabaseContract.BUY_LET).toString() : "",
-                (boolean) s.get(ListingsDatabaseContract.STATUS)));
+                (boolean) s.get(ListingsDatabaseContract.STATUS));
+
+        listingToAdd.setEditingAgent(s.get(ListingsDatabaseContract.EDITING_AGENT) != null ? s.get(ListingsDatabaseContract.EDITING_AGENT).toString() : "");
+
+        mReturnedListings.add(listingToAdd);
     }
 
 
@@ -568,6 +571,7 @@ public class FirebaseHelper implements MyDatabaseHelper.Model {
         data.put(ListingsDatabaseContract.UPDATE_TIME, listingToAdd.getLastUpdateTime());
         data.put(ListingsDatabaseContract.BUY_LET, listingToAdd.getBuyOrLet());
         data.put(ListingsDatabaseContract.SALE_DATE, listingToAdd.getSaleDate());
+        data.put(ListingsDatabaseContract.EDITING_AGENT, listingToAdd.getEditingAgent());
 
         FirebaseFirestore.getInstance()
                 .collection(FirebaseContract.LISTING_DATABASE_COLLECTION_PATH)
@@ -604,8 +608,8 @@ public class FirebaseHelper implements MyDatabaseHelper.Model {
     /**
      * Called after we have retrieved all listings from the local database from {@link FirebaseHelper#synchWithLocalDb(Context)}
      * This method also creates and mSyncObservable that is notified each time a listing has been added successfully
-     *  @param listings Arraylist of {@link Listing} retrieved from the local DB
      *
+     * @param listings Arraylist of {@link Listing} retrieved from the local DB
      */
     public void gotDataFromLocalDb(final ArrayList<Listing> listings) {
         final int[] iterationCount = {-1};

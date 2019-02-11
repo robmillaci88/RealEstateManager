@@ -90,8 +90,8 @@ public class ListingsMapPresenter implements FirebaseHelper.Model, MyDatabaseHel
 
     /**
      * Interface callback method from {@link MyDatabaseHelper#searchLocalDB(Context, Bundle)}
-     *  @param listings listings returned
      *
+     * @param listings listings returned
      */
     @Override
     public void gotDataFromLocalDb(ArrayList<Listing> listings) {

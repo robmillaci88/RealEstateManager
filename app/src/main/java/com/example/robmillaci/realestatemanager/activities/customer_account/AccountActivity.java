@@ -102,12 +102,17 @@ public class AccountActivity extends BaseActivity {
 
     @Override
     public void onBackPressed() {
-        startActivity(new Intent(AccountActivity.this,MainActivityView.class));
+        startActivity(new Intent(AccountActivity.this, MainActivityView.class));
     }
 
     @Override
     protected void onDestroy() {
         mCompositeDisposable.clear();
         super.onDestroy();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        //prevents the super method being called as this activity has immersive mode disabled
     }
 }

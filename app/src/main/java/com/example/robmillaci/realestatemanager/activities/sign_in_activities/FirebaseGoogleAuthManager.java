@@ -22,7 +22,7 @@ class FirebaseGoogleAuthManager {
         this.mFireBaseGoogleAuthCallback = callback;
     }
 
-     void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
+    void firebaseAuthWithGoogle(GoogleSignInAccount acct) {
         AuthCredential credential = GoogleAuthProvider.getCredential(acct.getIdToken(), null);
         FirebaseHelper.getmAuth().signInWithCredential(credential)
                 .addOnCompleteListener(new OnCompleteListener<AuthResult>() {

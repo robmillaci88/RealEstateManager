@@ -146,9 +146,9 @@ public class ListingItemFragment extends BaseFragment {
 
                 StringBuilder sb = new StringBuilder();
 
-                for (int a = 0; a < poiArray.length; a++) {
+                for (int a = 0; a < poiArray.length - 1; a++) { //the last value in poiArray is always "-" due to splitting by "," so we only look to the second to last value
                     if (a == 0) {
-                        sb.append("-").append(" ").append(poiArray[a]);
+                        sb.append("- ").append(poiArray[a]);
                     } else {
                         sb.append("\n").append("-").append(poiArray[a]);
                     }
@@ -258,6 +258,7 @@ public class ListingItemFragment extends BaseFragment {
      */
     private void updateViews() {
         //noinspection ConstantConditions
+
         mViewPager.setAdapter(new ImagesViewPagerAdapter(new WeakReference<>(getActivity().getApplicationContext()), mThisListing));
 
         mPriceTextView.setText(String.format("%s %s", getString(R.string.currency_symbol), mThisListing.getFormattedPrice()));
@@ -283,7 +284,7 @@ public class ListingItemFragment extends BaseFragment {
                 getString(R.string.last_edit),
                 mThisListing.getFormattedLastUpdateTime(),
                 getString(R.string.by_text),
-                mThisListing.getAgent()));
+                mThisListing.getEditingAgent()));
 
         mCircleIndicator.setViewPager(mViewPager);
     }

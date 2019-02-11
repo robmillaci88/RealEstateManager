@@ -4,7 +4,6 @@ import android.content.pm.ActivityInfo;
 import android.os.Build;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v4.app.NavUtils;
 import android.support.v7.app.AppCompatActivity;
 import android.view.WindowManager;
 
@@ -31,19 +30,28 @@ public class BaseActivity extends AppCompatActivity {
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
 
-        Utils.immersiveMode(getWindow().getDecorView()); //sets the app's bottom system bar to auto hide to produce a more immersive experience
+        Utils.immersiveMode(getWindow().getDecorView()); //sets the app's bottom system bar and status bar
+        // to auto hide to produce a more immersive experience
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.KITKAT) {
             getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN | WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS);
         }
 
         if (!Utils.isTablet(getApplicationContext())) { //remove rotation sensors if we are not on a tablet and set orientation to portrait
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
-                setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_PORTRAIT);
+            setRequestedOrientation(ActivityInfo.SCREEN_ORIENTATION_NOSENSOR);
         }
     }
 
 
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+
+        if (hasFocus) {
+            Utils.immersiveMode(getWindow().getDecorView()); //ensures immersive mode is maintained when activity focus changes
+        }
+    }
 
 
 }

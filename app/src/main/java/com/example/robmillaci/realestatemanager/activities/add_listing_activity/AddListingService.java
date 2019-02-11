@@ -50,7 +50,7 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
     protected void onHandleIntent(Intent intent) {
         Listing listingToAdd = new SharedPreferenceHelper(getApplicationContext()).getListingFromSharedPrefs(); //get the listing to add from SharedPreferences
 
-        boolean editingListing = intent.getBooleanExtra(EDITING_KEY, false); //get wether we are editing this listing or if it is a new listing
+        boolean editingListing = intent.getBooleanExtra(EDITING_KEY, false); //get whether we are editing this listing or if it is a new listing
 
         if (editingListing) {
             MyDatabaseHelper.editListing(listingToAdd); //if we are editing, we remove the old listing from the database which in turn will call add for the new listing
@@ -73,7 +73,7 @@ public class AddListingService extends IntentService implements FirebaseHelper.A
 
 
     /**
-     * Called when the listing has been added to the database and wether there was an error or not
+     * Called when the listing has been added to the database and whether there was an error or not
      *
      * @param error true if error false if not
      */

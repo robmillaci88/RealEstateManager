@@ -91,7 +91,7 @@ public class NetworkListener extends BroadcastReceiver implements FirebaseHelper
     /**
      * Callback when a listings are added from the local DB to firebase
      *
-     * @param error wether an error occurred or not whilst performing the upload to Firebase
+     * @param error whether an error occurred or not whilst performing the upload to Firebase
      */
     @Override
     public void dBListingsAddedToFirebase(boolean error) {

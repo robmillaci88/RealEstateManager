@@ -63,6 +63,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
     private static final int AGENT_COLUMN_DATA = 31;
     private static final int LASTUPDATE_COLUMN_DATA = 32;
     private static final int BUY_OR_LET_COLUMN_DATA = 33;
+    private static final int EDITING_AGENT_COLUMN_DATA = 34;
 
     public static final String NO_MAX_VALUE = "No Max";
     public static final String NO_MIN_VALUE = "No Min";
@@ -168,7 +169,8 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 ListingsDatabaseContract.SALE_DATE + " DATE, " +
                 ListingsDatabaseContract.AGENT + " TEXT, " +
                 ListingsDatabaseContract.UPDATE_TIME + " DATE," +
-                ListingsDatabaseContract.BUY_LET + " TEXT "
+                ListingsDatabaseContract.BUY_LET + " TEXT, " +
+                ListingsDatabaseContract.EDITING_AGENT + " TEXT "
                 + ");";
 
         db.execSQL(createStatement);
@@ -300,7 +302,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                 }
 
 
-                databaseListings.add(new Listing(
+                Listing listingToAdd = new Listing(
                         data[ID_COLUMN_DATA],
                         data[TYPE_COLUMN_DATA],
                         Double.parseDouble(data[PRICE_COLUMN_DATA]),
@@ -320,8 +322,11 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
                         data[AGENT_COLUMN_DATA],
                         data[LASTUPDATE_COLUMN_DATA],
                         data[BUY_OR_LET_COLUMN_DATA],
-                        data[AVAILABLE_COLUMN_DATA].equals(RESULT_FOR_SALE))
-                );
+                        data[AVAILABLE_COLUMN_DATA].equals(RESULT_FOR_SALE));
+
+                listingToAdd.setEditingAgent(data[EDITING_AGENT_COLUMN_DATA]);
+
+                databaseListings.add(listingToAdd);
 
             }
             cursor.close();
@@ -484,6 +489,7 @@ public class MyDatabaseHelper extends SQLiteOpenHelper {
             values.put(ListingsDatabaseContract.UPDATE_TIME, listingToAdd.getLastUpdateTime());
             values.put(ListingsDatabaseContract.BUY_LET, listingToAdd.getBuyOrLet());
             values.put(ListingsDatabaseContract.SALE_DATE, listingToAdd.getSaleDate());
+            values.put(ListingsDatabaseContract.EDITING_AGENT, listingToAdd.getEditingAgent());
 
             StringBuilder sb = new StringBuilder();
             int count = 0;

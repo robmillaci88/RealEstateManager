@@ -61,4 +61,10 @@ public class PrivacySettingsActivity extends BaseActivity {
         mCompositeDisposable.clear();
         super.onDestroy();
     }
+
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        //prevents the super method being called as this activity has immersive mode disabled
+    }
 }

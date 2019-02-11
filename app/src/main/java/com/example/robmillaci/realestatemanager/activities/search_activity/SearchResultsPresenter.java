@@ -52,8 +52,8 @@ public class SearchResultsPresenter implements MyDatabaseHelper.Model, FirebaseH
     /**
      * Callback from {@link MyDatabaseHelper#searchLocalDB(Context, Bundle)}
      * Sends the listings back to the mView
-     *  @param listings the returned listings
      *
+     * @param listings the returned listings
      */
     @Override
     public void gotDataFromLocalDb(ArrayList<Listing> listings) {

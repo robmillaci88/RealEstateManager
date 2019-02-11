@@ -23,7 +23,7 @@ public class MainActivityPresenter implements FirebaseHelper.Model, DbSyncListen
     /**
      * Syncs the local database with firebase
      */
-     void syncData() {
+    void syncData() {
         FirebaseHelper.getInstance().setAddlistingcallback(this).synchWithLocalDb(getApplicationContext());
     }
 
