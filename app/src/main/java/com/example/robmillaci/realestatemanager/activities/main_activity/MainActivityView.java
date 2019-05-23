@@ -113,16 +113,6 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
 
         configureFabs();
 
-        //this.textViewMain = findViewById(R.id.activity_second_activity_text_view_main);
-        //this caused an initial error because it is refering to a textview defined in second activity and we are trying to find the ID
-        //after inflating the View for the main activity.
-
-        //This should be this.textViewMain = findViewByID(R.id.activity_main_activity_text_view_main)
-
-        // this.textViewMain = findViewById(R.id.activity_main_activity_text_view_main);
-        //this.textViewQuantity = findViewById(R.id.activity_main_activity_text_view_quantity);
-
-
         if (Utils.CheckConnectivity(this)) { //Check whether the user logged in has admin access or not
             FirebaseHelper.getInstance().setAdminCallback(this).checkAdminAccess();
         }
@@ -426,23 +416,6 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         }
         return super.onOptionsItemSelected(item);
     }
-
-
-//    private void configureTextViewMain() {
-//        this.textViewMain.setTextSize(15);
-//        this.textViewMain.setText(R.string.main_textview_text);
-//    }
-//
-//    private void configureTextViewQuantity() {
-//        int quantity = Utils.convertDollarToEuro(100);
-//        this.textViewQuantity.setTextSize(20);
-
-    //this.textViewQuantity.setText(quantity); this caused an error because we are trying to use the the .setText() method which takes a string parameter
-    //We are trying to assign an integer value and hence this causes a crash with "String resource not found"
-    //Modified code below
-
-//        this.textViewQuantity.setText(String.valueOf(quantity));
-    //  }
 
 
     /**

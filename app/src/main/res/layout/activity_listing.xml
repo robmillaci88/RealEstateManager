@@ -47,9 +47,9 @@
             android:id="@+id/price"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
             android:tag="Price"
             android:text="@string/price"
             android:textStyle="bold"
@@ -85,10 +85,10 @@
             android:layout_height="60dp"
             android:layout_marginEnd="16dp"
             android:background="@drawable/for_sale"
+            android:contentDescription="@string/sale_status"
             android:tag="forSale"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/textView21"
-            android:contentDescription="@string/sale_status" />
+            app:layout_constraintTop_toBottomOf="@+id/textView21" />
 
         <Spinner
             android:id="@+id/type_spinner"
@@ -101,112 +101,171 @@
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/imageView2" />
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/price_edit_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:background="@drawable/green_outline_button"
-            android:drawablePadding="10dp"
-            android:drawableStart="@drawable/pound_icon"
-            android:ems="10"
-            android:imeOptions="actionNext"
-            android:inputType="number|numberDecimal"
-            android:paddingStart="10dp"
-            android:textColor="@color/colorPrimaryDark"
-            android:textSize="24sp"
             app:layout_constraintBottom_toBottomOf="@+id/sale_status_image"
             app:layout_constraintEnd_toStartOf="@+id/sale_status_image"
             app:layout_constraintStart_toEndOf="@+id/add_picture_btn"
-            app:layout_constraintTop_toBottomOf="@+id/price"
-            tools:ignore="Autofill,LabelFor,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/price">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/price_edit_text1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/pound_icon"
+                android:drawablePadding="10dp"
+                android:ems="10"
+                android:imeOptions="actionNext"
+                android:inputType="number|numberDecimal"
+                android:paddingStart="10dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:textSize="24sp"
+                app:layout_constraintBottom_toBottomOf="@+id/sale_status_image"
+                app:layout_constraintEnd_toStartOf="@+id/sale_status_image"
+                app:layout_constraintStart_toEndOf="@+id/add_picture_btn"
+                app:layout_constraintTop_toBottomOf="@+id/price"
+                tools:ignore="Autofill,LabelFor,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/address_postcode_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/postcode_icon"
-            android:nextFocusDown="@+id/address_number_et"
-            android:hint="@string/post_code"
-            android:tag="Post code"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.503"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/poi_multi_autocomplete"
-            tools:ignore="RtlSymmetry,UnusedAttribute" />
+            app:layout_constraintTop_toBottomOf="@+id/poi_multi_autocomplete">
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_postcode_et1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/postcode_icon"
+                android:drawablePadding="8dp"
+                android:hint="@string/post_code"
+                android:textColor="@color/colorPrimaryDark"
+                android:nextFocusDown="@+id/address_number_et"
+                android:tag="Post code"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.503"
+                app:layout_constraintStart_toStartOf="parent"
+                tools:ignore="RtlSymmetry,UnusedAttribute" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/address_street_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:drawableStart="@drawable/street_icon"
-            android:nextFocusDown="@+id/address_town_et"
-            android:hint="@string/street"
-            android:tag="Street"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_number_et"
-            tools:ignore="Autofill,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/address_number_et">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_street_et1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/street_icon"
+                android:hint="@string/street"
+                android:drawablePadding="8dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:nextFocusDown="@+id/address_town_et"
+                android:tag="Street"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="Autofill,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/address_number_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:nextFocusDown="@+id/address_street_et"
-            android:drawableStart="@drawable/house_number"
-            android:hint="@string/name_number"
-            android:tag="Name/number"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_postcode_et"
-            tools:ignore="Autofill,RtlSymmetry,TextFields" />
+            app:layout_constraintTop_toBottomOf="@+id/address_postcode_et">
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_number_et1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/house_number"
+                android:drawablePadding="8dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:hint="@string/name_number"
+                android:nextFocusDown="@+id/address_street_et"
+                android:tag="Name/number"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="Autofill,RtlSymmetry,TextFields" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/address_county_et"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:hint="@string/county"
-            android:tag="County"
+            android:layout_marginEnd="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            android:drawableStart="@drawable/country_icon"
-            android:nextFocusDown="@+id/description_edit_text"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_town_et"
-            tools:ignore="Autofill,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/address_town_et">
 
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_county_et1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/country_icon"
+                android:drawablePadding="8dp"
+                android:hint="@string/county"
+                android:nextFocusDown="@+id/description_edit_text"
+                android:tag="County"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="Autofill,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
+
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/address_town_et"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
-            android:hint="@string/town_city"
-            android:drawableStart="@drawable/town_icon"
-            android:nextFocusDown="@+id/address_county_et"
-            android:tag="Town/City"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="1.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_street_et"
-            tools:ignore="Autofill,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/address_street_et">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/address_town_et1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/town_icon"
+                android:drawablePadding="8dp"
+                android:hint="@string/town_city"
+                android:nextFocusDown="@+id/address_county_et"
+                android:tag="Town/City"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="1.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="Autofill,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
 
         <MultiAutoCompleteTextView
             android:id="@+id/poi_multi_autocomplete"
@@ -215,15 +274,13 @@
             android:layout_marginStart="8dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/green_outline_button"
             android:drawableStart="@drawable/poi_icon"
             android:drawablePadding="10dp"
+            android:dropDownAnchor="@+id/images_recycler_view"
             android:hint="@string/points_of_interest"
             android:nextFocusDown="@+id/address_postcode_et"
-            android:dropDownAnchor="@+id/images_recycler_view"
             android:paddingStart="5dp"
             android:tag="Points of interest"
-            android:textSize="24sp"
             android:textColor="@color/colorPrimaryDark"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
@@ -253,87 +310,104 @@
             app:layout_constraintStart_toStartOf="@+id/add_picture_btn"
             app:layout_constraintTop_toBottomOf="@+id/images_recycler_view" />
 
-
-        <com.example.robmillaci.realestatemanager.custom_objects.SquareEditText
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/surface_area_text"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_marginTop="8dp"
             android:layout_marginEnd="8dp"
-            android:nextFocusDown="@+id/poi_multi_autocomplete"
-            android:drawableStart="@drawable/surface_area"
-            android:hint="@string/surface_area_m2"
-            android:tag="Surface area"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/rooms_spinner"
-            tools:ignore="Autofill,RtlHardcoded,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/rooms_spinner">
+
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/surface_area_text1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawableStart="@drawable/surface_area"
+                android:drawablePadding="8dp"
+                android:textColor="@color/colorPrimaryDark"
+                android:hint="@string/surface_area_m2"
+                android:nextFocusDown="@+id/poi_multi_autocomplete"
+                android:tag="Surface area"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toTopOf="parent"
+                tools:ignore="Autofill,RtlHardcoded,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
 
         <ImageView
             android:id="@+id/imageView2"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:contentDescription="@string/type_of_property"
             app:layout_constraintBottom_toBottomOf="@+id/typetitle"
             app:layout_constraintStart_toStartOf="@+id/type_spinner"
             app:layout_constraintTop_toTopOf="@+id/typetitle"
-            app:srcCompat="@drawable/add_property"
-            android:contentDescription="@string/type_of_property" />
+            app:srcCompat="@drawable/add_property" />
 
         <ImageView
             android:id="@+id/imageView3"
             android:layout_width="30dp"
             android:layout_height="30dp"
+            android:contentDescription="@string/bedrooms_text"
             app:layout_constraintBottom_toBottomOf="@+id/textView17"
             app:layout_constraintStart_toStartOf="@+id/rooms_spinner"
             app:layout_constraintTop_toTopOf="@+id/textView17"
-            app:srcCompat="@drawable/rooms_icon"
-            android:contentDescription="@string/bedrooms_text" />
+            app:srcCompat="@drawable/rooms_icon" />
 
         <ImageView
             android:id="@+id/savebtn"
             android:layout_width="60dp"
             android:layout_height="60dp"
             android:layout_marginBottom="8dp"
+            android:contentDescription="@string/save"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/textView3"
-            app:srcCompat="@drawable/save"
-            android:contentDescription="@string/save" />
+            app:srcCompat="@drawable/save" />
 
         <TextView
             android:id="@+id/textView3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginEnd="8dp"
             android:layout_marginStart="8dp"
             android:layout_marginTop="24dp"
+            android:layout_marginEnd="8dp"
             android:text="@string/save"
             app:layout_constraintEnd_toEndOf="@+id/savebtn"
             app:layout_constraintStart_toStartOf="@+id/savebtn"
             app:layout_constraintTop_toBottomOf="@+id/description_edit_text" />
 
-        <EditText
+        <android.support.design.widget.TextInputLayout
             android:id="@+id/description_edit_text"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="8dp"
-            android:layout_marginTop="16dp"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
             android:layout_marginEnd="8dp"
-            android:background="@drawable/green_outline_button"
-            android:drawableStart="@drawable/description"
-            android:hint="@string/description_et"
-            android:inputType="textMultiLine|text"
-            android:singleLine="false"
-            android:tag="Description"
-            android:textSize="24sp"
-            android:textColor="@color/colorPrimaryDark"
+            android:layout_marginStart="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/address_county_et"
-            tools:ignore="Autofill,RtlSymmetry" />
+            app:layout_constraintTop_toBottomOf="@+id/address_county_et">
+            <android.support.design.widget.TextInputEditText
+                android:id="@+id/description_edit_text1"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:drawablePadding="8dp"
+                android:drawableStart="@drawable/description"
+                android:hint="@string/description_et"
+                android:inputType="textMultiLine|text"
+                android:singleLine="false"
+                android:tag="Description"
+                android:textColor="@color/colorPrimaryDark"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintHorizontal_bias="0.0"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="parent"
+                tools:ignore="Autofill,RtlSymmetry" />
+        </android.support.design.widget.TextInputLayout>
 
         <android.support.v7.widget.SwitchCompat
             android:id="@+id/buy_or_let"
@@ -358,9 +432,9 @@
             android:id="@+id/textView18"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginBottom="8dp"
-            android:layout_marginEnd="8dp"
             android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
             android:gravity="center_vertical|center_horizontal"
             android:text="@string/let"
             android:textColor="@android:color/black"

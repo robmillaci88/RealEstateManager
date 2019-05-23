@@ -14,6 +14,8 @@ import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
+import android.support.design.widget.TextInputEditText;
+import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -102,14 +104,14 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     private Spinner mTypeSpinner; //the type of listing spinner
     private Spinner mBedroomsSpinner; //the number of bedrooms spinner
 
-    private SquareEditText mSurfaceAreaText; //listings surface area
-    private EditText mPriceEditText; //listings price
+    private TextInputEditText mSurfaceAreaText; //listings surface area
+    private TextInputEditText mPriceEditText; //listings price
     private MultiAutoCompleteTextView mPoiAutocomplete; //listings P.O.I
-    private SquareEditText mAddressPostcodeEditText; //listings post code
-    private SquareEditText mAddressNumberEditText; //listings address number
-    private SquareEditText mAddressStreetEditText; //listings address street
-    private SquareEditText mAddressTownEditText;//listings address town
-    private SquareEditText mAddressCountyEditText;//listings address county
+    private TextInputEditText mAddressPostcodeEditText; //listings post code
+    private TextInputEditText mAddressNumberEditText; //listings address number
+    private TextInputEditText mAddressStreetEditText; //listings address street
+    private TextInputEditText mAddressTownEditText;//listings address town
+    private TextInputEditText mAddressCountyEditText;//listings address county
     private EditText mDescriptionEditText;//listings address description
 
     private SwitchCompat mBuyOrLetSwitch; //the buy or let switch
@@ -192,47 +194,59 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
                 if (!b) {
                     // on focus off
-                    String str = mPoiAutocomplete.getText().toString().trim();
-                    String[] enteredPoisArray = str.split(",");
+                    if (!mPoiAutocomplete.getText().toString().equals("") && mPoiAutocomplete.getText().toString().length() > 2 ) {
+                        String str = mPoiAutocomplete.getText().toString().trim();
+                        String[] enteredPoisArray = str.split(",");
 
-                    for (int i = 0; i < enteredPoisArray.length; i++) {
-                        enteredPoisArray[i] = enteredPoisArray[i].trim();
-                    }
+                        for (int i = 0; i < enteredPoisArray.length; i++) {
+                            enteredPoisArray[i] = enteredPoisArray[i].trim();
+                        }
 
-                    if (str.equals("")) {
-                        sendToast = true;
-                    }
+                        if (str.equals("")) {
+                            sendToast = true;
+                        }
 
-                    String[] allowed_values = getResources().getStringArray(R.array.poi_types);
-                    for (String temp : allowed_values) {
-                        for (String s : enteredPoisArray) {
-                            if (s.trim().compareTo(temp) == 0) {
-                                mEnteredPoisArrayList.add(s.trim() + ",");
+                        String[] allowed_values = getResources().getStringArray(R.array.poi_types);
+                        for (String temp : allowed_values) {
+                            for (String s : enteredPoisArray) {
+                                if (s.trim().compareTo(temp) == 0) {
+                                    mEnteredPoisArrayList.add(s.trim() + ",");
+                                }
                             }
                         }
+
+                        StringBuilder sb = new StringBuilder();
+                        for (String s : mEnteredPoisArrayList) {
+                            sb.append(s);
+                        }
+
+                        if (str.length() != sb.toString().trim().length()) {
+                            //text is being removed
+                            sendToast = true;
+                        }
+
+                        try {
+                            mPoiAutocomplete.setText(sb.toString().substring(0, sb.length() - 1));
+                            mEnteredPoisArrayList.clear();
+
+                        }catch (Exception e){
+                            sendToast = true;
+                        }
+
+                        if (sendToast) poiError();
+
+                    }else {
+                        poiError();
                     }
-
-                    StringBuilder sb = new StringBuilder();
-                    for (String s : mEnteredPoisArrayList) {
-                        sb.append(s);
-                    }
-
-                    if (str.length() != sb.toString().trim().length()) {
-                        //text is being removed
-                        sendToast = true;
-                    }
-
-                    mPoiAutocomplete.setText(sb.toString().substring(0, sb.length() - 1));
-                    mEnteredPoisArrayList.clear();
-
-                    if (sendToast)
-                        ToastModifications.createToast(AddListingView.this, getString(R.string.poi_selection_error), Toast.LENGTH_LONG);
-
                 }
             }
         });
     }
 
+    private void poiError(){
+        mPoiAutocomplete.setText("");
+        ToastModifications.createToast(AddListingView.this, getString(R.string.poi_selection_error), Toast.LENGTH_LONG);
+    }
 
     /**
      * populate the views in this activity with the values defined for an already existing listing
@@ -367,14 +381,14 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         mTypeSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.spinner_types)));
         mBedroomsSpinner.setAdapter(new ArrayAdapter<>(this, R.layout.spinner_item, getResources().getStringArray(R.array.spinner_number_of_rooms)));
 
-        mSurfaceAreaText = findViewById(R.id.surface_area_text);
-        mPriceEditText = findViewById(R.id.price_edit_text);
-        mAddressPostcodeEditText = findViewById(R.id.address_postcode_et);
-        mAddressNumberEditText = findViewById(R.id.address_number_et);
-        mAddressStreetEditText = findViewById(R.id.address_street_et);
-        mAddressTownEditText = findViewById(R.id.address_town_et);
-        mAddressCountyEditText = findViewById(R.id.address_county_et);
-        mDescriptionEditText = findViewById(R.id.description_edit_text);
+        mSurfaceAreaText = findViewById(R.id.surface_area_text1);
+        mPriceEditText = findViewById(R.id.price_edit_text1);
+        mAddressPostcodeEditText = findViewById(R.id.address_postcode_et1);
+        mAddressNumberEditText = findViewById(R.id.address_number_et1);
+        mAddressStreetEditText = findViewById(R.id.address_street_et1);
+        mAddressTownEditText = findViewById(R.id.address_town_et1);
+        mAddressCountyEditText = findViewById(R.id.address_county_et1);
+        mDescriptionEditText = findViewById(R.id.description_edit_text1);
         mBuyOrLetSwitch = findViewById(R.id.buy_or_let);
 
         mSaveButton = findViewById(R.id.savebtn);

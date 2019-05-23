@@ -2,6 +2,7 @@ package com.example.robmillaci.realestatemanager.custom_objects;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.support.design.widget.TextInputEditText;
 import android.support.v7.widget.AppCompatEditText;
 import android.text.InputType;
 import android.util.AttributeSet;
@@ -13,7 +14,7 @@ import com.example.robmillaci.realestatemanager.R;
 /**
  * Custom edit text with a custom background used in {@link com.example.robmillaci.realestatemanager.activities.add_listing_activity.AddListingView}
  */
-public class SquareEditText extends AppCompatEditText {
+public class SquareEditText extends TextInputEditText {
     public SquareEditText(Context context, AttributeSet attrs) {
         super(context, attrs);
         setProperties();
