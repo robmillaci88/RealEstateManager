@@ -15,7 +15,6 @@ import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.design.widget.TextInputEditText;
-import android.support.design.widget.TextInputLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.widget.GridLayoutManager;
@@ -41,7 +40,6 @@ import com.example.robmillaci.realestatemanager.activities.BaseActivity;
 import com.example.robmillaci.realestatemanager.activities.main_activity.MainActivityView;
 import com.example.robmillaci.realestatemanager.adapters.ImagesRecyclerViewAdapter;
 import com.example.robmillaci.realestatemanager.custom_objects.MyTokenizer;
-import com.example.robmillaci.realestatemanager.custom_objects.SquareEditText;
 import com.example.robmillaci.realestatemanager.data_objects.Listing;
 import com.example.robmillaci.realestatemanager.databases.firebase.FirebaseHelper;
 import com.example.robmillaci.realestatemanager.utils.SharedPreferenceHelper;
@@ -194,7 +192,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
 
                 if (!b) {
                     // on focus off
-                    if (!mPoiAutocomplete.getText().toString().equals("") && mPoiAutocomplete.getText().toString().length() > 2 ) {
+                    if (!mPoiAutocomplete.getText().toString().equals("") && mPoiAutocomplete.getText().toString().length() > 2) {
                         String str = mPoiAutocomplete.getText().toString().trim();
                         String[] enteredPoisArray = str.split(",");
 
@@ -229,13 +227,13 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
                             mPoiAutocomplete.setText(sb.toString().substring(0, sb.length() - 1));
                             mEnteredPoisArrayList.clear();
 
-                        }catch (Exception e){
+                        } catch (Exception e) {
                             sendToast = true;
                         }
 
                         if (sendToast) poiError();
 
-                    }else {
+                    } else {
                         poiError();
                     }
                 }
@@ -243,7 +241,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
         });
     }
 
-    private void poiError(){
+    private void poiError() {
         mPoiAutocomplete.setText("");
         ToastModifications.createToast(AddListingView.this, getString(R.string.poi_selection_error), Toast.LENGTH_LONG);
     }
@@ -634,6 +632,8 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
     private void createSaveListingProgressBar() {
         mProgressDialog = new ProgressDialog(this);
         mProgressDialog.setMessage(getString(R.string.saving_listing));
+        mProgressDialog.setCancelable(false);
+        mProgressDialog.setCanceledOnTouchOutside(false);
         mProgressDialog.show();
     }
 
@@ -691,7 +691,7 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      * @param grantResults the results of the persmission request
      */
     @Override
-    public void onRequestPermissionsResult(int requestCode, @NonNull String permissions[],
+    public void onRequestPermissionsResult(int requestCode, @NonNull String[] permissions,
                                            @NonNull int[] grantResults) {
         switch (requestCode) {
             case PICK_FROM_GALLERY_REQUEST_CODE:
@@ -847,26 +847,24 @@ public class AddListingView extends BaseActivity implements AddListingPresenter.
      */
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-        switch (item.getItemId()) {
-            case android.R.id.home:
-                AlertDialog.Builder confirmDiagBuilder = new AlertDialog.Builder(AddListingView.this);
-                confirmDiagBuilder.setMessage(R.string.want_to_save);
-                confirmDiagBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        mSaveButton.callOnClick();
-                    }
-                });
+        if (item.getItemId() == android.R.id.home) {
+            AlertDialog.Builder confirmDiagBuilder = new AlertDialog.Builder(AddListingView.this);
+            confirmDiagBuilder.setMessage(R.string.want_to_save);
+            confirmDiagBuilder.setPositiveButton(R.string.save, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    mSaveButton.callOnClick();
+                }
+            });
 
-                confirmDiagBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
-                    @Override
-                    public void onClick(DialogInterface dialogInterface, int i) {
-                        onBackPressed();
-                    }
-                });
+            confirmDiagBuilder.setNegativeButton(R.string.no, new DialogInterface.OnClickListener() {
+                @Override
+                public void onClick(DialogInterface dialogInterface, int i) {
+                    onBackPressed();
+                }
+            });
 
-                confirmDiagBuilder.show();
-                break;
+            confirmDiagBuilder.show();
         }
 
         return true;

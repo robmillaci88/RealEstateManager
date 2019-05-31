@@ -481,6 +481,8 @@ public class MainActivityView extends BaseActivity implements SynchListenerCallb
         keepScreenOn(true);
         pd = new ProgressDialog(this);
         pd.setMessage(getString(R.string.database_sync_message));
+        pd.setCancelable(false);
+        pd.setCanceledOnTouchOutside(false);
         pd.show();
     }
 

@@ -66,7 +66,7 @@ public class AddListingPresenter extends BroadcastReceiver {
 
 
     /**
-     * Called from {@link AddListingView#displayPictureMethodDialog()} to perform permission checks and then inform the view of the action to take
+     * Called to perform permission checks and then inform the view of the action to take
      */
     public void getPhotoFromDevice() {
         try {
@@ -84,7 +84,7 @@ public class AddListingPresenter extends BroadcastReceiver {
 
 
     /**
-     * Called from {@link AddListingView#displayPictureMethodDialog()} to perform permission checks and then inform the view of the action to take
+     * Called to perform permission checks and then inform the view of the action to take
      */
     public void getPhotoFromCamera() {
         if (ActivityCompat.checkSelfPermission(view.getViewActivity(), Manifest.permission.CAMERA)
@@ -98,7 +98,7 @@ public class AddListingPresenter extends BroadcastReceiver {
 
 
     /**
-     * Called from {@link AddListingView#changedImageDescr(String, int)} to update the arraylist of image descriptions for a listing and return the new list
+     *  update the arraylist of image descriptions for a listing and return the new list
      */
     public void changedImageDescr(String desc, int position, ArrayList<String> image_description) {
         try {
